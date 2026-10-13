@@ -51,3 +51,27 @@ def run_timing(raw_dir, out_dir, n_repeat=20, log=None, alpha=0.1):
     df = pd.DataFrame(rows); os.makedirs(out_dir, exist_ok=True)
     df.to_csv(os.path.join(out_dir, "E6_timing.csv"), index=False)
     return df
+
+def run_timing_scaling(raw_dir, out_dir, m_values=(10, 20, 30, 50), n_repeat=10, log=None, alpha=0.1):
+    """E6b (review round 6): wall-clock time of TJ+N and of a single transfer fit as a function of m (single core)."""
+    rows = []
+    for name, kind, Xs, Xt, y, tr, cal, pool, _ in _cases(raw_dir):
+        source = fit_source_model(Xs[tr], y[tr], max_lv=25 if name == "mango" else 15, seed=BASE_SEED)
+        sig = build_sigmas(source)["tq"]
+        for m in m_values:
+            if m >= len(pool) - 5:
+                continue
+            std, te = pool[:m], pool[m:]
+            Xs_std = Xs[std] if kind == "pds" else None
+            def one():
+                d = fit_deployed(kind, source, Xt[std], y[std], Xs_std); d.predict(Xt[te])
+            def tj():
+                tf = M.TransferFits(kind, source, Xt[std], y[std], Xs_std, Xt[te]); M.tj_plus(tf, alpha, sig)
+            for label, fn in (("single transfer fit + prediction", one), ("TJ+N (m LOO + 5 CV fits)", tj)):
+                fn(); ts = []
+                for _ in range(n_repeat):
+                    t0 = time.perf_counter(); fn(); ts.append(time.perf_counter() - t0)
+                rows.append(dict(dataset=name, kind=kind, m=m, n_test=len(te), step=label, median_s=float(np.median(ts))))
+        if log: log.info(f"[E6b_scaling] {name} done")
+    df = pd.DataFrame(rows); df.to_csv(os.path.join(out_dir, "E6b_timing_scaling.csv"), index=False)
+    return df

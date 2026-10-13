@@ -13,7 +13,8 @@
    - With small *m*, the realised coverage for one particular set of standards varies (Fig. 9). Conditional coverage across difficulty strata is only approximately balanced (Fig. 6).
    - The worst-case bound is 1−2α, although the observed coverage was close to or above 1−α.
 4. **Scope of the evidence.**
-   - Three public NIR data sets were used, one of them small (corn, *n* = 80), with two instrument pairs and one season shift.
+   - Three public NIR data sets were used, one of them small (corn, *n* = 80). They cover two instrument pairs for corn, one for tablets, one season shift and three handheld-instrument pairs for mango.
+   - Coverage refers to the samples in these data sets. Test samples recur across repetitions, so the results characterise the procedure on these populations, not on all possible samples.
    - The noise, wavelength-shift and source-size perturbations are simulated.
    - Other techniques (Raman, MIR), non-linear or deep domain-adaptation transfers, and process data streams with drift were not tested.
 5. **A simple competitor.** Gaussian intervals built from leave-one-standard-out residuals (Gauss-LOO) were often as efficient as TJ+N, and in some scenarios more so (§4.3). The advantage of TJ+N is its distribution-free guarantee and its behaviour under heavy-tailed or heteroscedastic errors, not uniformly narrower intervals.
@@ -41,6 +42,6 @@ We recommend:
 
 **Funding.** [To be completed by the authors; e.g. "This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors."]
 
-**Data availability.** All data sets are public: corn and IDRC Shootout 2002 tablets from Eigenvector Research [@eigenvector_data], and mango DMC from Mendeley Data (doi:10.17632/46htwnp833, CC BY 4.0) [@mango_data]. All code, configuration, raw per-repetition results and the scripts regenerating every table and figure are available at [repository URL / archived DOI to be inserted on acceptance].
+**Data availability.** All data sets are public: corn and IDRC Shootout 2002 tablets from Eigenvector Research [@eigenvector_data], and mango DMC from Mendeley Data (CC BY 4.0). Record version 1 (doi:10.17632/46htwnp833.1) was used for the season shift [@mango_data], and record version 6 (doi:10.17632/46htwnp833.6) for the instrument shift [@mango_data_v6]. All code, configuration, raw per-repetition results and the scripts regenerating every table and figure are available at [repository URL / archived DOI to be inserted on acceptance].
 
 **Acknowledgements.** We thank the providers of the public data sets: Cargill and Eigenvector Research (corn), the International Diffuse Reflectance Conference (Shootout 2002), and N. Anderson, K. Walsh, P. Subedi and J. Walsh (mango).

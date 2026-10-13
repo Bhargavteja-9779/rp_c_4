@@ -1,0 +1,6 @@
+Highlights
+- Source-based prediction intervals under-cover after NIR calibration transfer
+- Transfer jackknife+ re-fits only the transfer step, reusing every standard
+- Distribution-free coverage of at least 1-2α for randomly drawn standards
+- Valid across instruments, seasons, PDS/SBC, and PLS, ridge and CNN models
+- Wavelength drift after standardisation defeats all interval methods tested

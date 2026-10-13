@@ -47,6 +47,10 @@ def main():
         e = e[["kind", "target", "m", "method", "cov", "IS", "rmsep_mean", "under_covering"]].round(3)
         e.columns = ["Pipeline", "Target instrument", "m", "Method", "Coverage [95% CI]", "Median IS", "RMSEP", "Under-covering"]
         parts.append("# Table S6. Independent instrument shift (mango, E8)\n\n" + md(e, "**Table S6.** Mango instrument transfer (source instrument 15006; α = 0.10; 200 repetitions)."))
+    scp = os.path.join(RES, "raw", "E6b_timing_scaling.csv")
+    if os.path.exists(scp):
+        z = pd.read_csv(scp).round(4)
+        parts.append("# Table S7. Scaling of computational cost with m\n\n" + md(z, "**Table S7.** Wall-clock time of a single transfer fit with prediction and of TJ+N (including five CV+ refits) versus the number of standards m (single CPU core, median of 10 runs)."))
     parts.append("# Fig. S1. CNN training\n\n![**Fig. S1.** Training and validation loss of the 1D-CNN (mango, seasons 1–3).](figures/figS1_cnn_training.png){width=12cm}\n\n")
     parts.append("# Fig. S2. Friedman ranks\n\n![**Fig. S2.** Mean Friedman ranks of the scenario median interval score over the 40 primary scenarios (1 = best).](figures/figS2_friedman_ranks.png){width=12cm}\n")
     mdp = os.path.join(HERE, "supplementary_filled.md"); open(mdp, "w").write("\n".join(parts))

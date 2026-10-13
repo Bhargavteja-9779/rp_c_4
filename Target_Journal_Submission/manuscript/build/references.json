@@ -1524,31 +1524,19 @@
  {
   "id": "mango_data",
   "type": "dataset",
-  "title": "Mango DMC and NIR spectra (Version 6)",
+  "title": "Mango DMC and spectra Anderson et al. 2020 (Version 1)",
   "author": [
    {
     "family": "Anderson",
     "given": "Nicholas"
-   },
-   {
-    "family": "Walsh",
-    "given": "Kerry"
-   },
-   {
-    "family": "Subedi",
-    "given": "Phul"
-   },
-   {
-    "family": "Walsh",
-    "given": "Jeremy"
    }
   ],
   "publisher": "Mendeley Data",
-  "DOI": "10.17632/46htwnp833.6",
+  "DOI": "10.17632/46htwnp833.1",
   "issued": {
    "date-parts": [
     [
-     2026
+     2020
     ]
    ]
   }
@@ -1642,6 +1630,38 @@
   "issue": "4",
   "page": "335",
   "DOI": "10.3390/atmos17040335",
+  "issued": {
+   "date-parts": [
+    [
+     2026
+    ]
+   ]
+  }
+ },
+ {
+  "id": "mango_data_v6",
+  "type": "dataset",
+  "title": "Mango DMC and NIR spectra (Version 6)",
+  "author": [
+   {
+    "family": "Anderson",
+    "given": "Nicholas"
+   },
+   {
+    "family": "Walsh",
+    "given": "Kerry"
+   },
+   {
+    "family": "Subedi",
+    "given": "Phul"
+   },
+   {
+    "family": "Walsh",
+    "given": "Jeremy"
+   }
+  ],
+  "publisher": "Mendeley Data",
+  "DOI": "10.17632/46htwnp833.6",
   "issued": {
    "date-parts": [
     [

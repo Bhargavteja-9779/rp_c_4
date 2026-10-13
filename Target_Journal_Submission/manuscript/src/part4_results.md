@@ -96,6 +96,19 @@ The conclusions did not depend on the primary pipeline, the transfer direction o
 
 Over all generalisation settings, TJ+N under-covered in {{gen_tjn_under}} of {{gen_tjn_n}} scenarios.
 
+**Independent instrument shift (mango, E8).** Prompted by the review process, we added a test that was not part of the pre-registered design: transfer between handheld spectrometers on intact fruit, using the data providers' extended data set with paired spectra of the same fruit on several instruments [@mango_data_v6]. The design was fixed before any result was computed:
+- source instrument 15006;
+- the three target instruments with most shared fruit;
+- PDS and SBC pipelines;
+- *m* = 10–50 standards, 200 repetitions.
+
+The results reproduced the main findings (Table 8).
+- Source-calibrated intervals under-covered in every scenario: coverage {{e8_src_cov_pds}} after PDS and {{e8_src_cov_sbc}} after SBC.
+- TJ+N was valid: mean coverage {{e8_tjn_cov_pds}} (PDS) and {{e8_tjn_cov_sbc}} (SBC). It was never flagged at any α ({{e8_tjn_under_allalpha}} under-covering scenarios), whereas Gauss-LOO was flagged in {{e8_gauss_under_allalpha}}.
+- PDS proved a poor transfer for these instruments (RMSEP {{e8_rmsep_pds}} % DM, against {{e8_rmsep_sbc}} % with SBC). TJ+N made this visible through wide intervals (median width {{e8_width_pds}} vs {{e8_width_sbc}} % DM), whereas the source-calibrated intervals remained narrow and missed most samples. Valid intervals are thus also a diagnostic of transfer quality.
+
+{{table_e8}}
+
 {{table_general}}
 
 ## 4.7. Label-free variant (exploratory)
@@ -118,7 +131,15 @@ Coverage is a property of the procedure, not of one realised set of standards. A
 
 ## 4.10. Computational cost (RQ6)
 
-TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits for the optional CV+ comparison included in our timing). On a single CPU core, one transfer fit with prediction took {{time_one_corn}} ms (corn, *m* = 20), {{time_one_tablets}} ms (tablets, *m* = 50, 410 test spectra) and {{time_one_mango}} ms (mango SBC). The complete TJ+N interval computation took {{time_tj_corn}} s, {{time_tj_tablets}} s and {{time_tj_mango}} s, respectively, with peak memory below {{time_mem_max}} MB (Fig. 10). The source model is never re-fitted. The added cost is therefore negligible for routine laboratory use, and it scales linearly with *m* and with the cost of one transfer fit.
+TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits for the optional CV+ comparison included in our timing). On a single CPU core, one transfer fit with prediction took {{time_one_corn}} ms (corn, *m* = 20), {{time_one_tablets}} ms (tablets, *m* = 50, 410 test spectra) and {{time_one_mango}} ms (mango SBC). The complete TJ+N interval computation took {{time_tj_corn}} s, {{time_tj_tablets}} s and {{time_tj_mango}} s, respectively, with peak memory below {{time_mem_max}} MB (Fig. 10). The source model is never re-fitted. Measured over *m* = 10–50, the cost of TJ+N grew approximately linearly with the number of standards ({{scaling_text}}; Supplementary Table S7). These timings include the five CV+ refits and are thus upper bounds.
+
+**Deployment.**
+- The *m* leave-one-out transfers are fitted once, when the instrument is standardised.
+- For each routine spectrum, TJ+N then requires *m* applications of a stored transfer map and *m* predictions of the source model. For PDS, each map is a *p* × 5 coefficient array (about 28 kB for 700 channels); for SBC, it is two numbers.
+- Energy use is negligible at these scales.
+- For computationally expensive adaptation methods, for example domain-adaptive PLS with hyperparameter search or neural domain adaptation, the five-fold CV+ variant reduces the cost to five refits. It remained valid in all scenarios, at the price of somewhat wider intervals (§4.4).
+
+The added cost is therefore negligible for routine laboratory use.
 
 
 ![**Fig. 10.** Wall-clock time per test batch (single CPU core, median of 20 runs, logarithmic scale).](figures/fig9_timing.png){width=16.5cm}

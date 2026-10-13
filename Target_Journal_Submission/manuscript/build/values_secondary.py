@@ -64,6 +64,34 @@ def values(S, T, RES, CFG, md_table, primary):
     for mth, k in (("TJ+N", "tjn"), ("TJ+", "tj"), ("Gauss-LOO", "gauss"), ("ASTM-PI", "astm"), ("SCP-S", "scps")):
         x = e1[e1.method == mth]
         V[f"allpipe_{k}_under"] = f"{int(x['under_covering'].sum())} of {len(x)}"
+    # ------------------------------------------------------------ E8 independent instrument shift (mango)
+    e8 = s[s["experiment"].str.startswith("E8_")]
+    if len(e8):
+        meths8 = ["TJ+N", "TJ+", "SCP-T-split-N", "Gauss-LOO", "ASTM-PI", "SCP-S", "WCP-S", "Transport", "LF-conv"]
+        rows = []
+        for kind in ("pds", "sbc"):
+            for mth in meths8:
+                x = e8[(e8.kind == kind) & (e8.method == mth)]
+                if x.empty: continue
+                rows.append([kind.upper(), mth, f"{x['coverage_mean'].mean():.3f} ({x['coverage_mean'].min():.2f}–{x['coverage_mean'].max():.2f})",
+                             f"{int(x['under_covering'].sum())}/{len(x)}", f"{100 * x['frac_reps_any_inf'].mean():.0f}",
+                             f"{x['width_median'].median():.2f}", f"{x['rmsep_mean'].mean():.2f}"])
+        V["table_e8"] = md_table(pd.DataFrame(rows, columns=["Pipeline", "Method", "Coverage (range)", "Under", "Unbounded (% reps)", "Median width (% DM)", "RMSEP (% DM)"]),
+                                 "Independent instrument shift (E8): mango dry matter, source instrument 15006, three target instruments × four values of m (12 scenarios per pipeline; α = 0.10; 200 repetitions).")
+        for kind in ("pds", "sbc"):
+            t8 = e8[(e8.kind == kind) & (e8.method == "TJ+N")]
+            V[f"e8_tjn_cov_{kind}"] = f"{t8['coverage_mean'].mean():.3f}"; V[f"e8_tjn_under_{kind}"] = f"{int(t8['under_covering'].sum())}/{len(t8)}"
+            V[f"e8_rmsep_{kind}"] = f"{t8['rmsep_mean'].min():.2f}–{t8['rmsep_mean'].max():.2f}"
+            V[f"e8_width_{kind}"] = f"{t8['width_median'].median():.1f}"
+            src8 = e8[(e8.kind == kind) & e8.method.isin(["ASTM-PI", "SCP-S", "WCP-S"])]
+            V[f"e8_src_cov_{kind}"] = f"{src8['coverage_mean'].min():.2f}–{src8['coverage_mean'].max():.2f}"
+            V[f"e8_src_under_{kind}"] = f"{int(src8['under_covering'].sum())}/{len(src8)}"
+            g8 = e8[(e8.kind == kind) & (e8.method == "Gauss-LOO")]
+            V[f"e8_gauss_under_{kind}"] = f"{int(g8['under_covering'].sum())}/{len(g8)}"
+        allA8 = S[S["experiment"].str.startswith("E8_") & (S.method == "TJ+N")]
+        V["e8_tjn_under_allalpha"] = f"{int(allA8['under_covering'].sum())}/{len(allA8)}"
+        g8a = S[S["experiment"].str.startswith("E8_") & (S.method == "Gauss-LOO")]
+        V["e8_gauss_under_allalpha"] = f"{int(g8a['under_covering'].sum())}/{len(g8a)}"
     # ------------------------------------------------------------ sensitivity
     e7 = s[s["experiment"].str.startswith("E7_")].copy(); e7["setting"] = e7["experiment"].str.split("__").str[1]
     t = e7[e7.method == "TJ+N"]
@@ -92,6 +120,16 @@ def values(S, T, RES, CFG, md_table, primary):
     V["table_timing"] = md_table(tm.assign(**{"median time (s)": tm["median_s"].map(lambda x: f"{x:.4f}"), "peak memory (MB)": tm["peak_mem_MB"].map(lambda x: f"{x:.1f}")})
                                  [["dataset", "kind", "m", "n_test", "n_channels", "step", "median time (s)", "peak memory (MB)"]],
                                  "Computational cost (single CPU core, median of 20 runs).")
+    sc = os.path.join(RES, "raw", "E6b_timing_scaling.csv")
+    if os.path.exists(sc):
+        z = pd.read_csv(sc); zt = z[z.step.str.startswith("TJ+N")]
+        parts = []
+        for ds in ("corn", "tablets", "mango"):
+            x = zt[zt.dataset == ds].sort_values("m")
+            if len(x) >= 2:
+                parts.append(f"{ds}: {x['median_s'].iloc[0]:.2f} s at m = {int(x['m'].iloc[0])} to {x['median_s'].iloc[-1]:.2f} s at m = {int(x['m'].iloc[-1])}")
+        V["scaling_text"] = "; ".join(parts)
+        V["table_scaling"] = md_table(z.assign(median_s=z["median_s"].map(lambda v: f"{v:.4f}")), "Wall-clock time versus number of standards (single core, median of 10 runs).")
     # ------------------------------------------------------------ error analysis (Gauss at high Q)
     fs = sorted(glob.glob(os.path.join(RES, "raw", "E1_main_*_samples.csv.gz")))
     keep = {"corn": 15, "tablets": 20, "mango": 20}
