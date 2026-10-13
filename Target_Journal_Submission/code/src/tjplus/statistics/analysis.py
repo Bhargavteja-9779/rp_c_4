@@ -21,9 +21,12 @@ def load_raw(out):
         if f.endswith("_samples.csv.gz"):
             continue
         d = pd.read_csv(f)
-        d["experiment"] = os.path.basename(f).replace(".csv.gz", "")
+        d["experiment"] = os.path.basename(f).replace(".csv.gz", "").split("@")[0]
         frames.append(d)
     df = pd.concat(frames, ignore_index=True)
+    dup = df.duplicated(["experiment", "dataset", "property", "source", "target", "kind", "m", "alpha", "method", "rep"]).sum()
+    if dup:
+        raise RuntimeError(f"{dup} duplicated rows across result chunks")
     df["source"] = df["source"].astype(str); df["target"] = df["target"].astype(str)
     return df
 

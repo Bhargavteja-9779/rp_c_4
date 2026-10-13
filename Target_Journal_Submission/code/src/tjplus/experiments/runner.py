@@ -19,11 +19,21 @@ def _work(args):
         return run_corn_rep(rep, cfg)
     return run_fixed_rep(dataset, rep, cfg)
 
-def run_experiment(name, dataset, cfg, reps, out_dir, n_jobs, log=None):
+def run_experiment(name, dataset, cfg, reps, out_dir, n_jobs, log=None, rep_start=0, rep_end=None):
+    """Runs repetitions [rep_start, rep_end) (default: all). A partial range is written as
+    <name>@r<start>-<end>.csv.gz; the analysis merges chunks (seeds depend only on the repetition index)."""
     os.makedirs(out_dir, exist_ok=True)
-    out = os.path.join(out_dir, f"{name}.csv.gz")
+    rep_end = reps if rep_end is None else min(rep_end, reps)
+    tag = "" if (rep_start == 0 and rep_end == reps) else f"@r{rep_start:04d}-{rep_end:04d}"
+    out = os.path.join(out_dir, f"{name}{tag}.csv.gz")
+    if rep_start >= rep_end:
+        return None
+    if os.path.exists(out):
+        if log: log.info(f"[{name}{tag}] exists, skipped")
+        return None
     t0 = time.time()
-    tasks = [(dataset, r, cfg) for r in range(reps)]
+    tasks = [(dataset, r, cfg) for r in range(rep_start, rep_end)]
+    reps = len(tasks)
     rows, samples = [], []
     if n_jobs > 1:
         with get_context("fork").Pool(n_jobs, initializer=_init) as pool:
@@ -35,9 +45,9 @@ def run_experiment(name, dataset, cfg, reps, out_dir, n_jobs, log=None):
         for t in tasks:
             r, s = _work(t); rows += r; samples += s
     df = pd.DataFrame(rows).sort_values(["rep", "property", "target", "m", "kind", "alpha", "method"], kind="stable")
-    df.to_csv(out, index=False)
+    df.to_csv(out, index=False, float_format="%.6g")
     if samples:
-        pd.DataFrame(samples).to_csv(os.path.join(out_dir, f"{name}_samples.csv.gz"), index=False)
+        pd.DataFrame(samples).to_csv(os.path.join(out_dir, f"{name}{tag}_samples.csv.gz"), index=False)
     if log:
         log.info(f"[{name}] done: {len(df)} rows in {time.time() - t0:.0f}s -> {out}")
     return df

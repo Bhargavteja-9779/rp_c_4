@@ -206,12 +206,13 @@ def fig_conditional(summary, cfg, figdir, alpha=0.1):
 
 # ------------------------------------------------------------------ Fig 8: error analysis
 def fig_errors(out, figdir):
-    fs = sorted(glob.glob(os.path.join(out, "raw", "E1_main_*_samples.csv.gz")))
+    fs = {ds: sorted(glob.glob(os.path.join(out, "raw", f"E1_main_{ds}*_samples.csv.gz"))) for ds in ("corn", "tablets", "mango")}
+    fs = {k: v for k, v in fs.items() if v}
     if not fs:
         return
     fig, axs = plt.subplots(1, 3, figsize=(7.2, 2.5), sharey=True)
-    for ax, f in zip(axs, fs):
-        d = pd.read_csv(f)
+    for ax, (ds_, fl) in zip(axs, fs.items()):
+        d = pd.concat([pd.read_csv(f) for f in fl], ignore_index=True)
         ds = d["dataset"].iloc[0]
         d = d[d["m"] == d["m"].median() if d["m"].median() in d["m"].values else d["m"] == sorted(d["m"].unique())[1]]
         for meth in ["TJ+N", "Gauss-LOO", "ASTM-PI"]:
@@ -245,7 +246,9 @@ def fig_timing(out, figdir):
 
 # ------------------------------------------------------------------ Fig 10: coverage distribution over repetitions
 def fig_cov_distribution(out, cfg, figdir, alpha=0.1):
-    fs = {os.path.basename(f).split("_")[2].split(".")[0]: f for f in glob.glob(os.path.join(out, "raw", "E1_main_*.csv.gz")) if "samples" not in f}
+    fs = {ds: [f for f in sorted(glob.glob(os.path.join(out, "raw", f"E1_main_{ds}*.csv.gz"))) if "samples" not in f]
+          for ds in ("corn", "tablets", "mango")}
+    fs = {k: v for k, v in fs.items() if v}
     if not fs:
         return
     meths = ["TJ+N", "SCP-T-split-N", "Gauss-LOO", "ASTM-PI", "SCP-S"]
@@ -254,7 +257,7 @@ def fig_cov_distribution(out, cfg, figdir, alpha=0.1):
     for ax, ds in zip(axs, ["corn", "tablets", "mango"]):
         if ds not in fs:
             continue
-        d = pd.read_csv(fs[ds]); prop, tgt, m = sel[ds]
+        d = pd.concat([pd.read_csv(f) for f in fs[ds]], ignore_index=True); prop, tgt, m = sel[ds]
         d = d[(d["alpha"] == alpha) & (d["kind"] == cfg["primary_kind"][ds]) & (d["property"] == prop)
               & (d["target"].astype(str) == tgt) & (d["m"] == m)]
         data = [d[d["method"] == mm]["coverage"].to_numpy() for mm in meths]

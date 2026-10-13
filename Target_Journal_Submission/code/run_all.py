@@ -42,6 +42,9 @@ def main():
     ap.add_argument("--jobs", type=int, default=max(1, os.cpu_count() or 1))
     ap.add_argument("--skip-experiments", action="store_true")
     ap.add_argument("--no-analysis", action="store_true")
+    ap.add_argument("--rep-start", type=int, default=0)
+    ap.add_argument("--rep-end", type=int, default=None)
+    ap.add_argument("--skip-cnn-timing", action="store_true")
     ap.add_argument("--out", default=os.path.join(HERE, "..", "results"))
     a = ap.parse_args()
     out = os.path.abspath(a.out if a.mode == "full" else a.out + "_quick")
@@ -58,12 +61,12 @@ def main():
                 continue
             reps = spec["reps_full"] if a.mode == "full" else spec["reps_quick"]
             for rname, c in expand(name, spec, cfg, a.mode, raw_dir):
-                run_experiment(rname, spec["dataset"], c, reps, os.path.join(out, "raw"), a.jobs, log)
-        if not only or "E5_cnn_mango" in only:
+                run_experiment(rname, spec["dataset"], c, reps, os.path.join(out, "raw"), a.jobs, log, a.rep_start, a.rep_end)
+        if (not only or "E5_cnn_mango" in only) and not a.skip_cnn_timing and not os.path.exists(os.path.join(out, "raw", "E5_cnn_mango.csv.gz")):
             from tjplus.experiments.cnn_mango import run_cnn_experiment
             run_cnn_experiment(raw_dir, os.path.join(out, "raw"), reps=200 if a.mode == "full" else 3, log=log,
                                epochs=None if a.mode == "full" else 5)
-        if not only or "E6_timing" in only:
+        if (not only or "E6_timing" in only) and not a.skip_cnn_timing and not os.path.exists(os.path.join(out, "raw", "E6_timing.csv")):
             from tjplus.experiments.timing import run_timing
             run_timing(raw_dir, os.path.join(out, "raw"), n_repeat=20 if a.mode == "full" else 2, log=log)
     if a.no_analysis:
