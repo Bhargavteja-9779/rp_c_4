@@ -1,0 +1,39 @@
+journal,sampled,n_with_dates,median_days,q1,q3,pct_le30,pct_le60,pct_le72
+Frontiers in Artificial Intelligence,300,300,73.0,54.25,107.5,5.3,31.7,49.0
+Frontiers in Neuroscience,300,300,62.0,44.25,86.5,8.3,47.3,60.3
+Frontiers in Neurorobotics,77,77,64,42.5,102.0,10.4,46.8,55.8
+Frontiers in Computational Neuroscience,152,152,75.0,50.25,109.0,5.9,31.6,46.1
+Frontiers in Big Data,126,126,74.5,49.75,119.75,8.7,32.5,48.4
+Frontiers in Digital Health,300,300,80.0,53.0,125.75,3.3,31.3,42.7
+Frontiers in Public Health,300,300,68.0,48.0,96.75,6.7,40.0,56.0
+Frontiers in Medicine,300,300,64.5,45.0,85.5,6.7,45.7,59.7
+Frontiers in Oncology,300,300,68.0,46.0,100.5,7.3,44.0,55.0
+Frontiers in Immunology,300,300,70.0,53.0,103.0,5.0,36.0,52.7
+Frontiers in Bioengineering and Biotechnology,300,300,68.0,47.0,101.0,5.0,44.0,55.3
+Frontiers in Microbiology,300,300,54.0,40.0,86.75,10.7,57.3,66.7
+Frontiers in Genetics,300,300,67.5,47.25,108.0,8.3,42.0,55.0
+Frontiers in Endocrinology,300,300,60.5,41.0,83.0,9.7,50.0,67.0
+Frontiers in Cardiovascular Medicine,300,300,85.0,56.0,123.0,3.3,28.7,38.7
+Frontiers in Pharmacology,300,300,68.0,51.0,101.75,4.3,41.3,57.7
+Frontiers in Nutrition,300,300,69.0,49.0,97.75,6.3,42.0,53.7
+Frontiers in Psychiatry,300,300,66.0,47.0,101.0,6.3,40.3,57.0
+Frontiers in Human Neuroscience,300,300,76.0,52.0,109.75,6.3,34.3,47.0
+Frontiers in Physiology,300,300,61.0,43.0,92.75,7.0,49.3,58.7
+Plant Methods (BMC),159,159,97,71.0,147.0,0.0,16.4,28.3
+Plant Phenomics,161,161,143,104.5,178.0,0.0,3.7,7.5
+Journal of Translational Medicine (BMC),300,298,125.0,87.75,169.5,2.3,13.4,19.5
+Bioresource Technology (Elsevier),300,299,76,60.0,101.0,1.3,25.8,45.8
+Plant Physiol Biochem (Elsevier),300,299,91,66.0,140.0,2.0,18.7,31.8
+Food Chemistry (Elsevier),300,298,178.0,131.0,223.0,0.0,0.3,1.3
+Int J Biol Macromol (Elsevier),300,290,110.5,84.0,153.5,0.7,7.9,15.2
+Ultrasonics Sonochemistry (Elsevier),300,299,76,57.0,114.0,2.3,30.1,45.8
+Journal of Nanobiotechnology (BMC),300,299,115,86.0,151.0,1.0,9.0,15.7
+Biomedical Signal Proc Control (Elsevier),9,0,,,,,,
+Neuroimage (Elsevier),300,299,148,107.0,204.0,0.3,5.0,7.7
+Journal of Neuroscience Methods (Elsevier),296,295,106,75.0,150.0,0.3,12.9,21.7
+Talanta (Elsevier),300,299,68,51.0,95.0,3.3,35.8,58.5
+Spectrochim Acta A (Elsevier),300,300,75.0,54.0,105.0,1.0,33.3,48.0
+Analytica Chimica Acta (Elsevier),300,300,58.0,43.0,77.0,6.7,55.0,70.3
+Journal of Biophotonics (Wiley),300,299,89,63.0,126.0,3.7,23.4,34.1
+Biomedical Optics Express (Optica),300,293,65,53.0,82.0,3.8,43.7,60.4
+Optics Express (Optica),300,0,,,,,,

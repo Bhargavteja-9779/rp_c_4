@@ -1,0 +1,48 @@
+journal,sampled,n_with_dates,median_days,q1,q3,pct_le30,pct_le60,pct_le72
+Bioinformatics (OUP),300,262,144.0,103.75,197.25,6.1,7.3,8.4
+Briefings in Bioinformatics (OUP),300,299,125,92.0,170.0,3.0,6.0,11.4
+NAR Genomics and Bioinformatics (OUP),229,228,153.5,115.0,203.5,0.9,2.6,5.3
+Bioinformatics Advances (OUP),300,299,130,99.0,160.0,2.3,9.4,12.4
+GigaScience (OUP),102,99,198,140.0,252.0,4.0,9.1,12.1
+JAMIA (OUP),276,268,120.5,85.5,163.75,8.2,12.3,16.4
+Nucleic Acids Research (OUP),300,294,157.5,77.25,243.25,3.4,18.0,23.5
+European Heart Journal Digital Health (OUP),222,220,118.0,88.0,155.5,0.5,5.0,10.9
+PNAS Nexus (OUP),300,298,170.5,112.0,230.75,2.7,6.4,10.1
+Brain Communications (OUP),300,299,232,174.0,295.0,1.3,1.3,1.3
+J Chem Inf Model (ACS),300,201,79,60.0,108.0,3.5,25.4,39.8
+J Chem Theory Comput (ACS),300,158,77.0,59.0,97.25,1.9,30.4,44.9
+ACS Omega (ACS),300,300,106.0,76.0,136.0,1.7,11.0,21.3
+Digital Discovery (RSC),70,70,124.5,96.75,154.0,0.0,10.0,15.7
+Computers in Biology and Medicine (Elsevier),300,299,124,79.0,193.0,1.3,12.7,20.7
+Comput Methods Programs Biomed (Elsevier),300,300,183.0,131.5,245.0,0.3,1.0,3.7
+J Biomedical Informatics (Elsevier),214,214,148.0,112.75,187.0,0.0,0.9,2.8
+Artificial Intelligence in Medicine (Elsevier),210,210,293.0,171.0,387.25,0.0,0.5,0.5
+Neural Networks (Elsevier),300,300,216.0,158.25,296.0,0.0,0.3,1.0
+Medical Image Analysis (Elsevier),300,299,228,166.0,312.0,0.0,0.0,0.3
+Comput Struct Biotechnol J (Elsevier),300,300,91.0,62.0,118.5,1.0,23.0,35.3
+Journal of Advanced Research (Elsevier),300,300,163.5,122.0,221.75,0.0,0.7,2.7
+Science of the Total Environment (Elsevier),300,141,142,93.5,209.0,0.0,9.9,13.5
+J Hazardous Materials (Elsevier),300,300,94.0,73.0,121.5,0.7,12.3,24.3
+Ecotoxicol Environ Saf (Elsevier),300,300,128.0,89.0,181.75,0.0,3.3,13.3
+Environmental Research (Elsevier),300,287,83,59.0,123.0,0.7,25.8,40.1
+Water Research (Elsevier),300,300,86.0,68.25,117.75,1.0,15.7,29.0
+J Environmental Management (Elsevier),300,300,116.5,77.0,164.25,0.7,8.7,20.3
+Patterns (Cell Press),103,103,167,125.0,209.0,1.9,1.9,2.9
+iScience (Cell Press),300,297,186,138.5,249.0,0.0,0.7,3.7
+Scientific Reports (Nature),300,288,138.0,90.25,198.25,0.7,8.0,11.8
+npj Digital Medicine (Nature),300,300,189.0,132.0,257.5,0.3,2.3,4.3
+Communications Biology (Nature),300,298,243.5,175.75,326.25,0.3,1.0,1.0
+BMC Bioinformatics (BMC),300,300,146.5,104.0,229.75,0.3,4.7,9.3
+BMC Med Inform Decis Mak (BMC),300,299,176,107.0,377.0,0.3,5.7,11.0
+Journal of Cheminformatics (Springer),208,207,132,107.0,172.0,0.0,1.0,3.4
+Brain Informatics (Springer),54,54,127.5,86.75,186.5,11.1,20.4,20.4
+IEEE J Biomed Health Inform (IEEE),300,0,,,,,,
+IEEE Trans Neural Netw Learn Syst (IEEE),300,0,,,,,,
+IEEE Trans Med Imaging (IEEE),300,0,,,,,,
+Advanced Science (Wiley),300,300,113.0,79.25,160.75,1.7,15.3,21.7
+Medical Physics (Wiley),300,298,181.5,125.0,238.0,1.0,2.7,4.7
+PLOS Computational Biology (PLOS),300,279,196,139.0,280.0,0.0,0.7,1.4
+Frontiers in Plant Science (Frontiers),300,300,53.5,39.0,75.0,11.0,58.7,72.7
+Physiological Measurement (IOP),196,185,128,100.0,168.0,1.1,5.4,9.2
+J Neural Engineering (IOP),300,291,138,108.0,190.0,0.7,4.8,7.2
+Physics in Medicine & Biology (IOP),300,289,124,101.0,161.5,0.0,3.1,8.7
