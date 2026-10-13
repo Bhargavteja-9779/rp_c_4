@@ -4,3 +4,4 @@ __pycache__/
 .pytest_cache/
 **/data/raw/
 Target_Journal_Submission/results_quick/
+Target_Journal_Submission/results/experiment_logs/
