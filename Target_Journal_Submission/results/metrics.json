@@ -1,0 +1,125 @@
+{
+  "primary_alpha": 0.1,
+  "by_method": {
+    "ASTM-PI": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.49237635418833336,
+      "min_coverage": 0.0259,
+      "n_under_covering": 29,
+      "median_IS": 4.7303625,
+      "frac_reps_infinite": 0.0
+    },
+    "Gauss-LOO": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.9053561238166667,
+      "min_coverage": 0.892666644,
+      "n_under_covering": 0,
+      "median_IS": 2.0473825,
+      "frac_reps_infinite": 0.0
+    },
+    "LF-conv": {
+      "n_scenarios": 36,
+      "mean_coverage": 0.8953998896666666,
+      "min_coverage": 0.8519,
+      "n_under_covering": 20,
+      "median_IS": 1.7333975,
+      "frac_reps_infinite": 0.0
+    },
+    "SCP-S": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.6174424113600001,
+      "min_coverage": 0.051,
+      "n_under_covering": 33,
+      "median_IS": 4.4622825,
+      "frac_reps_infinite": 0.0
+    },
+    "SCP-T-split": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.9583177039999999,
+      "min_coverage": 0.8920000000000001,
+      "n_under_covering": 0,
+      "median_IS": Infinity,
+      "frac_reps_infinite": 0.5
+    },
+    "SCP-T-split-N": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.9587038234499999,
+      "min_coverage": 0.9007999999999999,
+      "n_under_covering": 0,
+      "median_IS": Infinity,
+      "frac_reps_infinite": 0.5
+    },
+    "TCV+N": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.9312567925833333,
+      "min_coverage": 0.898455834,
+      "n_under_covering": 0,
+      "median_IS": 2.28482,
+      "frac_reps_infinite": 0.0
+    },
+    "TJ+": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.9235934414999999,
+      "min_coverage": 0.8999999766666668,
+      "n_under_covering": 0,
+      "median_IS": 2.2766625,
+      "frac_reps_infinite": 0.0
+    },
+    "TJ+N": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.9221885562833332,
+      "min_coverage": 0.897920936,
+      "n_under_covering": 0,
+      "median_IS": 2.1620025,
+      "frac_reps_infinite": 0.0
+    },
+    "TJ+N[Q]": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.9223902318333334,
+      "min_coverage": 0.8993395359999999,
+      "n_under_covering": 0,
+      "median_IS": 2.203445,
+      "frac_reps_infinite": 0.0
+    },
+    "TJ+N[T2]": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.9223653116166666,
+      "min_coverage": 0.899567422,
+      "n_under_covering": 0,
+      "median_IS": 2.1244199999999998,
+      "frac_reps_infinite": 0.0
+    },
+    "TJ-insample-N": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.8981785069499999,
+      "min_coverage": 0.8299394033333334,
+      "n_under_covering": 14,
+      "median_IS": 2.0160774999999997,
+      "frac_reps_infinite": 0.0
+    },
+    "TJ-naive-N": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.9130041365499999,
+      "min_coverage": 0.897344208,
+      "n_under_covering": 0,
+      "median_IS": 2.0792450000000002,
+      "frac_reps_infinite": 0.0
+    },
+    "Transport": {
+      "n_scenarios": 36,
+      "mean_coverage": 0.8109182929388888,
+      "min_coverage": 0.28780000000000006,
+      "n_under_covering": 18,
+      "median_IS": 2.76937,
+      "frac_reps_infinite": 0.0
+    },
+    "WCP-S": {
+      "n_scenarios": 40,
+      "mean_coverage": 0.68871622157,
+      "min_coverage": 0.19460000000000002,
+      "n_under_covering": 33,
+      "median_IS": 22.666150000000002,
+      "frac_reps_infinite": 0.48860000000000003
+    }
+  }
+}

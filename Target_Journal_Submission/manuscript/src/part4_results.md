@@ -22,11 +22,18 @@ Weighting the source residuals for covariate shift (WCP-S) did not repair covera
 
 {{table_main}}
 
+![**Fig. 3.** Mean empirical coverage of nominal 90% intervals versus the number of transfer standards *m* (primary pipelines; 500 repetitions for corn and tablets, 300 for mango). Markers show the mean over scenarios (properties and target instruments); vertical lines show the range over scenarios. Hollow markers: the method returned unbounded intervals in more than half of the repetitions (coverage trivially 1). Horizontal line: nominal level.](figures/fig3_coverage_vs_m.png){width=16.5cm}
+
+
 ## 4.3. Validity and efficiency of the transfer jackknife+ (RQ2)
 
 TJ+N was not flagged as under-covering in any of the {{n_scen_main}} primary scenarios. Its mean coverage was {{tjn_cov_main}} at α = 0.10, and the same held at α = 0.05 and 0.20 ({{tjn_under_all_alpha}} under-covering scenarios over all three levels; Table 4). Coverage exceeded the nominal level most clearly for *m* = 10–15. This is expected from the discrete rank $\lceil (1-\alpha)(m+1)\rceil$: with *m* = 10 the upper bound is the largest of the ten leave-one-out bounds.
 
 **Against the valid split-standards baseline.** Halving the standards made SCP-T-split unbounded in every repetition for *m* ≤ 15 at α = 0.10 ({{split_inf_text}}). Where both methods gave bounded intervals, TJ+N had a lower interval score in {{tjn_vs_split_better}} of {{tjn_vs_split_n}} scenarios (paired Wilcoxon, Holm-adjusted *p* < 0.05), with a median rank-biserial correlation of {{tjn_vs_split_rb}}. Reusing every standard for both transfer and calibration is therefore the main practical gain.
+
+Interval widths relative to the RMSEP of the deployed predictor are shown in Fig. 4.
+
+![**Fig. 4.** Median interval width relative to the RMSEP of the deployed predictor for the methods that were not under-covering (unbounded settings omitted).](figures/fig4_width_vs_m.png){width=16.5cm}
 
 **Against Gaussian leave-one-standard-out intervals.** The simple Gauss-LOO interval was a strong competitor at α = 0.10.
 - It was never flagged as under-covering at this level.
@@ -34,31 +41,60 @@ TJ+N was not flagged as under-covering in any of the {{n_scen_main}} primary sce
 - It did not differ significantly from TJ+N after Holm correction (*p* = {{p_tjn_gauss}}).
 - Per scenario, Gauss-LOO had the lower score more often on corn ({{gauss_better_corn}} of 24 scenarios), while TJ+N was better more often on tablets and mango ({{tjn_better_gauss_other}} of 16).
 
-Its validity, however, depends on approximately Gaussian errors. At α = 0.05 it under-covered in {{gauss_under_005}} of 40 scenarios, and at α = 0.20 in {{gauss_under_020}}, whereas TJ+N and TJ+ never did. The price of distribution-free validity at α = 0.05 is that TJ+N needs *m* ≥ 19 standards. With fewer standards it returns unbounded intervals rather than over-confident ones.
+Its validity, however, depends on approximately Gaussian errors. At α = 0.05 it under-covered in {{gauss_under_005}} of 40 scenarios, and at α = 0.20 in {{gauss_under_020}}, whereas TJ+N and TJ+ never did. The price of distribution-free validity at α = 0.05 is that TJ+N needs *m* ≥ 19 standards. With fewer standards it returns unbounded intervals rather than over-confident ones. Over all four transfer pipelines (PDS, DS, SBC and no transfer) and the three data sets, TJ+N under-covered in {{allpipe_tjn_under}} pipeline × scenario combinations at α = 0.10. The corresponding numbers were {{allpipe_gauss_under}} for Gauss-LOO, {{allpipe_astm_under}} for ASTM-PI and {{allpipe_scps_under}} for SCP-S (Table S2).
+
+{{table_alpha}}
 
 ## 4.4. Ablation (RQ3)
 
 Table 5 and Fig. 5 isolate the components.
 - **Leave-one-out re-fitting is essential.** With residuals from the transfer fitted on all standards (TJ-insample-N), the intervals under-covered in {{insample_under}} of {{n_scen_main}} scenarios. The effect was largest for SBC on mango (coverage {{insample_cov_mango}}), because a slope and bias fitted to the same standards absorb part of their own residuals.
-- **The "+" construction.** Centring the interval on the full-fit prediction (TJ-naive-N) was valid on average here, but it carries no guarantee and gave lower coverage than TJ+N.
 - **K-fold CV+.** Five-fold CV+ (TCV+N) needs only five refits but was more conservative, with a higher interval score than TJ+N in {{tcv_worse}} of {{n_scen_main}} scenarios.
-- **Difficulty normalisation helped only partly.**
-  - TJ+N had a lower interval score than unnormalised TJ+ in {{tjn_vs_tj_better}} scenarios and a higher one in {{tjn_vs_tj_worse}}.
-  - Unnormalised intervals under-covered the most difficult third of test samples (coverage in the highest-σ tertile {{tj_cov_sig3}}) and over-covered the easiest third ({{tj_cov_sig1}}).
-  - TJ+N moved coverage towards the difficult samples ({{tjn_cov_sig1}} and {{tjn_cov_sig3}}; Fig. 7). On corn it over-corrected, mainly through the Q term.
-  - A T²-only difficulty function gave the most balanced conditional coverage on corn. Because this variant was identified after the results were seen, we report it as exploratory and keep the pre-registered TJ+N as the primary method.
+- **The "+" construction.** Centring the interval on the full-fit prediction (TJ-naive-N) gave equal or slightly lower coverage than TJ+N. It was not flagged as under-covering here, but it carries no finite-sample guarantee.
+- **Difficulty normalisation.** Normalisation improved efficiency in most scenarios.
+  - TJ+N had a significantly lower interval score than unnormalised TJ+ in {{tjn_vs_tj_better}} of {{n_scen_main}} scenarios, and a higher one in {{tjn_vs_tj_worse}}.
+  - It also rebalanced conditional coverage. Unnormalised intervals under-covered the most difficult third of test samples (coverage in the highest-σ tertile {{tj_cov_sig3}}) and over-covered the easiest third ({{tj_cov_sig1}}). With TJ+N these became {{tjn_cov_sig3}} and {{tjn_cov_sig1}} (Fig. 6).
+  - On corn, the Q term over-corrected slightly: the highest-σ tertile was over-covered. A T²-only difficulty function was more balanced there. Because this variant was identified after the results were seen, we report it as exploratory and keep the pre-registered TJ+N as the primary method.
+  - The Q term was most valuable when the test spectra drifted after standardisation (§4.5).
 
 {{table_ablation}}
 
+![**Fig. 5.** Ablation of TJ+N. Left: mean coverage. Right: median interval score relative to TJ+N (finite intervals only).](figures/fig5_ablation.png){width=16.5cm}
+
+![**Fig. 6.** Conditional coverage within tertiles of the difficulty σ(x) of the test spectra (primary pipelines, α = 0.10).](figures/fig7_conditional_coverage.png){width=16.5cm}
+
+
 ## 4.5. Robustness (RQ4)
 
-{{robust_text}}
+TJ+N was not flagged as under-covering in any of the {{rob_n_nonshift}} robustness scenarios that preserve the joint distribution of standards and test samples (Table 6; Fig. 7). These were Kennard–Stone selection, added noise at SNR 1000–100, and halving the source data.
+
+**Kennard–Stone standards.** Selecting the standards by Kennard–Stone, which is outside the scope of Proposition 1, made TJ+N conservative (coverage {{rob_ks_cov}}). The selected standards span the extremes of the target population, so their leave-one-out residuals are, if anything, larger than those of typical samples. This empirical result is reassuring, but it is not a guarantee. Other non-random selection schemes, for example standards concentrated in a narrow concentration range, could bias coverage in either direction.
+
+**Post-standardisation wavelength drift.** The decisive failure mode was a one-channel wavelength shift of the test spectra after the transfer had been fitted. This simulates instrument drift between standardisation and routine use, and it breaks exchangeability between standards and test samples. No method remained valid.
+- Tablets: TJ+N coverage was {{rob_shift_tjn_tablets}}; Gauss-LOO {{rob_shift_gauss_tablets}}.
+- Corn: TJ+N {{rob_shift_tjn_corn}}, against {{rob_shift_tj_corn}} for unnormalised TJ+ and {{rob_shift_gauss_corn}} for Gauss-LOO.
+- Mango: TJ+N {{rob_shift_tjn_mango}}, against {{rob_shift_tj_mango}} for TJ+ and {{rob_shift_gauss_mango}} for Gauss-LOO.
+
+On corn and mango, the Q residual of the shifted spectra inflated σ(x) and recovered a large part of the coverage. On tablets, where the assay information is concentrated in a few sharp bands, it did not. Drift after standardisation must therefore be detected (for example by monitoring Q) and corrected by re-standardisation. No interval method compensates for it reliably.
 
 {{table_robust}}
 
+![**Fig. 7.** Robustness of interval coverage (α = 0.10): Kennard–Stone selection of standards, spectral noise added to all target spectra, a ±1-channel wavelength shift of the test spectra after standardisation, and halved source training data.](figures/fig6_robustness.png){width=16.5cm}
+
+
+
 ## 4.6. Generalisation across pipelines, directions and model classes (RQ5)
 
-{{general_text}}
+The conclusions did not depend on the primary pipeline, the transfer direction or the model class (Table 7).
+- **Transfer pipelines.** With DS, SBC or no transfer instead of PDS, TJ+N and TJ+ were never flagged as under-covering (§4.3).
+- **Reverse direction.** Transferring from mp5 to m5 gave the same picture: no under-coverage for TJ+N, and under-coverage of the source-calibrated intervals.
+- **Ridge regression.** With ridge source models, TJ+N was valid on all three data sets.
+- **1D-CNN on mango.** The CNN ({{cnn_params}} parameters, early stopping after {{cnn_epochs}} epochs, {{cnn_train_s}} s on a CPU) reached RMSEP {{cnn_rmsep}} % after SBC. On top of it:
+  - TJ+N gave coverage {{cnn_tjn_cov}} with the lowest interval score ({{cnn_tjn_is}}).
+  - Gauss-LOO under-covered in {{cnn_gauss_under}} scenarios (coverage {{cnn_gauss_cov}}; score {{cnn_gauss_is}}).
+  - MC-dropout intervals [@gal2016], a common deep-learning uncertainty estimate for spectra [@maxime2025], under-covered in {{cnn_mc_under}} scenarios (coverage {{cnn_mc_cov}}). Their epistemic variance does not reflect the season shift.
+
+Over all generalisation settings, TJ+N under-covered in {{gen_tjn_under}} of {{gen_tjn_n}} scenarios.
 
 {{table_general}}
 
@@ -68,17 +104,24 @@ The label-free LF-conv interval uses only paired, unlabelled standards. It was n
 
 ## 4.8. Sensitivity to transfer and model settings
 
-{{sens_text}}
+Changing the PDS window (3, 7 or 11 channels instead of the pre-registered 5) or the number of latent variables (±2) changed point accuracy considerably. For example, the corn RMSEP by window was {{sens_corn_rmsep_hw}}, which shows that the pre-registered window of 5 was not the most accurate choice for corn; it was nevertheless kept, since the window was not tuned on target data. Interval validity was unaffected: TJ+N under-covered in {{sens_tjn_under}} of {{sens_n}} sensitivity scenarios (coverage {{sens_tjn_cov}}; Table S3). The source-calibrated intervals under-covered in {{sens_src_under}} cases. Their validity also depended on the setting; for example, ASTM-PI coverage fell to {{sens_tab_lvm2_astm}} for the tablet assay with two latent variables fewer. Because TJ+ calibrates on the deployed pipeline itself, poorer transfer settings are reflected in wider, but still valid, intervals.
 
-## 4.9. Computational cost (RQ6)
+## 4.9. Error analysis
 
-{{timing_text}}
+Misses of the conventional intervals were associated with spectra that the source model reconstructed poorly after transfer (Fig. 8). On corn, the miss rate of ASTM-PI was {{astm_miss_q1}} in the lowest and {{astm_miss_q5}} in the highest Q-residual quintile of the test spectra. Gauss-LOO, which uses one width for all samples, was valid on average but missed more often in the highest Q quintile: {{miss_q5_gauss_corn}} (corn), {{miss_q5_gauss_tablets}} (tablets) and {{miss_q5_gauss_mango}} (mango), against {{miss_q5_tjn_corn}}, {{miss_q5_tjn_tablets}} and {{miss_q5_tjn_mango}} for TJ+N, for a nominal 0.10. The difficulty normalisation thus moves coverage to where it is needed. A large Q residual after transfer is in any case a useful warning flag for an individual prediction.
 
-## 4.10. Error analysis
+Coverage is a property of the procedure, not of one realised set of standards. Across repetitions, the 5th percentile of per-repetition coverage of TJ+N at *m* = 20 was {{tjn_p05_m20}} (Fig. 9). An unlucky draw of 20 standards can therefore give a markedly lower realised coverage on a given test batch. This variability, intrinsic to marginal guarantees with small calibration sets, shrinks as *m* grows ({{tjn_p05_m50}} at *m* = 50 for tablets and mango).
 
-Misses were concentrated in spectra that the source model reconstructed poorly after transfer. For the classical parametric interval, the miss rate rose with the Q-residual quintile of the test spectrum (Fig. 8; {{astm_miss_q1}} in the lowest vs {{astm_miss_q5}} in the highest quintile, corn). TJ+N kept the miss rate closer to nominal across quintiles ({{tjn_miss_q1}}–{{tjn_miss_q5}}). Large Q is therefore a useful warning flag for a transferred calibration, and it is the rationale for including Q in σ(x).
+![**Fig. 8.** Miss rate (1 − coverage) by Q-residual quintile of the test spectra (first 100 repetitions; corn m = 15, tablets assay and mango m = 20). Horizontal line: nominal miss rate 0.10.](figures/fig8_error_analysis.png){width=16.5cm}
 
-Coverage is a property of the procedure, not of one realised set of standards. Across repetitions, the 5th percentile of per-repetition coverage of TJ+N at *m* = 20 was {{tjn_p05_m20}} (Fig. 10). An unlucky draw of 20 standards can therefore give a markedly lower realised coverage on a given test batch. This variability, intrinsic to marginal guarantees with small calibration sets, shrinks as *m* grows ({{tjn_p05_m50}} at *m* = 50 for tablets and mango).
+![**Fig. 9.** Distribution over repetitions of the realised test-set coverage for one scenario per data set (violins; dots = mean). The guarantee concerns the mean; individual draws of standards vary.](figures/fig10_coverage_distribution.png){width=16.5cm}
+
+## 4.10. Computational cost (RQ6)
+
+TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits for the optional CV+ comparison included in our timing). On a single CPU core, one transfer fit with prediction took {{time_one_corn}} ms (corn, *m* = 20), {{time_one_tablets}} ms (tablets, *m* = 50, 410 test spectra) and {{time_one_mango}} ms (mango SBC). The complete TJ+N interval computation took {{time_tj_corn}} s, {{time_tj_tablets}} s and {{time_tj_mango}} s, respectively, with peak memory below {{time_mem_max}} MB (Fig. 10). The source model is never re-fitted. The added cost is therefore negligible for routine laboratory use, and it scales linearly with *m* and with the cost of one transfer fit.
+
+
+![**Fig. 10.** Wall-clock time per test batch (single CPU core, median of 20 runs, logarithmic scale).](figures/fig9_timing.png){width=16.5cm}
 
 ## 4.11. Practical recommendations
 

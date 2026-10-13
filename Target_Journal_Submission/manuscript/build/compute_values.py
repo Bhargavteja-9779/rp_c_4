@@ -101,6 +101,7 @@ def main():
     V["n_scen_main"] = len(t)
     V["tjn_cov_main"] = f"{t['coverage_mean'].mean():.3f} (range over scenarios {t['coverage_mean'].min():.3f}–{t['coverage_mean'].max():.3f})"
     allA = pd.concat([primary(S, a) for a in CFG["alphas"]])
+    V["tjn_cov_mean"] = f"{t['coverage_mean'].mean():.3f}"
     V["tjn_under_all_alpha"] = int(allA[allA.method == "TJ+N"]["under_covering"].sum())
     ok = None
     for mm in sorted(t["m"].unique()):

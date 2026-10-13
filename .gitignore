@@ -4,9 +4,3 @@ __pycache__/
 .pytest_cache/
 **/data/raw/
 Target_Journal_Submission/results_quick/
-Target_Journal_Submission/results/experiment_logs/
-# TEMPORARY while experiments run (removed at completion)
-Target_Journal_Submission/results/raw/E4_*
-Target_Journal_Submission/results/raw/E5_*
-Target_Journal_Submission/results/raw/E6_*
-Target_Journal_Submission/results/raw/E7_*

@@ -1,0 +1,140 @@
+{
+  "median_interval_score": {
+    "n_scenarios": 40,
+    "methods": [
+      "ASTM-PI",
+      "Gauss-LOO",
+      "SCP-S",
+      "SCP-T-split",
+      "SCP-T-split-N",
+      "TJ+",
+      "TJ+N",
+      "WCP-S"
+    ],
+    "friedman_chi2": 145.46004254026127,
+    "p_value": 3.6428242936568807e-28,
+    "mean_ranks": {
+      "Gauss-LOO": 2.175,
+      "TJ+N": 2.525,
+      "TJ+": 3.125,
+      "SCP-S": 4.2625,
+      "ASTM-PI": 5.025,
+      "SCP-T-split-N": 6.025,
+      "WCP-S": 6.2625,
+      "SCP-T-split": 6.6
+    },
+    "pairwise_vs_ref": [
+      {
+        "method": "ASTM-PI",
+        "p": 0.00017029843002092093,
+        "p_holm": 0.0006811937200836837,
+        "rank_biserial": -0.6536585365853659
+      },
+      {
+        "method": "Gauss-LOO",
+        "p": 0.1058129653429205,
+        "p_holm": 0.1058129653429205,
+        "rank_biserial": 0.2951219512195122
+      },
+      {
+        "method": "SCP-S",
+        "p": 0.0008436624721070984,
+        "p_holm": 0.0025309874163212953,
+        "rank_biserial": -0.5878048780487805
+      },
+      {
+        "method": "SCP-T-split",
+        "p": 1.000444171950221e-10,
+        "p_holm": 6.002665031701326e-10,
+        "rank_biserial": -0.973170731707317
+      },
+      {
+        "method": "SCP-T-split-N",
+        "p": 1.8189894035458565e-12,
+        "p_holm": 1.2732925824820995e-11,
+        "rank_biserial": -1.0
+      },
+      {
+        "method": "TJ+",
+        "p": 0.03944668134499807,
+        "p_holm": 0.07889336268999614,
+        "rank_biserial": -0.37317073170731707
+      },
+      {
+        "method": "WCP-S",
+        "p": 8.20273271529004e-08,
+        "p_holm": 4.10136635764502e-07,
+        "rank_biserial": -0.8707317073170732
+      }
+    ]
+  },
+  "coverage_shortfall": {
+    "n_scenarios": 40,
+    "methods": [
+      "ASTM-PI",
+      "Gauss-LOO",
+      "SCP-S",
+      "SCP-T-split",
+      "SCP-T-split-N",
+      "TJ+",
+      "TJ+N",
+      "WCP-S"
+    ],
+    "friedman_chi2": 190.91461187214617,
+    "p_value": 9.610991635973742e-38,
+    "mean_ranks": {
+      "SCP-T-split-N": 3.1875,
+      "SCP-T-split": 3.25,
+      "TJ+": 3.25,
+      "TJ+N": 3.35,
+      "Gauss-LOO": 3.625,
+      "WCP-S": 5.95,
+      "ASTM-PI": 6.6625,
+      "SCP-S": 6.725
+    },
+    "pairwise_vs_ref": [
+      {
+        "method": "ASTM-PI",
+        "p": 1.577542564418466e-06,
+        "p_holm": 7.88771282209233e-06,
+        "rank_biserial": -0.9879032258064516
+      },
+      {
+        "method": "Gauss-LOO",
+        "p": 0.027991815485665747,
+        "p_holm": 0.11196726194266299,
+        "rank_biserial": -0.9285714285714286
+      },
+      {
+        "method": "SCP-S",
+        "p": 3.9966606163971807e-07,
+        "p_holm": 2.7976624314780265e-06,
+        "rank_biserial": -0.9966386554621849
+      },
+      {
+        "method": "SCP-T-split",
+        "p": 1.0,
+        "p_holm": 1.0,
+        "rank_biserial": 0.0
+      },
+      {
+        "method": "SCP-T-split-N",
+        "p": 0.17971249487899976,
+        "p_holm": 0.5391374846369993,
+        "rank_biserial": 1.0
+      },
+      {
+        "method": "TJ+",
+        "p": 0.28504940740261275,
+        "p_holm": 0.5700988148052255,
+        "rank_biserial": 0.6666666666666666
+      },
+      {
+        "method": "WCP-S",
+        "p": 3.9966606163971807e-07,
+        "p_holm": 2.7976624314780265e-06,
+        "rank_biserial": -0.9966386554621849
+      }
+    ]
+  }
+}

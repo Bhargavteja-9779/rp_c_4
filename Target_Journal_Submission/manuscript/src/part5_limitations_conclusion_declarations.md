@@ -3,21 +3,22 @@
 1. **Reference values for the standards.**
    - TJ+ needs the reference values of the transfer standards.
    - SBC needs them anyway, and PDS/DS standards are usually calibration samples with known values.
-   - When reference values are unavailable, only the exploratory label-free variant applies, and it carries no guarantee (§4.5).
+   - When reference values are unavailable, only the exploratory label-free variant applies, and it carries no guarantee and under-covered in our tests (§4.7).
 2. **How the standards are selected.**
    - The guarantee assumes the standards are a random sample of the target population, exchangeable with future samples.
-   - Kennard–Stone and other representative designs violate this assumption. Their empirical effect is reported in §4.4, but they are not covered by Proposition 1.
+   - Kennard–Stone and other representative designs violate this assumption. Kennard–Stone selection made TJ+N conservative in our tests (§4.5), but it is not covered by Proposition 1.
    - In practice, a random subset of standards can be reserved for interval calibration.
 3. **Marginal, not conditional, guarantee.**
    - Coverage holds on average over the draw of standards and future samples.
-   - With small *m*, the realised coverage for one particular set of standards varies (Fig. 10). Conditional coverage across difficulty strata is only approximately balanced (Fig. 7).
+   - With small *m*, the realised coverage for one particular set of standards varies (Fig. 9). Conditional coverage across difficulty strata is only approximately balanced (Fig. 6).
    - The worst-case bound is 1−2α, although the observed coverage was close to or above 1−α.
 4. **Scope of the evidence.**
    - Three public NIR data sets were used, one of them small (corn, *n* = 80), with two instrument pairs and one season shift.
    - The noise, wavelength-shift and source-size perturbations are simulated.
    - Other techniques (Raman, MIR), non-linear or deep domain-adaptation transfers, and process data streams with drift were not tested.
-5. **A simple competitor.** Gaussian intervals built from leave-one-standard-out residuals (Gauss-LOO) were often as efficient as TJ+N, and in some scenarios more so (§4.2). The advantage of TJ+N is its distribution-free guarantee and its behaviour under heavy-tailed or heteroscedastic errors, not uniformly narrower intervals.
-6. **Difficulty normalisation.** The pre-registered σ(x) built from both T² and Q did not uniformly improve efficiency over unnormalised TJ+. A T²-only variant performed better in several scenarios, but this was observed *post hoc* and needs confirmation on independent data.
+5. **A simple competitor.** Gaussian intervals built from leave-one-standard-out residuals (Gauss-LOO) were often as efficient as TJ+N, and in some scenarios more so (§4.3). The advantage of TJ+N is its distribution-free guarantee and its behaviour under heavy-tailed or heteroscedastic errors, not uniformly narrower intervals.
+6. **Difficulty normalisation.** The pre-registered σ(x), built from T² and Q, improved efficiency and conditional coverage in most scenarios, but not uniformly. On corn it over-covered difficult samples, and a T²-only variant was more balanced there. That variant was identified *post hoc* and needs confirmation on independent data.
+7. **Drift after standardisation.** A shift of the routine spectra after the transfer has been fitted (simulated as a one-channel wavelength shift) invalidated all intervals, including TJ+N (§4.5). The guarantee presupposes a stable target instrument between standardisation and use.
 
 # 6. Conclusions
 

@@ -2,7 +2,7 @@
 
 ## 3.1. Data sets
 
-Three public NIR data sets with documented domain shifts were used (Table 1). No data were collected for this study.
+Three public NIR data sets with documented domain shifts were used (Table 1; Fig. 2). No data were collected for this study.
 
 **Corn** [@eigenvector_data]. Eighty corn samples were measured on three NIR spectrometers: m5 (master), mp5 and mp6. The range is 1100–2498 nm at 2 nm intervals (700 channels). Moisture, oil, protein and starch were determined by reference methods. Instrument shift: m5→mp5 and m5→mp6, plus mp5→m5 as a reverse-direction check.
 
@@ -11,6 +11,9 @@ Three public NIR data sets with documented domain shifts were used (Table 1). No
 **Mango dry matter** [@anderson2020; @mango_data]. The data comprise 11,691 NIR spectra (684–990 nm used, 103 channels) of intact mango fruit from four harvest seasons, with dry-matter content (DMC) as reference. As recommended by the data providers, replicate scans of the same fruit (2–6 scans; one subset scanned at three temperatures) must never be split between training and test sets. Replicates were therefore averaged per fruit, giving {{n_fruit}} fruit. Season shift: seasons 1–3 (source) → season 4 (target, the providers' external validation season).
 
 {{table1}}
+
+![**Fig. 2.** Data sets. Top: mean NIR spectra per instrument (corn, tablets) or per season group (mango). Bottom: reference-value distributions.](figures/fig2_datasets.png){width=16.5cm}
+
 
 ## 3.2. Protocol
 

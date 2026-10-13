@@ -20,6 +20,12 @@ def main():
     if missing and not allow:
         sys.exit(f"Missing values for placeholders: {missing}")
     text = re.sub(r"\{\{(\w+)\}\}", lambda m: str(vals.get(m.group(1), f"[[{m.group(1)}]]")), text)
+    # number table captions in order of appearance
+    k = [0]
+    def _num(m):
+        k[0] += 1
+        return f"Table: **Table {k[0]}.** "
+    text = re.sub(r"^Table: ", _num, text, flags=re.M)
     # loose lists: blank line before every list item (renders lists in body style, not the table "Compact" style)
     lines, outl = text.split("\n"), []
     for ln in lines:

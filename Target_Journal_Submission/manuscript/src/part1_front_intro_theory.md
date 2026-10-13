@@ -10,11 +10,11 @@ title: "Valid prediction intervals for transferred multivariate calibrations: re
 
 # Abstract {.unnumbered}
 
-**Background:** Calibration models built on one spectrometer or harvest season are routinely deployed elsewhere after calibration transfer (e.g., piecewise direct standardisation, PDS) or slope/bias correction, using a handful of transfer standards. Analytical results also require a stated uncertainty. However, whether the prediction intervals of a transferred calibration keep their nominal coverage has not, to our knowledge, been studied systematically, and splitting the scarce standards between transfer and uncertainty calibration wastes them.
+**Background:** Calibrations built on one spectrometer or season are routinely transferred to others using a few transfer standards. Whether the prediction intervals of a transferred calibration keep their nominal coverage has not been studied systematically, and splitting the scarce standards between transfer and uncertainty calibration wastes them.
 
-**Results:** We propose a transfer jackknife+ (TJ+): every standard is left out in turn, the transfer step is re-fitted on the remaining standards, and the leave-one-out residuals, normalised by a source-learned difficulty function of Hotelling T² and Q residuals, define distribution-free intervals. For exchangeable standards these intervals have coverage of at least 1−2α. On three public NIR data sets (corn, three instruments; pharmaceutical tablets, two instruments; mango dry matter, four seasons) in {{n_scen_main}} pre-registered scenarios with up to 500 random repetitions each, source-calibrated intervals (ASTM-type parametric, split conformal, weighted conformal) under-covered after transfer, with mean coverage as low as {{min_cov_source}} for a nominal 0.90. TJ+N reached a mean coverage of {{tjn_cov_main}} and never under-covered for *m* ≥ {{tjn_valid_m}} standards. Its intervals were finite where the split-standards alternative was not ({{split_inf_text}}). Robustness, ablation, ridge and 1D-CNN analyses delimit when the guarantee applies.
+**Results:** We propose a transfer jackknife+ (TJ+N). Each standard is left out in turn, the transfer step (e.g., piecewise direct standardisation) is re-fitted on the others, and the leave-one-out residuals, normalised by a difficulty function of Hotelling T² and Q residuals learned from source data, define distribution-free intervals with coverage ≥ 1−2α for exchangeable standards. On three public NIR data sets (instrument and season shift; {{n_scen_main}} pre-registered scenarios, up to 500 repetitions each), source-calibrated intervals under-covered after transfer, with coverage as low as {{min_cov_source}} for a nominal 0.90. TJ+N had a mean coverage of {{tjn_cov_mean}} and was never flagged as under-covering, at α = 0.05, 0.10 or 0.20, under four transfer pipelines, or with PLS, ridge and 1D-CNN models. Splitting the standards gave unbounded intervals for *m* ≤ 15. Gaussian intervals from leave-one-out residuals were similarly efficient at 90% but under-covered in {{gauss_under_005}} of 40 scenarios at 95%. All methods failed under wavelength drift occurring after standardisation.
 
-**Significance:** TJ+ provides finite-sample-valid uncertainty for transferred NIR calibrations from the standards that calibration transfer already requires, at a cost of *m* refits of the transfer step.
+**Significance:** TJ+N gives finite-sample-valid uncertainty for transferred NIR calibrations from the standards that calibration transfer already requires, at the cost of *m* refits of the transfer step (seconds or less).
 
 **Keywords:** calibration transfer; prediction interval; conformal prediction; jackknife+; near-infrared spectroscopy; measurement uncertainty
 
@@ -70,7 +70,7 @@ The TJ+N interval for a new target spectrum $\mathbf{x}$ is
 
 $$\hat C(\mathbf{x}) = \left[\, \hat q^{-}_{\alpha}\{\mu_{-i}(\mathbf{x}) - \sigma_{-i}(\mathbf{x})R_i\},\;\; \hat q^{+}_{\alpha}\{\mu_{-i}(\mathbf{x}) + \sigma_{-i}(\mathbf{x})R_i\}\,\right], \qquad (4)$$
 
-where $\hat q^{+}_{\alpha}\{v_i\}$ is the $\lceil(1-\alpha)(m+1)\rceil$-th smallest of $v_1,\dots,v_m$ (and $+\infty$ if this rank exceeds $m$), and $\hat q^{-}_{\alpha}\{v_i\}$ is the $\lfloor\alpha(m+1)\rfloor$-th smallest (and $-\infty$ if this rank is below 1). The unnormalised variant TJ+ uses $\sigma\equiv 1$. The source model $f$ is **never** re-fitted; only the transfer step is.
+where $\hat q^{+}_{\alpha}\{v_i\}$ is the $\lceil(1-\alpha)(m+1)\rceil$-th smallest of $v_1,\dots,v_m$ (and $+\infty$ if this rank exceeds $m$), and $\hat q^{-}_{\alpha}\{v_i\}$ is the $\lfloor\alpha(m+1)\rfloor$-th smallest (and $-\infty$ if this rank is below 1). The unnormalised variant TJ+ uses $\sigma\equiv 1$. The source model $f$ is **never** re-fitted; only the transfer step is (Fig. 1).
 
 **Proposition 1.** *Suppose that $Z_1,\dots,Z_{m+1}$ are exchangeable. This holds, for example, when the standards and the future sample are drawn at random from the same target population. Suppose also that $\mathcal{T}$ treats its input standards symmetrically, and that $f$ and $\sigma$ do not depend on the target data. Then $\Pr\{y_{m+1}\in\hat C(\mathbf{x}^T_{m+1})\}\ge 1-2\alpha$.*
 
@@ -79,7 +79,10 @@ where $\hat q^{+}_{\alpha}\{v_i\}$ is the $\lceil(1-\alpha)(m+1)\rceil$-th small
 Three remarks clarify the scope of the guarantee.
 - **No transfer step.** When there is no transfer ($\mu_{-i}=f$), TJ+ reduces to split conformal prediction that uses *all* $m$ standards for calibration, with exact $1-\alpha$ coverage.
 - **Minimum number of standards.** Finite upper bounds require $\lceil(1-\alpha)(m+1)\rceil\le m$, i.e. $m\ge 9$ for α = 0.1 and $m\ge 19$ for α = 0.05. Splitting the standards in half (SCP-T-split, §2.4) needs twice as many.
-- **Conditions are not automatic.** Exchangeability is a property of how the standards are chosen. Representative-design selection, such as Kennard–Stone [@kennard1969], is not covered by Proposition 1 and is examined empirically (§4.4). The bound is also marginal: it holds on average over the draw of standards and the test sample, not conditionally on a particular set of standards.
+- **Conditions are not automatic.** Exchangeability is a property of how the standards are chosen. Representative-design selection, such as Kennard–Stone [@kennard1969], is not covered by Proposition 1 and is examined empirically (§4.5). The bound is also marginal: it holds on average over the draw of standards and the test sample, not conditionally on a particular set of standards.
+
+
+![**Fig. 1.** Transfer jackknife+ (TJ+N). Only the transfer step is re-fitted in the leave-one-standard-out loop; the source model and the difficulty function σ are fixed beforehand from source data.](figures/fig1_workflow.png){width=16.5cm}
 
 ## 2.4. Comparison methods
 

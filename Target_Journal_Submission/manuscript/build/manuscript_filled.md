@@ -10,11 +10,11 @@ title: "Valid prediction intervals for transferred multivariate calibrations: re
 
 # Abstract {.unnumbered}
 
-**Background:** Calibration models built on one spectrometer or harvest season are routinely deployed elsewhere after calibration transfer (e.g., piecewise direct standardisation, PDS) or slope/bias correction, using a handful of transfer standards. Analytical results also require a stated uncertainty. However, whether the prediction intervals of a transferred calibration keep their nominal coverage has not, to our knowledge, been studied systematically, and splitting the scarce standards between transfer and uncertainty calibration wastes them.
+**Background:** Calibrations built on one spectrometer or season are routinely transferred to others using a few transfer standards. Whether the prediction intervals of a transferred calibration keep their nominal coverage has not been studied systematically, and splitting the scarce standards between transfer and uncertainty calibration wastes them.
 
-**Results:** We propose a transfer jackknife+ (TJ+): every standard is left out in turn, the transfer step is re-fitted on the remaining standards, and the leave-one-out residuals, normalised by a source-learned difficulty function of Hotelling T² and Q residuals, define distribution-free intervals. For exchangeable standards these intervals have coverage of at least 1−2α. On three public NIR data sets (corn, three instruments; pharmaceutical tablets, two instruments; mango dry matter, four seasons) in [[n_scen_main]] pre-registered scenarios with up to 500 random repetitions each, source-calibrated intervals (ASTM-type parametric, split conformal, weighted conformal) under-covered after transfer, with mean coverage as low as [[min_cov_source]] for a nominal 0.90. TJ+N reached a mean coverage of [[tjn_cov_main]] and never under-covered for *m* ≥ [[tjn_valid_m]] standards. Its intervals were finite where the split-standards alternative was not ([[split_inf_text]]). Robustness, ablation, ridge and 1D-CNN analyses delimit when the guarantee applies.
+**Results:** We propose a transfer jackknife+ (TJ+N). Each standard is left out in turn, the transfer step (e.g., piecewise direct standardisation) is re-fitted on the others, and the leave-one-out residuals, normalised by a difficulty function of Hotelling T² and Q residuals learned from source data, define distribution-free intervals with coverage ≥ 1−2α for exchangeable standards. On three public NIR data sets (instrument and season shift; 40 pre-registered scenarios, up to 500 repetitions each), source-calibrated intervals under-covered after transfer, with coverage as low as 0.03 for a nominal 0.90. TJ+N had a mean coverage of 0.922 and was never flagged as under-covering, at α = 0.05, 0.10 or 0.20, under four transfer pipelines, or with PLS, ridge and 1D-CNN models. Splitting the standards gave unbounded intervals for *m* ≤ 15. Gaussian intervals from leave-one-out residuals were similarly efficient at 90% but under-covered in 14 of 40 scenarios at 95%. All methods failed under wavelength drift occurring after standardisation.
 
-**Significance:** TJ+ provides finite-sample-valid uncertainty for transferred NIR calibrations from the standards that calibration transfer already requires, at a cost of *m* refits of the transfer step.
+**Significance:** TJ+N gives finite-sample-valid uncertainty for transferred NIR calibrations from the standards that calibration transfer already requires, at the cost of *m* refits of the transfer step (seconds or less).
 
 **Keywords:** calibration transfer; prediction interval; conformal prediction; jackknife+; near-infrared spectroscopy; measurement uncertainty
 
@@ -76,7 +76,7 @@ The TJ+N interval for a new target spectrum $\mathbf{x}$ is
 
 $$\hat C(\mathbf{x}) = \left[\, \hat q^{-}_{\alpha}\{\mu_{-i}(\mathbf{x}) - \sigma_{-i}(\mathbf{x})R_i\},\;\; \hat q^{+}_{\alpha}\{\mu_{-i}(\mathbf{x}) + \sigma_{-i}(\mathbf{x})R_i\}\,\right], \qquad (4)$$
 
-where $\hat q^{+}_{\alpha}\{v_i\}$ is the $\lceil(1-\alpha)(m+1)\rceil$-th smallest of $v_1,\dots,v_m$ (and $+\infty$ if this rank exceeds $m$), and $\hat q^{-}_{\alpha}\{v_i\}$ is the $\lfloor\alpha(m+1)\rfloor$-th smallest (and $-\infty$ if this rank is below 1). The unnormalised variant TJ+ uses $\sigma\equiv 1$. The source model $f$ is **never** re-fitted; only the transfer step is.
+where $\hat q^{+}_{\alpha}\{v_i\}$ is the $\lceil(1-\alpha)(m+1)\rceil$-th smallest of $v_1,\dots,v_m$ (and $+\infty$ if this rank exceeds $m$), and $\hat q^{-}_{\alpha}\{v_i\}$ is the $\lfloor\alpha(m+1)\rfloor$-th smallest (and $-\infty$ if this rank is below 1). The unnormalised variant TJ+ uses $\sigma\equiv 1$. The source model $f$ is **never** re-fitted; only the transfer step is (Fig. 1).
 
 **Proposition 1.** *Suppose that $Z_1,\dots,Z_{m+1}$ are exchangeable. This holds, for example, when the standards and the future sample are drawn at random from the same target population. Suppose also that $\mathcal{T}$ treats its input standards symmetrically, and that $f$ and $\sigma$ do not depend on the target data. Then $\Pr\{y_{m+1}\in\hat C(\mathbf{x}^T_{m+1})\}\ge 1-2\alpha$.*
 
@@ -88,7 +88,10 @@ Three remarks clarify the scope of the guarantee.
 
 - **Minimum number of standards.** Finite upper bounds require $\lceil(1-\alpha)(m+1)\rceil\le m$, i.e. $m\ge 9$ for α = 0.1 and $m\ge 19$ for α = 0.05. Splitting the standards in half (SCP-T-split, §2.4) needs twice as many.
 
-- **Conditions are not automatic.** Exchangeability is a property of how the standards are chosen. Representative-design selection, such as Kennard–Stone [@kennard1969], is not covered by Proposition 1 and is examined empirically (§4.4). The bound is also marginal: it holds on average over the draw of standards and the test sample, not conditionally on a particular set of standards.
+- **Conditions are not automatic.** Exchangeability is a property of how the standards are chosen. Representative-design selection, such as Kennard–Stone [@kennard1969], is not covered by Proposition 1 and is examined empirically (§4.5). The bound is also marginal: it holds on average over the draw of standards and the test sample, not conditionally on a particular set of standards.
+
+
+![**Fig. 1.** Transfer jackknife+ (TJ+N). Only the transfer step is re-fitted in the leave-one-standard-out loop; the source model and the difficulty function σ are fixed beforehand from source data.](figures/fig1_workflow.png){width=16.5cm}
 
 ## 2.4. Comparison methods
 
@@ -119,3 +122,396 @@ All methods share the same deployed point predictor $\mu_{\mathcal{D}}$ fitted o
 - TJ+N[T²] and TJ+N[Q]: σ from a single diagnostic.
 
 **Label-free variant (exploratory, LF-conv).** If the paired standards have no reference values, the target error decomposes as $y-\mu(\mathbf{x}^T)=e^S-d$. Here $e^S=y-f(\mathbf{x}^S)$ is the source error, estimated by the pooled source residuals $e_j$. The term $d=\mu(\mathbf{x}^T)-f(\mathbf{x}^S)$ is the transfer discrepancy, estimated from leave-one-out fits on the standards as $d_i=\mu_{-i}(\mathbf{x}^T_i)-f(\mathbf{x}^S_i)$. The interval is $\mu(\mathbf{x})+[\,Q_{\alpha/2},Q_{1-\alpha/2}\,]$ of $\{e_j-d_i\}_{j,i}$. It assumes independence of $e^S$ and $d$ and has no finite-sample guarantee.
+
+
+# 3. Experimental
+
+## 3.1. Data sets
+
+Three public NIR data sets with documented domain shifts were used (Table 1; Fig. 2). No data were collected for this study.
+
+**Corn** [@eigenvector_data]. Eighty corn samples were measured on three NIR spectrometers: m5 (master), mp5 and mp6. The range is 1100–2498 nm at 2 nm intervals (700 channels). Moisture, oil, protein and starch were determined by reference methods. Instrument shift: m5→mp5 and m5→mp6, plus mp5→m5 as a reverse-direction check.
+
+**Pharmaceutical tablets (IDRC Shootout 2002)** [@eigenvector_data]. 655 tablets were measured on two spectrometers (600–1898 nm, 650 channels), with reference weight, hardness and active-ingredient assay. The distributed calibrate (155), validate (40) and test (460) partition was retained. Instrument 1 is the master.
+
+**Mango dry matter** [@anderson2020; @mango_data]. The data comprise 11,691 NIR spectra (684–990 nm used, 103 channels) of intact mango fruit from four harvest seasons, with dry-matter content (DMC) as reference. As recommended by the data providers, replicate scans of the same fruit (2–6 scans; one subset scanned at three temperatures) must never be split between training and test sets. Replicates were therefore averaged per fruit, giving 4,677 fruit. Season shift: seasons 1–3 (source) → season 4 (target, the providers' external validation season).
+
+| Data set | Size | Shift | Range (channels) | Responses | Source train / source cal. / target pool | m |
+|:--|--:|--:|--:|--:|--:|--:|
+| Corn | 80 samples | m5 → mp5, mp6 (and mp5 → m5) | 1100–2498 nm (700) | moisture, oil, protein, starch (%) | 40 / 10 / 30 (random each repetition) | 10, 15, 20 |
+| Tablets | 655 tablets | 1 → 2 | 600–1898 nm (650) | assay (mg), weight (mg), hardness | 155 / 40 / 460 (fixed) | 10, 20, 30, 50 |
+| Mango | 4,677 fruit (3,952 source, 725 target) | seasons 1–3 → 4 | 684–990 nm (103) | dry matter (%) | 3,162 / 790 / 725 | 10, 20, 30, 50 |
+
+Table: **Table 1.** Data sets and splitting protocol.
+
+
+![**Fig. 2.** Data sets. Top: mean NIR spectra per instrument (corn, tablets) or per season group (mango). Bottom: reference-value distributions.](figures/fig2_datasets.png){width=16.5cm}
+
+
+## 3.2. Protocol
+
+The design, including all hyperparameters, seeds, metrics, tests and the validity criterion, was fixed before any target-domain result was computed. It is documented with a deviation log in the repository.
+
+**Source models.** Preprocessing was chosen among none, SNV [@barnes1989], Savitzky–Golay [@savitzky1964] first derivative (window 11, order 2) and second derivative (window 13, order 2). The number of PLS latent variables [@wold2001] (≤15 for corn and tablets, ≤25 for mango) was chosen by 10-fold cross-validation (one-standard-error rule) on the source training data only. The out-of-fold residuals of this cross-validation were used to fit σ (Eq. (2)). For model-class generalisation, ridge regression (penalty by 10-fold CV, same preprocessing) and a small 1D-CNN were used. The CNN (mango only) has two convolutional layers and dropout 0.2, and was trained once on seasons 1–3 with early stopping on a 10% split of the source training data.
+
+**Splits.**
+
+- *Corn:* in every repetition, 40 random samples were the source training set (master spectra), 10 the source calibration set and 30 the target pool. From the pool, *m* ∈ {10, 15, 20} random standards were drawn; the remaining 30−*m* samples were test samples.
+
+- *Tablets:* the source training set was the instrument-1 calibrate set and the source calibration set the instrument-1 validate set. The target pool was the instrument-2 test set, with *m* ∈ {10, 20, 30, 50} standards and the remaining 460−*m* tablets as test samples.
+
+- *Mango:* source fruit were split once (80/20, fixed seed) into source training and source calibration sets. The target pool was the 725 season-4 fruit, with *m* ∈ {10, 20, 30, 50}.
+
+Standards were never used to train the source model, and test samples were never standards. Repetitions: 500 (corn, tablets) and 300 (mango) for the main experiment, 200 for the secondary experiments, with seeds fixed in advance.
+
+**Transfer.** PDS (window 5, truncated pseudo-inverse with relative tolerance 0.01, with intercept) [@wang1991; @bouveresse1996], DS, SBC and no transfer were applied. Spectral preprocessing was applied after spectral standardisation. The pre-registered primary pipelines were PDS for corn and tablets and SBC for mango; the other pipelines are reported as secondary results.
+
+**Metrics.** For each repetition and method we recorded:
+
+- empirical coverage on the test samples;
+
+- mean and median interval width;
+
+- the fraction of unbounded intervals;
+
+- the Winkler interval score $\mathrm{IS}_\alpha=(u-l)+\tfrac{2}{\alpha}(l-y)_+ + \tfrac{2}{\alpha}(y-u)_+$, a proper scoring rule for central intervals [@gneiting2007];
+
+- RMSEP of the point prediction;
+
+- coverage within tertiles of σ(x) and of y (conditional coverage).
+
+The primary miscoverage level was α = 0.10; α = 0.05 and 0.20 were sensitivity analyses.
+
+**Statistics.** Mean coverage over repetitions is reported with a 95% percentile-bootstrap confidence interval (2000 resamples of repetitions). A method was pre-registered as *under-covering* in a scenario when the upper limit of this interval was below 1−α. Interval scores were compared only between methods that were not under-covering. Within each scenario, TJ+N was compared with every other method by a two-sided Wilcoxon signed-rank test on the per-repetition interval score, paired by repetition (identical splits). Holm's correction [@holm1979] was applied within the scenario, and the matched-pairs rank-biserial correlation was used as effect size. Unbounded intervals were assigned the worst rank. Across scenarios, methods were compared with a Friedman test on the scenario-level median interval score, followed by Holm-corrected pairwise Wilcoxon tests against TJ+N [@demsar2006]. Repetitions are independent random draws of the splits from fixed data sets, so inferences are conditional on the data sets.
+
+**Robustness and sensitivity.** Robustness conditions were:
+
+- Kennard–Stone selection of the standards from a random half of the target pool (non-exchangeable);
+
+- Gaussian noise added to all target spectra (SNR 1000, 300, 100);
+
+- a ±1-channel wavelength shift of the test spectra after the transfer was fitted (post-standardisation drift);
+
+- halving the source training set.
+
+Sensitivity analyses covered the PDS half-window (1, 2, 3, 5), the number of latent variables (±2) and α.
+
+**Software and hardware.** All methods were implemented in Python (NumPy, SciPy, scikit-learn, PyTorch). Our PLS implementation agrees with scikit-learn to within 10⁻¹⁴. Unit tests include a Monte Carlo coverage check of TJ+. Computations ran on 4 CPU cores without a GPU. The full study is reproduced by a single command (`python run_all.py --mode full`).
+
+
+# 4. Results and discussion
+
+## 4.1. Point accuracy after transfer
+
+Calibration transfer was necessary, but it was not equally beneficial everywhere (Table 2).
+
+- **Corn:** applying the master models directly to mp5/mp6 spectra gave RMSEP values 2.6–5.2 times larger than after PDS with *m* = 20 standards.
+
+- **Tablets:** PDS reduced the assay RMSEP from 6.43 mg (*m* = 10) to 4.65 mg (*m* = 50). The weight and hardness predictions were insensitive to the transfer.
+
+- **Mango:** SBC did not improve on the uncorrected source model (RMSEP 1.06–1.15 vs 1.05 %), consistent with reports that models built over several seasons are already fairly robust [@anderson2020].
+
+All interval methods share the same point predictor within a pipeline, so the comparisons below isolate the interval construction.
+
+| Data set | Response | DS (m=10) | DS (m=20) | NONE (m=10) | NONE (m=20) | PDS (m=10) | PDS (m=20) | SBC (m=10) | SBC (m=20) |
+|:--|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| Corn | moisture | 0.308 | 0.238 | 1.598 | 1.592 | 0.349 | 0.304 | 0.251 | 0.229 |
+| Corn | oil | 0.187 | 0.145 | 0.287 | 0.286 | 0.142 | 0.109 | 0.091 | 0.084 |
+| Corn | protein | 0.439 | 0.316 | 0.794 | 0.794 | 0.233 | 0.194 | 0.168 | 0.158 |
+| Corn | starch | 0.885 | 0.669 | 1.901 | 1.897 | 0.568 | 0.466 | 0.406 | 0.377 |
+| Mango | dry_matter | – | – | 1.052 | 1.052 | – | – | 1.155 | 1.095 |
+| Tablets | assay | 9.216 | 5.998 | 7.351 | 7.347 | 6.434 | 5.101 | 7.797 | 7.298 |
+| Tablets | hardness | 1.011 | 1.014 | 1.055 | 1.054 | 1.021 | 1.022 | 1.074 | 0.998 |
+| Tablets | weight | 4.138 | 4.165 | 4.456 | 4.456 | 4.194 | 4.201 | 4.212 | 3.926 |
+
+Table: **Table 2.** Point accuracy (mean RMSEP over repetitions; corn averaged over mp5 and mp6) of the deployed predictor for each transfer pipeline and number of standards m. NONE = source model applied without transfer.
+
+
+## 4.2. Conventional intervals after transfer (RQ1)
+
+Source-calibrated intervals under-covered whenever the transfer added error that the source calibration had not seen (Fig. 3; Table 3).
+
+- **Corn:** the mean coverage of nominal 90% intervals was 0.03–0.74 for ASTM-PI, SCP-S and WCP-S, which were flagged as under-covering in 72 of 72 scenario × method cells.
+
+- **Mango:** coverage was 0.71–0.76 (12 of 12 cells under-covering).
+
+- **Tablets:** the picture was mixed (0.81–0.95; 11 of 36 cells under-covering). Under-coverage occurred mainly for the assay with few standards, where a poorly determined PDS inflated the error, while weight and hardness were unaffected by the transfer.
+
+Weighting the source residuals for covariate shift (WCP-S) did not repair coverage, and it produced unbounded intervals in 59% of corn repetitions. When the domains are almost perfectly separable, the estimated likelihood ratios degenerate. More fundamentally, an instrument change alters the conditional relation between spectrum and property, which violates the covariate-shift assumption. The transport baseline, which maps source-calibration spectra into the secondary-instrument space with a master→secondary PDS, recovered part of the coverage on corn (mean coverage 0.75, range 0.29–0.92). It still under-covered in 14 of 24 scenarios, because the transported residuals inherit the source error distribution and only approximate the transfer error.
+
+| Method | Corn coverage | Corn under | Tablets coverage | Tablets under | Mango coverage | Mango under | Unbounded (% reps) | Friedman rank (IS) |
+|:--|--:|--:|--:|--:|--:|--:|--:|--:|
+| TJ+N | 0.931 (0.91–0.96) | 0/24 | 0.910 (0.90–0.95) | 0/12 | 0.904 (0.90–0.91) | 0/4 | 0 | 2.52 |
+| TJ+ | 0.933 (0.91–0.96) | 0/24 | 0.911 (0.90–0.95) | 0/12 | 0.904 (0.90–0.91) | 0/4 | 0 | 3.12 |
+| SCP-T-split-N | 0.970 (0.90–1.00) | 0/24 | 0.942 (0.91–1.00) | 0/12 | 0.942 (0.90–1.00) | 0/4 | 50 | 6.03 |
+| SCP-T-split | 0.969 (0.89–1.00) | 0/24 | 0.943 (0.91–1.00) | 0/12 | 0.941 (0.91–1.00) | 0/4 | 50 | 6.60 |
+| Gauss-LOO | 0.904 (0.89–0.91) | 0/24 | 0.908 (0.89–0.93) | 0/12 | 0.904 (0.90–0.91) | 0/4 | 0 | 2.17 |
+| ASTM-PI | 0.233 (0.03–0.43) | 24/24 | 0.925 (0.85–0.95) | 1/12 | 0.748 (0.73–0.76) | 4/4 | 0 | 5.03 |
+| SCP-S | 0.453 (0.05–0.68) | 24/24 | 0.910 (0.81–0.94) | 5/12 | 0.729 (0.71–0.74) | 4/4 | 0 | 4.26 |
+| WCP-S | 0.567 (0.19–0.74) | 24/24 | 0.917 (0.85–0.95) | 5/12 | 0.736 (0.72–0.75) | 4/4 | 49 | 6.26 |
+| Transport | 0.753 (0.29–0.92) | 14/24 | 0.926 (0.88–0.97) | 4/12 | – | – | 0 | – |
+| LF-conv | 0.883 (0.85–0.91) | 16/24 | 0.920 (0.88–0.96) | 4/12 | – | – | 0 | – |
+
+Table: **Table 3.** Coverage of nominal 90% intervals (α = 0.1) for the primary transfer pipelines (corn and tablets: PDS; mango: SBC). Coverage: mean over scenarios of the mean per-repetition coverage, with the range over scenarios in parentheses. Under: scenarios flagged as under-covering (upper limit of the 95% bootstrap CI < 0.90) / number of scenarios. Friedman rank: mean rank of the scenario median interval score over the 40 scenarios (1 = best; only methods available in all scenarios).
+
+
+![**Fig. 3.** Mean empirical coverage of nominal 90% intervals versus the number of transfer standards *m* (primary pipelines; 500 repetitions for corn and tablets, 300 for mango). Markers show the mean over scenarios (properties and target instruments); vertical lines show the range over scenarios. Hollow markers: the method returned unbounded intervals in more than half of the repetitions (coverage trivially 1). Horizontal line: nominal level.](figures/fig3_coverage_vs_m.png){width=16.5cm}
+
+
+## 4.3. Validity and efficiency of the transfer jackknife+ (RQ2)
+
+TJ+N was not flagged as under-covering in any of the 40 primary scenarios. Its mean coverage was 0.922 (range over scenarios 0.898–0.959) at α = 0.10, and the same held at α = 0.05 and 0.20 (0 under-covering scenarios over all three levels; Table 4). Coverage exceeded the nominal level most clearly for *m* = 10–15. This is expected from the discrete rank $\lceil (1-\alpha)(m+1)\rceil$: with *m* = 10 the upper bound is the largest of the ten leave-one-out bounds.
+
+**Against the valid split-standards baseline.** Halving the standards made SCP-T-split unbounded in every repetition for *m* ≤ 15 at α = 0.10 (20 of 40 scenarios, all with m ≤ 15). Where both methods gave bounded intervals, TJ+N had a lower interval score in 20 of 20 scenarios (paired Wilcoxon, Holm-adjusted *p* < 0.05), with a median rank-biserial correlation of -0.52. Reusing every standard for both transfer and calibration is therefore the main practical gain.
+
+Interval widths relative to the RMSEP of the deployed predictor are shown in Fig. 4.
+
+![**Fig. 4.** Median interval width relative to the RMSEP of the deployed predictor for the methods that were not under-covering (unbounded settings omitted).](figures/fig4_width_vs_m.png){width=16.5cm}
+
+**Against Gaussian leave-one-standard-out intervals.** The simple Gauss-LOO interval was a strong competitor at α = 0.10.
+
+- It was never flagged as under-covering at this level.
+
+- It had the best mean rank of interval score in the Friedman analysis (Fig. S2; χ² = 145.5, *p* = 3.6×10^−^28; mean ranks Gauss-LOO 2.17, TJ+N 2.52, TJ+ 3.12).
+
+- It did not differ significantly from TJ+N after Holm correction (*p* = 0.11).
+
+- Per scenario, Gauss-LOO had the lower score more often on corn (14 of 24 scenarios), while TJ+N was better more often on tablets and mango (9 of 16).
+
+Its validity, however, depends on approximately Gaussian errors. At α = 0.05 it under-covered in 14 of 40 scenarios, and at α = 0.20 in 2, whereas TJ+N and TJ+ never did. The price of distribution-free validity at α = 0.05 is that TJ+N needs *m* ≥ 19 standards. With fewer standards it returns unbounded intervals rather than over-confident ones. Over all four transfer pipelines (PDS, DS, SBC and no transfer) and the three data sets, TJ+N under-covered in 0 of 152 pipeline × scenario combinations at α = 0.10. The corresponding numbers were 12 of 152 for Gauss-LOO, 120 of 152 for ASTM-PI and 129 of 152 for SCP-S (Table S2).
+
+| Method | α = 0.05 (nominal 0.95) | α = 0.1 (nominal 0.90) | α = 0.2 (nominal 0.80) |
+|:--|--:|--:|--:|
+| TJ+N | 0/40 (50%) | 0/40 (0%) | 0/40 (0%) |
+| TJ+ | 0/40 (50%) | 0/40 (0%) | 0/40 (0%) |
+| SCP-T-split-N | 0/40 (90%) | 0/40 (50%) | 0/40 (0%) |
+| Gauss-LOO | 14/40 (0%) | 0/40 (0%) | 2/40 (0%) |
+| ASTM-PI | 29/40 (0%) | 29/40 (0%) | 29/40 (0%) |
+| SCP-S | 29/40 (0%) | 33/40 (0%) | 34/40 (0%) |
+| WCP-S | 29/40 (69%) | 33/40 (49%) | 33/40 (30%) |
+| LF-conv | 25/36 (0%) | 20/36 (0%) | 13/36 (0%) |
+
+Table: **Table 4.** Validity across miscoverage levels: number of under-covering scenarios / scenarios, with the mean percentage of repetitions returning unbounded intervals in parentheses (primary pipelines).
+
+
+## 4.4. Ablation (RQ3)
+
+Table 5 and Fig. 5 isolate the components.
+
+- **Leave-one-out re-fitting is essential.** With residuals from the transfer fitted on all standards (TJ-insample-N), the intervals under-covered in 14 of 40 scenarios. The effect was largest for SBC on mango (coverage 0.83–0.89), because a slope and bias fitted to the same standards absorb part of their own residuals.
+
+- **K-fold CV+.** Five-fold CV+ (TCV+N) needs only five refits but was more conservative, with a higher interval score than TJ+N in 32 of 40 scenarios.
+
+- **The "+" construction.** Centring the interval on the full-fit prediction (TJ-naive-N) gave equal or slightly lower coverage than TJ+N. It was not flagged as under-covering here, but it carries no finite-sample guarantee.
+
+- **Difficulty normalisation.** Normalisation improved efficiency in most scenarios.
+
+  - TJ+N had a significantly lower interval score than unnormalised TJ+ in 24 of 40 scenarios, and a higher one in 5.
+
+  - It also rebalanced conditional coverage. Unnormalised intervals under-covered the most difficult third of test samples (coverage in the highest-σ tertile 0.878) and over-covered the easiest third (0.957). With TJ+N these became 0.933 and 0.904 (Fig. 6).
+
+  - On corn, the Q term over-corrected slightly: the highest-σ tertile was over-covered. A T²-only difficulty function was more balanced there. Because this variant was identified after the results were seen, we report it as exploratory and keep the pre-registered TJ+N as the primary method.
+
+  - The Q term was most valuable when the test spectra drifted after standardisation (§4.5).
+
+| Variant | Corn cov. | Corn under | Corn rel. IS | Tablets cov. | Tablets under | Tablets rel. IS | Mango cov. | Mango under | Mango rel. IS | Cov. low/high σ tertile |
+|:--|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+| TJ+N | 0.931 | 0/24 | 1.000 | 0.910 | 0/12 | 1.000 | 0.904 | 0/4 | 1.000 | 0.904 / 0.933 |
+| TJ+ | 0.933 | 0/24 | 1.019 | 0.911 | 0/12 | 1.062 | 0.904 | 0/4 | 1.016 | 0.957 / 0.878 |
+| TCV+N | 0.942 | 0/24 | 1.066 | 0.917 | 0/12 | 1.000 | 0.908 | 0/4 | 1.009 | 0.916 / 0.941 |
+| TJ-naive-N | 0.919 | 0/24 | 0.961 | 0.905 | 0/12 | 0.999 | 0.903 | 0/4 | 0.996 | 0.894 / 0.924 |
+| TJ-insample-N | 0.897 | 10/24 | 0.935 | 0.912 | 0/12 | 1.000 | 0.863 | 4/4 | 0.992 | 0.878 / 0.909 |
+| TJ+N[T2] | 0.931 | 0/24 | 0.976 | 0.911 | 0/12 | 0.999 | 0.904 | 0/4 | 1.005 | 0.922 / 0.916 |
+| TJ+N[Q] | 0.931 | 0/24 | 1.020 | 0.911 | 0/12 | 1.011 | 0.904 | 0/4 | 1.006 | 0.914 / 0.924 |
+
+Table: **Table 5.** Ablation of TJ+N (α = 0.10, primary pipelines). Rel. IS: median over scenarios of the scenario median interval score relative to TJ+N (< 1 = narrower/better). Cov. low/high σ tertile: mean coverage in the lowest and highest tertile of σ(x) over all scenarios.
+
+
+![**Fig. 5.** Ablation of TJ+N. Left: mean coverage. Right: median interval score relative to TJ+N (finite intervals only).](figures/fig5_ablation.png){width=16.5cm}
+
+![**Fig. 6.** Conditional coverage within tertiles of the difficulty σ(x) of the test spectra (primary pipelines, α = 0.10).](figures/fig7_conditional_coverage.png){width=16.5cm}
+
+
+## 4.5. Robustness (RQ4)
+
+TJ+N was not flagged as under-covering in any of the 30 robustness scenarios that preserve the joint distribution of standards and test samples (Table 6; Fig. 7). These were Kennard–Stone selection, added noise at SNR 1000–100, and halving the source data.
+
+**Kennard–Stone standards.** Selecting the standards by Kennard–Stone, which is outside the scope of Proposition 1, made TJ+N conservative (coverage 0.93–0.96). The selected standards span the extremes of the target population, so their leave-one-out residuals are, if anything, larger than those of typical samples. This empirical result is reassuring, but it is not a guarantee. Other non-random selection schemes, for example standards concentrated in a narrow concentration range, could bias coverage in either direction.
+
+**Post-standardisation wavelength drift.** The decisive failure mode was a one-channel wavelength shift of the test spectra after the transfer had been fitted. This simulates instrument drift between standardisation and routine use, and it breaks exchangeability between standards and test samples. No method remained valid.
+
+- Tablets: TJ+N coverage was 0.04–0.07; Gauss-LOO 0.02–0.04.
+
+- Corn: TJ+N 0.60–0.94, against 0.05–0.45 for unnormalised TJ+ and 0.02–0.29 for Gauss-LOO.
+
+- Mango: TJ+N 0.73–0.97, against 0.08–0.22 for TJ+ and 0.07–0.21 for Gauss-LOO.
+
+On corn and mango, the Q residual of the shifted spectra inflated σ(x) and recovered a large part of the coverage. On tablets, where the assay information is concentrated in a few sharp bands, it did not. Drift after standardisation must therefore be detected (for example by monitoring Q) and corrected by re-standardisation. No interval method compensates for it reliably.
+
+| Condition | Data | TJ+N | TJ+ | Gauss-LOO | SCP-T-split-N | ASTM-PI | SCP-S |
+|:--|--:|--:|--:|--:|--:|--:|--:|
+| Kennard–Stone standards | Corn | 0.95 (0/4) | 0.96 (0/4) | 0.91 (0/4) | 1.00 (0/4) | 0.23 (4/4) | 0.45 (4/4) |
+| Kennard–Stone standards | Tablets | 0.93 (0/1) | 0.96 (0/1) | 0.95 (0/1) | 0.92 (0/1) | 0.94 (0/1) | 0.92 (0/1) |
+| Kennard–Stone standards | Mango | 0.96 (0/1) | 0.97 (0/1) | 0.97 (0/1) | 0.96 (0/1) | 0.75 (1/1) | 0.73 (1/1) |
+| Noise SNR 1000 | Corn | 0.95 (0/4) | 0.95 (0/4) | 0.90 (0/4) | 1.00 (0/4) | 0.23 (4/4) | 0.46 (4/4) |
+| Noise SNR 1000 | Tablets | 0.92 (0/1) | 0.91 (0/1) | 0.91 (0/1) | 0.92 (0/1) | 0.93 (0/1) | 0.91 (0/1) |
+| Noise SNR 1000 | Mango | 0.90 (0/1) | 0.90 (0/1) | 0.90 (0/1) | 0.91 (0/1) | 0.74 (1/1) | 0.73 (1/1) |
+| Noise SNR 300 | Corn | 0.94 (0/4) | 0.95 (0/4) | 0.91 (0/4) | 1.00 (0/4) | 0.23 (4/4) | 0.45 (4/4) |
+| Noise SNR 300 | Tablets | 0.91 (0/1) | 0.91 (0/1) | 0.91 (0/1) | 0.92 (0/1) | 0.93 (0/1) | 0.91 (0/1) |
+| Noise SNR 300 | Mango | 0.91 (0/1) | 0.91 (0/1) | 0.90 (0/1) | 0.91 (0/1) | 0.69 (1/1) | 0.67 (1/1) |
+| Noise SNR 100 | Corn | 0.96 (0/4) | 0.96 (0/4) | 0.91 (0/4) | 1.00 (0/4) | 0.18 (4/4) | 0.33 (4/4) |
+| Noise SNR 100 | Tablets | 0.91 (0/1) | 0.91 (0/1) | 0.91 (0/1) | 0.91 (0/1) | 0.93 (0/1) | 0.91 (0/1) |
+| Noise SNR 100 | Mango | 0.90 (0/1) | 0.90 (0/1) | 0.89 (0/1) | 0.91 (0/1) | 0.51 (1/1) | 0.49 (1/1) |
+| λ-shift +1 channel (test) | Corn | 0.82 (2/4) | 0.26 (4/4) | 0.15 (4/4) | 1.00 (0/4) | 0.08 (4/4) | 0.07 (4/4) |
+| λ-shift +1 channel (test) | Tablets | 0.04 (1/1) | 0.01 (1/1) | 0.02 (1/1) | 0.22 (1/1) | 0.01 (1/1) | 0.01 (1/1) |
+| λ-shift +1 channel (test) | Mango | 0.97 (0/1) | 0.22 (1/1) | 0.21 (1/1) | 0.97 (0/1) | 0.11 (1/1) | 0.07 (1/1) |
+| λ-shift −1 channel (test) | Corn | 0.84 (2/4) | 0.29 (4/4) | 0.17 (4/4) | 1.00 (0/4) | 0.09 (4/4) | 0.07 (4/4) |
+| λ-shift −1 channel (test) | Tablets | 0.07 (1/1) | 0.03 (1/1) | 0.04 (1/1) | 0.25 (1/1) | 0.02 (1/1) | 0.01 (1/1) |
+| λ-shift −1 channel (test) | Mango | 0.73 (1/1) | 0.08 (1/1) | 0.07 (1/1) | 0.79 (1/1) | 0.02 (1/1) | 0.02 (1/1) |
+| Half source data | Corn | 0.95 (0/4) | 0.95 (0/4) | 0.91 (0/4) | 1.00 (0/4) | 0.33 (4/4) | 0.61 (4/4) |
+| Half source data | Tablets | 0.91 (0/1) | 0.91 (0/1) | 0.92 (0/1) | 0.91 (0/1) | 0.97 (0/1) | 0.96 (0/1) |
+| Half source data | Mango | 0.90 (0/1) | 0.90 (0/1) | 0.90 (0/1) | 0.90 (0/1) | 0.75 (1/1) | 0.75 (1/1) |
+
+Table: **Table 6.** Robustness (E4; α = 0.10; corn m = 15, tablets assay and mango m = 20; 200 repetitions). Mean coverage with under-covering scenarios / scenarios in parentheses.
+
+
+![**Fig. 7.** Robustness of interval coverage (α = 0.10): Kennard–Stone selection of standards, spectral noise added to all target spectra, a ±1-channel wavelength shift of the test spectra after standardisation, and halved source training data.](figures/fig6_robustness.png){width=16.5cm}
+
+
+
+## 4.6. Generalisation across pipelines, directions and model classes (RQ5)
+
+The conclusions did not depend on the primary pipeline, the transfer direction or the model class (Table 7).
+
+- **Transfer pipelines.** With DS, SBC or no transfer instead of PDS, TJ+N and TJ+ were never flagged as under-covering (§4.3).
+
+- **Reverse direction.** Transferring from mp5 to m5 gave the same picture: no under-coverage for TJ+N, and under-coverage of the source-calibrated intervals.
+
+- **Ridge regression.** With ridge source models, TJ+N was valid on all three data sets.
+
+- **1D-CNN on mango.** The CNN (110,369 parameters, early stopping after 101 epochs, 36 s on a CPU) reached RMSEP 1.22 % after SBC. On top of it:
+
+  - TJ+N gave coverage 0.910 with the lowest interval score (5.24).
+
+  - Gauss-LOO under-covered in 2/4 scenarios (coverage 0.894; score 5.42).
+
+  - MC-dropout intervals [@gal2016], a common deep-learning uncertainty estimate for spectra [@maxime2025], under-covered in 4/4 scenarios (coverage 0.807). Their epistemic variance does not reflect the season shift.
+
+Over all generalisation settings, TJ+N under-covered in 0 of 22 scenarios.
+
+| Setting | TJ+N | TJ+ | Gauss-LOO | SCP-T-split-N | ASTM-PI | SCP-S | WCP-S | MC-dropout |
+|:--|--:|--:|--:|--:|--:|--:|--:|--:|
+| Corn mp5→m5, PLS, PDS | 0.931 (0/12); 1.11 | 0.932 (0/12); 1.21 | 0.905 (0/12); 1.17 | 0.971 (0/12); inf | 0.657 (12/12); 1.34 | 0.757 (12/12); 1.25 | 0.800 (11/12); 1.53 | – |
+| Corn m5→mp5, ridge, PDS | 0.943 (0/4); 1.21 | 0.953 (0/4); 1.17 | 0.904 (0/4); 1.06 | 1.000 (0/4); inf | 0.057 (4/4); 3.6 | 0.416 (4/4); 1.98 | 0.518 (4/4); inf | – |
+| Tablets assay, ridge, PDS | 0.916 (0/1); 21.8 | 0.915 (0/1); 21.9 | 0.914 (0/1); 22 | 0.918 (0/1); 26.4 | 0.905 (0/1); 20.7 | 0.874 (1/1); 20.9 | 0.888 (1/1); 21.8 | – |
+| Mango, ridge, SBC | 0.898 (0/1); 4.5 | 0.899 (0/1); 4.57 | 0.899 (0/1); 4.52 | 0.902 (0/1); 4.97 | 0.729 (1/1); 5.1 | 0.716 (1/1); 5.2 | 0.742 (1/1); inf | – |
+| Mango, 1D-CNN, SBC | 0.910 (0/4); 5.24 | 0.909 (0/4); 5.51 | 0.894 (2/4); 5.42 | 0.945 (0/4); 5.59 | 0.714 (4/4); 6.48 | 0.693 (4/4); 6.71 | 0.780 (4/4); inf | 0.807 (4/4); 5.66 |
+
+Table: **Table 7.** Generalisation (E5; α = 0.10). Each cell: mean coverage (under-covering / scenarios); median interval score (lower is better).
+
+
+## 4.7. Label-free variant (exploratory)
+
+The label-free LF-conv interval uses only paired, unlabelled standards. It was not reliable: it under-covered in 20 of 36 paired scenarios at α = 0.10. Its independence assumption between source error and transfer discrepancy is evidently too strong. Reference values for at least a random subset of standards remain necessary for valid intervals.
+
+## 4.8. Sensitivity to transfer and model settings
+
+Changing the PDS window (3, 7 or 11 channels instead of the pre-registered 5) or the number of latent variables (±2) changed point accuracy considerably. For example, the corn RMSEP by window was 3: 0.237, 7: 0.348, 11: 0.503, which shows that the pre-registered window of 5 was not the most accurate choice for corn; it was nevertheless kept, since the window was not tuned on target data. Interval validity was unaffected: TJ+N under-covered in 0 of 27 sensitivity scenarios (coverage 0.899–0.972; Table S3). The source-calibrated intervals under-covered in 49 of 54 cases. Their validity also depended on the setting; for example, ASTM-PI coverage fell to 0.78 for the tablet assay with two latent variables fewer. Because TJ+ calibrates on the deployed pipeline itself, poorer transfer settings are reflected in wider, but still valid, intervals.
+
+## 4.9. Error analysis
+
+Misses of the conventional intervals were associated with spectra that the source model reconstructed poorly after transfer (Fig. 8). On corn, the miss rate of ASTM-PI was 0.76 in the lowest and 0.86 in the highest Q-residual quintile of the test spectra. Gauss-LOO, which uses one width for all samples, was valid on average but missed more often in the highest Q quintile: 0.12 (corn), 0.17 (tablets) and 0.13 (mango), against 0.04, 0.10 and 0.10 for TJ+N, for a nominal 0.10. The difficulty normalisation thus moves coverage to where it is needed. A large Q residual after transfer is in any case a useful warning flag for an individual prediction.
+
+Coverage is a property of the procedure, not of one realised set of standards. Across repetitions, the 5th percentile of per-repetition coverage of TJ+N at *m* = 20 was 0.70–0.81 (Fig. 9). An unlucky draw of 20 standards can therefore give a markedly lower realised coverage on a given test batch. This variability, intrinsic to marginal guarantees with small calibration sets, shrinks as *m* grows (0.82–0.84 at *m* = 50 for tablets and mango).
+
+![**Fig. 8.** Miss rate (1 − coverage) by Q-residual quintile of the test spectra (first 100 repetitions; corn m = 15, tablets assay and mango m = 20). Horizontal line: nominal miss rate 0.10.](figures/fig8_error_analysis.png){width=16.5cm}
+
+![**Fig. 9.** Distribution over repetitions of the realised test-set coverage for one scenario per data set (violins; dots = mean). The guarantee concerns the mean; individual draws of standards vary.](figures/fig10_coverage_distribution.png){width=16.5cm}
+
+## 4.10. Computational cost (RQ6)
+
+TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits for the optional CV+ comparison included in our timing). On a single CPU core, one transfer fit with prediction took 4.6 ms (corn, *m* = 20), 24.3 ms (tablets, *m* = 50, 410 test spectra) and 0.4 ms (mango SBC). The complete TJ+N interval computation took 0.15 s, 2.79 s and 0.06 s, respectively, with peak memory below 15 MB (Fig. 10). The source model is never re-fitted. The added cost is therefore negligible for routine laboratory use, and it scales linearly with *m* and with the cost of one transfer fit.
+
+
+![**Fig. 10.** Wall-clock time per test batch (single CPU core, median of 20 runs, logarithmic scale).](figures/fig9_timing.png){width=16.5cm}
+
+## 4.11. Practical recommendations
+
+1. Do not reuse source-domain interval formulas after transfer without checking them on target data.
+
+2. Draw at least part of the transfer standards at random from the routine target population, and obtain their reference values.
+
+3. Use TJ+ intervals: re-fit the transfer with each standard left out. This needs *m* ≥ 9 for 90% and *m* ≥ 19 for 95% intervals.
+
+4. Report the leave-one-standard-out RMSE as well. Gaussian intervals built from it are a reasonable approximation at 90% but can under-cover at 95%.
+
+5. Flag predictions with large Q residuals after transfer.
+
+
+# 5. Limitations
+
+1. **Reference values for the standards.**
+
+   - TJ+ needs the reference values of the transfer standards.
+
+   - SBC needs them anyway, and PDS/DS standards are usually calibration samples with known values.
+
+   - When reference values are unavailable, only the exploratory label-free variant applies, and it carries no guarantee and under-covered in our tests (§4.7).
+
+2. **How the standards are selected.**
+
+   - The guarantee assumes the standards are a random sample of the target population, exchangeable with future samples.
+
+   - Kennard–Stone and other representative designs violate this assumption. Kennard–Stone selection made TJ+N conservative in our tests (§4.5), but it is not covered by Proposition 1.
+
+   - In practice, a random subset of standards can be reserved for interval calibration.
+
+3. **Marginal, not conditional, guarantee.**
+
+   - Coverage holds on average over the draw of standards and future samples.
+
+   - With small *m*, the realised coverage for one particular set of standards varies (Fig. 9). Conditional coverage across difficulty strata is only approximately balanced (Fig. 6).
+
+   - The worst-case bound is 1−2α, although the observed coverage was close to or above 1−α.
+
+4. **Scope of the evidence.**
+
+   - Three public NIR data sets were used, one of them small (corn, *n* = 80), with two instrument pairs and one season shift.
+
+   - The noise, wavelength-shift and source-size perturbations are simulated.
+
+   - Other techniques (Raman, MIR), non-linear or deep domain-adaptation transfers, and process data streams with drift were not tested.
+
+5. **A simple competitor.** Gaussian intervals built from leave-one-standard-out residuals (Gauss-LOO) were often as efficient as TJ+N, and in some scenarios more so (§4.3). The advantage of TJ+N is its distribution-free guarantee and its behaviour under heavy-tailed or heteroscedastic errors, not uniformly narrower intervals.
+
+6. **Difficulty normalisation.** The pre-registered σ(x), built from T² and Q, improved efficiency and conditional coverage in most scenarios, but not uniformly. On corn it over-covered difficult samples, and a T²-only variant was more balanced there. That variant was identified *post hoc* and needs confirmation on independent data.
+
+7. **Drift after standardisation.** A shift of the routine spectra after the transfer has been fitted (simulated as a one-channel wavelength shift) invalidated all intervals, including TJ+N (§4.5). The guarantee presupposes a stable target instrument between standardisation and use.
+
+# 6. Conclusions
+
+Prediction intervals for calibrations moved to a new instrument or season should not be calibrated on source-domain data. In our benchmark, the classical parametric interval, source split conformal prediction and covariate-shift-weighted conformal prediction all under-covered after transfer, sometimes severely.
+
+The transfer jackknife+ re-fits only the transfer step in a leave-one-standard-out loop. It thereby reuses the transfer standards that calibration transfer already requires, and gives distribution-free intervals with a finite-sample guarantee. Its intervals were valid across instruments, properties, shift types and model classes whenever its assumptions held. They were bounded with far fewer standards than the valid alternative that splits the standards. The extra cost is *m* refits of the transfer step, which took seconds or less in all cases studied.
+
+We recommend:
+
+1. drawing at least a random subset of transfer standards from the target population;
+
+2. using *m* ≥ 9 (α = 0.10) or *m* ≥ 19 (α = 0.05);
+
+3. reporting TJ+-type intervals, or at least Gaussian leave-one-standard-out intervals, alongside RMSEP whenever a calibration is transferred.
+
+# Declarations {.unnumbered}
+
+**CRediT authorship contribution statement.** [Author 1]: Conceptualization, Methodology, Software, Formal analysis, Writing – original draft. [Author 2]: Supervision, Validation, Writing – review & editing. *(To be completed by the authors.)*
+
+**Declaration of competing interest.** The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+**Declaration of generative AI and AI-assisted technologies in the writing process.** During the preparation of this work the authors used an AI assistant (Claude, Anthropic) for literature search support, code development, data analysis and drafting of the manuscript. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
+
+**Funding.** [To be completed by the authors; e.g. "This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors."]
+
+**Data availability.** All data sets are public: corn and IDRC Shootout 2002 tablets from Eigenvector Research [@eigenvector_data], and mango DMC from Mendeley Data (doi:10.17632/46htwnp833, CC BY 4.0) [@mango_data]. All code, configuration, raw per-repetition results and the scripts regenerating every table and figure are available at [repository URL / archived DOI to be inserted on acceptance].
+
+**Acknowledgements.** We thank the providers of the public data sets: Cargill and Eigenvector Research (corn), the International Diffuse Reflectance Conference (Shootout 2002), and N. Anderson, K. Walsh, P. Subedi and J. Walsh (mango).
