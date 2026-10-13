@@ -1,4 +1,6 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
-data/raw/
+.pytest_cache/
+**/data/raw/
+Target_Journal_Submission/results_quick/
