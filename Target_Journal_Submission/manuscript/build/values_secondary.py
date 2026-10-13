@@ -70,7 +70,14 @@ def values(S, T, RES, CFG, md_table, primary):
     V["sens_tjn_under"] = int(t["under_covering"].sum()); V["sens_n"] = len(t)
     V["sens_tjn_cov"] = f"{t['coverage_mean'].min():.3f}–{t['coverage_mean'].max():.3f}"
     w = e7[(e7.dataset == "corn") & e7.setting.str.startswith("hw") & (e7.method == "TJ+N")].groupby("setting")["rmsep_mean"].mean()
-    V["sens_corn_rmsep_hw"] = ", ".join(f"{int(k[2:]) * 2 + 1}: {v:.3f}" for k, v in w.items())
+    V["sens_corn_rmsep_hw"] = ", ".join(f"{v:.3f} ({int(k[2:]) * 2 + 1} channels)" for k, v in w.items())
+    e1c = s[s["experiment"].str.startswith("E1_main_corn") & (s.kind == "pds") & (s.m == 15) & (s.method == "TJ+N") & (s.target == "mp5")]
+    V["sens_corn_rmsep_w5"] = f"{e1c['rmsep_mean'].mean():.3f}"
+    tb = s[s["experiment"].str.startswith("E1_main_tablets") & (s.kind == "pds")]
+    a10 = tb[(tb.property == "assay") & (tb.m == 10) & tb.method.isin(["ASTM-PI", "SCP-S", "WCP-S"])]
+    V["tab_assay_m10_src"] = f"coverage {a10['coverage_mean'].min():.2f}–{a10['coverage_mean'].max():.2f}"
+    wt = tb[(tb.property == "weight") & tb.method.isin(["SCP-S", "WCP-S"])]
+    V["tab_weight_scps"] = f"{wt['coverage_mean'].min():.3f}–{wt['coverage_mean'].max():.3f}"
     src = e7[e7.method.isin(["ASTM-PI", "SCP-S"])]
     V["sens_src_under"] = f"{int(src['under_covering'].sum())} of {len(src)}"
     lvt = e7[(e7.dataset == "tablets") & (e7.setting == "lv-2")]

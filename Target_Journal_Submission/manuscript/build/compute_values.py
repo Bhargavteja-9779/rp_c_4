@@ -65,6 +65,7 @@ def main():
     tab = tr.pivot_table(index=["dataset", "property"], columns=["Pipeline", "m"], values="rmsep_mean").round(3)
     tab.columns = [f"{k} (m={mm})" for k, mm in tab.columns]
     tab = tab.reset_index().rename(columns={"dataset": "Data set", "property": "Response"})
+    tab["Response"] = tab["Response"].str.replace("_", " ")
     tab["Data set"] = tab["Data set"].map(DSN)
     V["table_rmsep"] = md_table(tab.fillna("–"), "Point accuracy (mean RMSEP over repetitions; corn averaged over mp5 and mp6) of the deployed predictor for each transfer pipeline and number of standards m. NONE = source model applied without transfer.")
     # ---------------------------------------------------------------- RQ1
@@ -95,12 +96,14 @@ def main():
         rows.append(row)
     V["table_main"] = md_table(pd.DataFrame(rows, columns=["Method", "Corn coverage", "Corn under", "Tablets coverage", "Tablets under",
                                                           "Mango coverage", "Mango under", "Unbounded (% reps)", "Friedman rank (IS)"]),
-                               f"Coverage of nominal 90% intervals (α = {A}) for the primary transfer pipelines (corn and tablets: PDS; mango: SBC). Coverage: mean over scenarios of the mean per-repetition coverage, with the range over scenarios in parentheses. Under: scenarios flagged as under-covering (upper limit of the 95% bootstrap CI < 0.90) / number of scenarios. Friedman rank: mean rank of the scenario median interval score over the {FR['median_interval_score']['n_scenarios']} scenarios (1 = best; only methods available in all scenarios).")
+                               f"Coverage of nominal 90% intervals (α = {A:.2f}) for the primary transfer pipelines (corn and tablets: PDS; mango: SBC). Coverage: mean over scenarios of the mean per-repetition coverage, with the range over scenarios in parentheses. Under: scenarios flagged as under-covering (upper limit of the 95% bootstrap CI < 0.90) / number of scenarios. Friedman rank: mean rank of the scenario median interval score over the {FR['median_interval_score']['n_scenarios']} scenarios (1 = best; only methods available in all scenarios).")
     # ---------------------------------------------------------------- RQ2
     t = P[P.method == "TJ+N"]
     V["n_scen_main"] = len(t)
     V["tjn_cov_main"] = f"{t['coverage_mean'].mean():.3f} (range over scenarios {t['coverage_mean'].min():.3f}–{t['coverage_mean'].max():.3f})"
     allA = pd.concat([primary(S, a) for a in CFG["alphas"]])
+    hw = t.assign(hw=(t["coverage_ci_hi"] - t["coverage_ci_lo"]) / 2).groupby("dataset")["hw"].median()
+    V["ci_hw_text"] = ", ".join(f"{DSN[k].lower()} ±{v:.3f}" for k, v in hw.items())
     V["tjn_cov_mean"] = f"{t['coverage_mean'].mean():.3f}"
     V["tjn_under_all_alpha"] = int(allA[allA.method == "TJ+N"]["under_covering"].sum())
     ok = None

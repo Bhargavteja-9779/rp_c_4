@@ -34,7 +34,9 @@ def _kfold(n, k, rng):
     idx = rng.permutation(n)
     return [idx[i::k] for i in range(k)]
 
-def fit_source_model(X, y, max_lv=15, preps=("none", "snv", "sg1", "sg2"), k=10, seed=0):
+def fit_source_model(X, y, max_lv=15, preps=("none", "snv", "sg1", "sg2"), k=10, seed=0, lv_offset=0):
+    """lv_offset (sensitivity analysis only): the selected number of LVs is shifted by this amount BEFORE the
+    out-of-fold residuals, diagnostics, SEC and final model are computed, so all source quantities are consistent."""
     rng = np.random.default_rng(seed)
     n = len(y)
     folds = _kfold(n, k, rng)
@@ -61,6 +63,8 @@ def fit_source_model(X, y, max_lv=15, preps=("none", "snv", "sg1", "sg2"), k=10,
         if best is None or mse[amin] < best[0]:
             best = (mse[amin], prep, a_1se, pred, t2s, Xp)
     _, prep, A, pred, folds_info, Xp = best
+    if lv_offset:
+        A = int(np.clip(A + lv_offset, 1, pred.shape[1]))
     oof_t2 = np.zeros(n); oof_q = np.zeros(n)
     for te, m, tr in folds_info.values():
         a = min(A, m.A_)

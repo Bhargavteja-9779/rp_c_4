@@ -1595,5 +1595,59 @@
    ]
   },
   "DOI": "10.2307/4615733"
+ },
+ {
+  "id": "prinster2022",
+  "type": "paper-conference",
+  "title": "JAWS: auditing predictive uncertainty under covariate shift",
+  "author": [
+   {
+    "family": "Prinster",
+    "given": "Drew"
+   },
+   {
+    "family": "Liu",
+    "given": "Anqi"
+   },
+   {
+    "family": "Saria",
+    "given": "Suchi"
+   }
+  ],
+  "container-title": "Advances in Neural Information Processing Systems 35 (NeurIPS 2022)",
+  "issued": {
+   "date-parts": [
+    [
+     2022
+    ]
+   ]
+  }
+ },
+ {
+  "id": "zhivkov2026",
+  "type": "article-journal",
+  "title": "Machine learning calibration transfer for low-cost air quality sensors: distance-based uncertainty quantification in a hybrid urban monitoring network",
+  "author": [
+   {
+    "family": "Zhivkov",
+    "given": "Petar"
+   },
+   {
+    "family": "Fidanova",
+    "given": "Stefka"
+   }
+  ],
+  "container-title": "Atmosphere",
+  "volume": "17",
+  "issue": "4",
+  "page": "335",
+  "DOI": "10.3390/atmos17040335",
+  "issued": {
+   "date-parts": [
+    [
+     2026
+    ]
+   ]
+  }
  }
 ]

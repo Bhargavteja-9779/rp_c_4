@@ -57,9 +57,7 @@ def run_corn_rep(rep, cfg):
                 from ..models.ridge import fit_source_ridge
                 source = fit_source_ridge(Xs[tr], y[tr], max_lv=15, seed=BASE_SEED + rep)
             else:
-                source = fit_source_model(Xs[tr], y[tr], max_lv=15, seed=BASE_SEED + rep)
-            if "lv_offset" in cfg:
-                source.A = int(np.clip(source.A + cfg["lv_offset"], 1, source.model.A_)); source.model.n_use = source.A
+                source = fit_source_model(Xs[tr], y[tr], max_lv=15, seed=BASE_SEED + rep, lv_offset=cfg.get("lv_offset", 0))
             sigmas = build_sigmas(source)
             e_pool, Xs_pool = _source_pool(source, Xs[tr], Xs[cal], y[cal])
             vr = np.random.default_rng(BASE_SEED + 7919 * rep + pi)
@@ -102,9 +100,7 @@ def _fixed_source(dataset, cfg, pi):
             tr = tr[: len(tr) // 2]
         y = d.y; Xs = Xt = d.X; maxlv = 25; prop = "dry_matter"
     if cfg.get("model", "pls") == "pls":
-        source = fit_source_model(Xs[tr], y[tr], max_lv=maxlv, seed=BASE_SEED)
-        if "lv_offset" in cfg:
-            source.A = int(np.clip(source.A + cfg["lv_offset"], 1, source.model.A_)); source.model.n_use = source.A
+        source = fit_source_model(Xs[tr], y[tr], max_lv=maxlv, seed=BASE_SEED, lv_offset=cfg.get("lv_offset", 0))
     else:
         from ..models.ridge import fit_source_ridge
         source = fit_source_ridge(Xs[tr], y[tr], max_lv=maxlv, seed=BASE_SEED)
@@ -136,3 +132,36 @@ def run_fixed_rep(dataset, rep, cfg):
                 rows += [{**meta, **x} for x in r]
                 samples += [{**meta, "m": m, "sample": int(te[x["j"]]), **x} for x in s]
     return rows, samples
+
+def run_mango_inst_rep(rep, cfg):
+    """E8 (review-driven external validation): mango instrument shift with paired spectra.
+    Source = instrument 15006 fruit NOT measured on the target instrument (80/20 train/cal, fixed seed);
+    target pool = fruit measured on both instruments (target spectrum + paired master spectrum)."""
+    from ..data.loaders import load_mango_instruments
+    d = load_mango_instruments(cfg["raw_dir"])
+    src_inst = 15006
+    rows = []
+    for pi in cfg["properties"]:
+        tgt = cfg["targets"][pi]
+        key = ("mango_inst", tgt, cfg.get("model", "pls"))
+        if key not in _FIXED_CACHE:
+            srcidx = np.nonzero(d.present[src_inst] & ~d.present[tgt])[0]
+            pool = np.nonzero(d.present[src_inst] & d.present[tgt])[0]
+            p = np.random.default_rng(BASE_SEED + tgt).permutation(srcidx)
+            ncal = int(round(0.2 * len(p))); cal, tr = p[:ncal], p[ncal:]
+            Xs = d.spectra[src_inst]
+            source = fit_source_model(Xs[tr], d.y[tr], max_lv=25, seed=BASE_SEED)
+            sigmas = build_sigmas(source)
+            e_pool, Xs_pool = _source_pool(source, Xs[tr], Xs[cal], d.y[cal])
+            _FIXED_CACHE[key] = (pool, source, sigmas, e_pool, Xs_pool)
+        pool, source, sigmas, e_pool, Xs_pool = _FIXED_CACHE[key]
+        Xs, Xt, y = d.spectra[src_inst], d.spectra[tgt], d.y
+        for m in cfg["m_values"]:
+            std, te = _std_test(pool, m, np.random.default_rng(BASE_SEED + 104729 * rep + m), "", Xt[pool])
+            for kind in cfg["kinds"]:
+                r, _ = evaluate(source, sigmas, e_pool, Xs_pool, kind, Xt[std], y[std], Xs[std], Xt[te], y[te], Xt[pool],
+                                cfg["alphas"], seed=BASE_SEED + rep, methods=cfg["methods"])
+                meta = dict(dataset="mango_inst", property="dry_matter", source=str(src_inst), target=str(tgt), rep=rep,
+                            prep=source.prep, A=source.A)
+                rows += [{**meta, **x} for x in r]
+    return rows, []

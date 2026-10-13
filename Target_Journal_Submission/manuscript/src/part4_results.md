@@ -7,7 +7,7 @@ Calibration transfer was necessary, but it was not equally beneficial everywhere
 - **Tablets:** PDS reduced the assay RMSEP from {{tab_assay_rmsep_m10}} mg (*m* = 10) to {{tab_assay_rmsep_m50}} mg (*m* = 50). The weight and hardness predictions were insensitive to the transfer.
 - **Mango:** SBC did not improve on the uncorrected source model (RMSEP {{mango_sbc_rmsep}} vs {{mango_none_rmsep}} %), consistent with reports that models built over several seasons are already fairly robust [@anderson2020].
 
-All interval methods share the same point predictor within a pipeline, so the comparisons below isolate the interval construction.
+The transfer settings (PDS window 5, SBC slope and bias, LV numbers) were fixed in advance and were not tuned on target data. They are therefore not the most accurate possible: on corn, SBC gave lower RMSEP than the pre-registered PDS for all four properties, and a 3-channel PDS window was more accurate than the 5-channel one (§4.8). This does not affect the comparison of interval methods. All interval methods share the same point predictor within a pipeline, so the comparisons isolate the interval construction, and interval validity is reported for every pipeline (§4.3).
 
 {{table_rmsep}}
 
@@ -16,9 +16,9 @@ All interval methods share the same point predictor within a pipeline, so the co
 Source-calibrated intervals under-covered whenever the transfer added error that the source calibration had not seen (Fig. 3; Table 3).
 - **Corn:** the mean coverage of nominal 90% intervals was {{src_cov_range_corn}} for ASTM-PI, SCP-S and WCP-S, which were flagged as under-covering in {{src_under_corn}} scenario × method cells.
 - **Mango:** coverage was {{src_cov_range_mango}} ({{src_under_mango}} cells under-covering).
-- **Tablets:** the picture was mixed ({{src_cov_range_tablets}}; {{src_under_tablets}} cells under-covering). Under-coverage occurred mainly for the assay with few standards, where a poorly determined PDS inflated the error, while weight and hardness were unaffected by the transfer.
+- **Tablets:** the picture was mixed ({{src_cov_range_tablets}}; {{src_under_tablets}} cells under-covering). Severe under-coverage occurred for the assay with *m* = 10 (all three methods, {{tab_assay_m10_src}}), where PDS fitted on ten standards inflated the error. For weight, SCP-S and WCP-S under-covered slightly but systematically at every *m* ({{tab_weight_scps}}), while hardness intervals were valid.
 
-Weighting the source residuals for covariate shift (WCP-S) did not repair coverage, and it produced unbounded intervals in {{wcp_inf_pct}} of corn repetitions. When the domains are almost perfectly separable, the estimated likelihood ratios degenerate. More fundamentally, an instrument change alters the conditional relation between spectrum and property, which violates the covariate-shift assumption. The transport baseline, which maps source-calibration spectra into the secondary-instrument space with a master→secondary PDS, recovered part of the coverage on corn ({{transport_cov_corn}}). It still under-covered in {{transport_under_corn}} of 24 scenarios, because the transported residuals inherit the source error distribution and only approximate the transfer error.
+The failure is not an artefact of the in-sample calibration error used by ASTM-PI: SCP-S, which uses cross-validated (out-of-fold) source residuals, under-covered almost as severely. Weighting the source residuals for covariate shift (WCP-S) did not repair coverage either, and it produced unbounded intervals in {{wcp_inf_pct}} of corn repetitions. When the domains are almost perfectly separable, the estimated likelihood ratios degenerate. More fundamentally, an instrument change alters the conditional relation between spectrum and property, which violates the covariate-shift assumption. The transport baseline, which maps source-calibration spectra into the secondary-instrument space with a master→secondary PDS, recovered part of the coverage on corn ({{transport_cov_corn}}). It still under-covered in {{transport_under_corn}} of 24 scenarios, because the transported residuals inherit the source error distribution and only approximate the transfer error.
 
 {{table_main}}
 
@@ -27,7 +27,7 @@ Weighting the source residuals for covariate shift (WCP-S) did not repair covera
 
 ## 4.3. Validity and efficiency of the transfer jackknife+ (RQ2)
 
-TJ+N was not flagged as under-covering in any of the {{n_scen_main}} primary scenarios. Its mean coverage was {{tjn_cov_main}} at α = 0.10, and the same held at α = 0.05 and 0.20 ({{tjn_under_all_alpha}} under-covering scenarios over all three levels; Table 4). Coverage exceeded the nominal level most clearly for *m* = 10–15. This is expected from the discrete rank $\lceil (1-\alpha)(m+1)\rceil$: with *m* = 10 the upper bound is the largest of the ten leave-one-out bounds.
+TJ+N was not flagged as under-covering in any of the {{n_scen_main}} primary scenarios. Given the precision of the coverage estimates (median half-width of the 95% CI: {{ci_hw_text}}), this means that no scenario was significantly below nominal at that resolution. Its mean coverage was {{tjn_cov_main}} at α = 0.10, and the same held at α = 0.05 and 0.20 ({{tjn_under_all_alpha}} under-covering scenarios over all three levels; Table 4). Coverage exceeded the nominal level most clearly for *m* = 10–15. This is expected from the discrete rank $\lceil (1-\alpha)(m+1)\rceil$: with *m* = 10 the upper bound is the largest of the ten leave-one-out bounds. In practice, this conservativeness means somewhat wider intervals than necessary when few standards are available; it decreases as *m* grows (Fig. 3).
 
 **Against the valid split-standards baseline.** Halving the standards made SCP-T-split unbounded in every repetition for *m* ≤ 15 at α = 0.10 ({{split_inf_text}}). Where both methods gave bounded intervals, TJ+N had a lower interval score in {{tjn_vs_split_better}} of {{tjn_vs_split_n}} scenarios (paired Wilcoxon, Holm-adjusted *p* < 0.05), with a median rank-biserial correlation of {{tjn_vs_split_rb}}. Reusing every standard for both transfer and calibration is therefore the main practical gain.
 
@@ -37,9 +37,9 @@ Interval widths relative to the RMSEP of the deployed predictor are shown in Fig
 
 **Against Gaussian leave-one-standard-out intervals.** The simple Gauss-LOO interval was a strong competitor at α = 0.10.
 - It was never flagged as under-covering at this level.
-- It had the best mean rank of interval score in the Friedman analysis (Fig. S2; χ² = {{friedman_chi2}}, *p* = {{friedman_p}}; mean ranks Gauss-LOO {{rank_gauss}}, TJ+N {{rank_tjn}}, TJ+ {{rank_tj}}).
-- It did not differ significantly from TJ+N after Holm correction (*p* = {{p_tjn_gauss}}).
-- Per scenario, Gauss-LOO had the lower score more often on corn ({{gauss_better_corn}} of 24 scenarios), while TJ+N was better more often on tablets and mango ({{tjn_better_gauss_other}} of 16).
+- It had the best mean rank of interval score across scenarios (Fig. S2; mean ranks Gauss-LOO {{rank_gauss}}, TJ+N {{rank_tjn}}, TJ+ {{rank_tj}}; Friedman χ² = {{friedman_chi2}}, nominal *p* = {{friedman_p}}, which overstates the evidence because scenarios are dependent).
+- Across scenarios, it did not differ significantly from TJ+N after Holm correction (*p* = {{p_tjn_gauss}}).
+- Per scenario (Holm-adjusted *p* < 0.05), Gauss-LOO had the lower interval score in {{gauss_better_corn}} of 24 corn scenarios. On tablets and mango, TJ+N was better in {{tjn_better_gauss_other}} and Gauss-LOO in {{gauss_better_other}} of 16 scenarios.
 
 Its validity, however, depends on approximately Gaussian errors. At α = 0.05 it under-covered in {{gauss_under_005}} of 40 scenarios, and at α = 0.20 in {{gauss_under_020}}, whereas TJ+N and TJ+ never did. The price of distribution-free validity at α = 0.05 is that TJ+N needs *m* ≥ 19 standards. With fewer standards it returns unbounded intervals rather than over-confident ones. Over all four transfer pipelines (PDS, DS, SBC and no transfer) and the three data sets, TJ+N under-covered in {{allpipe_tjn_under}} pipeline × scenario combinations at α = 0.10. The corresponding numbers were {{allpipe_gauss_under}} for Gauss-LOO, {{allpipe_astm_under}} for ASTM-PI and {{allpipe_scps_under}} for SCP-S (Table S2).
 
@@ -66,7 +66,7 @@ Table 5 and Fig. 5 isolate the components.
 
 ## 4.5. Robustness (RQ4)
 
-TJ+N was not flagged as under-covering in any of the {{rob_n_nonshift}} robustness scenarios that preserve the joint distribution of standards and test samples (Table 6; Fig. 7). These were Kennard–Stone selection, added noise at SNR 1000–100, and halving the source data.
+Apart from post-standardisation drift, TJ+N was not flagged as under-covering in any of the {{rob_n_nonshift}} robustness scenarios (Table 6; Fig. 7). These were Kennard–Stone selection of the standards, added noise at SNR 1000–100, and halving the source data.
 
 **Kennard–Stone standards.** Selecting the standards by Kennard–Stone, which is outside the scope of Proposition 1, made TJ+N conservative (coverage {{rob_ks_cov}}). The selected standards span the extremes of the target population, so their leave-one-out residuals are, if anything, larger than those of typical samples. This empirical result is reassuring, but it is not a guarantee. Other non-random selection schemes, for example standards concentrated in a narrow concentration range, could bias coverage in either direction.
 
@@ -92,7 +92,7 @@ The conclusions did not depend on the primary pipeline, the transfer direction o
 - **1D-CNN on mango.** The CNN ({{cnn_params}} parameters, early stopping after {{cnn_epochs}} epochs, {{cnn_train_s}} s on a CPU) reached RMSEP {{cnn_rmsep}} % after SBC. On top of it:
   - TJ+N gave coverage {{cnn_tjn_cov}} with the lowest interval score ({{cnn_tjn_is}}).
   - Gauss-LOO under-covered in {{cnn_gauss_under}} scenarios (coverage {{cnn_gauss_cov}}; score {{cnn_gauss_is}}).
-  - MC-dropout intervals [@gal2016], a common deep-learning uncertainty estimate for spectra [@maxime2025], under-covered in {{cnn_mc_under}} scenarios (coverage {{cnn_mc_cov}}). Their epistemic variance does not reflect the season shift.
+  - MC-dropout intervals [@gal2016], a common deep-learning uncertainty estimate for spectra [@maxime2025], under-covered in {{cnn_mc_under}} scenarios (coverage {{cnn_mc_cov}}), presumably because dropout variance captures model uncertainty but not the systematic error introduced by the season shift.
 
 Over all generalisation settings, TJ+N under-covered in {{gen_tjn_under}} of {{gen_tjn_n}} scenarios.
 
@@ -104,7 +104,7 @@ The label-free LF-conv interval uses only paired, unlabelled standards. It was n
 
 ## 4.8. Sensitivity to transfer and model settings
 
-Changing the PDS window (3, 7 or 11 channels instead of the pre-registered 5) or the number of latent variables (±2) changed point accuracy considerably. For example, the corn RMSEP by window was {{sens_corn_rmsep_hw}}, which shows that the pre-registered window of 5 was not the most accurate choice for corn; it was nevertheless kept, since the window was not tuned on target data. Interval validity was unaffected: TJ+N under-covered in {{sens_tjn_under}} of {{sens_n}} sensitivity scenarios (coverage {{sens_tjn_cov}}; Table S3). The source-calibrated intervals under-covered in {{sens_src_under}} cases. Their validity also depended on the setting; for example, ASTM-PI coverage fell to {{sens_tab_lvm2_astm}} for the tablet assay with two latent variables fewer. Because TJ+ calibrates on the deployed pipeline itself, poorer transfer settings are reflected in wider, but still valid, intervals.
+Changing the PDS window (3, 7 or 11 channels instead of the pre-registered 5) or the number of latent variables (±2) changed point accuracy considerably. For example, the mean corn RMSEP with *m* = 15 was {{sens_corn_rmsep_w5}} with the pre-registered 5-channel window and {{sens_corn_rmsep_hw}} with the other windows. The pre-registered window was thus not the most accurate choice for corn; it was nevertheless kept, since it was fixed before any target data were analysed. Interval validity was unaffected: TJ+N under-covered in {{sens_tjn_under}} of {{sens_n}} sensitivity scenarios (coverage {{sens_tjn_cov}}; Table S3). The source-calibrated intervals under-covered in {{sens_src_under}} cases. Their validity also depended on the setting; for example, ASTM-PI coverage fell to {{sens_tab_lvm2_astm}} for the tablet assay with two latent variables fewer. Because TJ+ calibrates on the deployed pipeline itself, poorer transfer settings are reflected in wider, but still valid, intervals.
 
 ## 4.9. Error analysis
 
@@ -123,7 +123,15 @@ TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits fo
 
 ![**Fig. 10.** Wall-clock time per test batch (single CPU core, median of 20 runs, logarithmic scale).](figures/fig9_timing.png){width=16.5cm}
 
-## 4.11. Practical recommendations
+## 4.11. Relation to analytical measurement uncertainty
+
+A TJ+ interval is a *prediction* interval for the reference value of an individual routine sample. Its target is the value that the reference method would return. Its width therefore reflects, jointly, the error of the reference method, spectral noise, model error and the error introduced by the transfer. All of these enter the leave-one-standard-out residuals.
+
+It is not a GUM-type uncertainty budget, in which components are estimated separately and propagated. Nor is it conditional on the particular sample: the 1−2α (empirically ≈1−α) statement concerns samples drawn from the routine population. Error-propagation approaches to multivariate prediction uncertainty [@faber1997; @olivieri2006; @allegrini2016] give sample-specific uncertainties, but they rest on a calibration error model that, as shown in §4.2, no longer holds after transfer.
+
+TJ+N is complementary. It provides an empirically calibrated coverage statement for the transferred method, it can be used to check whether a parametric uncertainty statement still holds after transfer, and, through σ(x), it retains sample-specific widths. Where the reference-method repeatability is known, comparing it with the TJ+N interval width shows how much of the uncertainty after transfer stems from the NIR method itself.
+
+## 4.12. Practical recommendations
 
 1. Do not reuse source-domain interval formulas after transfer without checking them on target data.
 2. Draw at least part of the transfer standards at random from the routine target population, and obtain their reference values.

@@ -14,9 +14,11 @@ def _init():
 
 def _work(args):
     dataset, rep, cfg = args
-    from .datasets import run_corn_rep, run_fixed_rep
+    from .datasets import run_corn_rep, run_fixed_rep, run_mango_inst_rep
     if dataset == "corn":
         return run_corn_rep(rep, cfg)
+    if dataset == "mango_inst":
+        return run_mango_inst_rep(rep, cfg)
     return run_fixed_rep(dataset, rep, cfg)
 
 def run_experiment(name, dataset, cfg, reps, out_dir, n_jobs, log=None, rep_start=0, rep_end=None):

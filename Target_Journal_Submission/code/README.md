@@ -32,7 +32,10 @@ Data handling that prevents leakage:
 ```bash
 python -m pytest tests -q                  # unit tests incl. a coverage simulation (~5 s)
 python run_all.py --mode quick             # pipeline check, few repetitions (~3 min); outputs in ../results_quick
-python run_all.py --mode full --jobs 4     # full pre-registered study (~3 h on 4 cores); outputs below
+python run_all.py --mode full --jobs 4     # full pre-registered study (~3-4 h on 4 cores); outputs below
+# Long runs can be split into resumable repetition chunks, e.g.
+#   python run_all.py --mode full --only E1_main_tablets --rep-start 0 --rep-end 125
+# (see scripts/run_remaining.sh); finished chunks are skipped and the analysis merges chunks automatically.
 ```
 Useful options:
 * `--only E1_main_corn,E4_robust_mango` runs selected experiments only.

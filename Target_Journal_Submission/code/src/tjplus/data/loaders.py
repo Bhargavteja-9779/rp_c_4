@@ -17,7 +17,9 @@ SOURCES = {
     "tablets": ("https://eigenvector.com/wp-content/uploads/2019/06/nir_shootout_2002.mat_.zip",
                 "04c03a4314ab8e8f63e0ecc788b657b5d1b5450791ce465ad41ad90cb5d52125", "nir_shootout_2002.mat_.zip"),
     "mango": ("https://data.mendeley.com/public-files/datasets/46htwnp833/files/62760987-c0a4-48c7-86cd-eb9d60f77e48/file_downloaded",
-              "86159e2df9244fa52f821856ea003f562ef7f6a031dd08794e3cd4458f0f153f", "NAnderson2020MendeleyMangoNIRData.csv"),
+              "86159e2df9244fa52f821856ea003f562ef7f6a031dd08794e3cd4458f0f153f", "NAnderson2020MendeleyMangoNIRData.csv"),  # record version 1
+    "mango_v4": ("https://data.mendeley.com/public-files/datasets/46htwnp833/files/747b2613-4d0a-4628-8aaf-8fc5547d286e/file_downloaded",
+                 "367c377255c350f322387236ed121629807055baa3f02aeaf5a76fe9ada518b6", "MangoDMC_NIR_Data_v4.csv"),  # record version 6
 }
 
 def _sha256(path):
@@ -106,3 +108,47 @@ def load_mango(raw_dir, wl_min=684, wl_max=990):
     idx = Xf.index.to_frame(index=False)
     return SeasonData("mango", Xf.to_numpy(float), idx["DM"].to_numpy(float), idx["Season"].to_numpy(int),
                       np.array([float(c) for c in keep]), n_scans)
+
+
+@dataclass
+class PairedInstrumentData:
+    name: str
+    spectra: dict        # instrument -> (n_fruit, p) fruit-mean spectra (NaN rows where not measured)
+    y: np.ndarray
+    present: dict        # instrument -> bool mask of fruit measured on it
+    wavelengths: np.ndarray
+
+@functools.lru_cache(maxsize=None)
+def load_mango_instruments(raw_dir, instruments=(15006, 15016, 15014, 15029), wl_min=684, wl_max=990):
+    """Mango multi-instrument data (Mendeley record version 6, file MangoDMC_NIR_Data_v4.csv): spectra flagged as
+    outliers by the providers (outlier_flag_1 != 0) are excluded; replicate spectra are averaged per fruit
+    (season + reference number) and instrument. A processed cache is written next to the raw file."""
+    import pandas as pd
+    path = fetch("mango_v4", raw_dir)
+    cache = os.path.join(raw_dir, "mango_instruments_" + "_".join(map(str, instruments)) + ".npz")
+    if os.path.exists(cache):
+        z = np.load(cache, allow_pickle=False)
+        inst = [int(i) for i in z["instruments"]]
+        return PairedInstrumentData("mango_inst", {i: z[f"X_{i}"] for i in inst}, z["y"],
+                                    {i: z[f"P_{i}"] for i in inst}, z["wl"])
+    head = pd.read_csv(path, nrows=0).columns
+    wl_cols = [c for c in head if c.replace(".", "", 1).isdigit()]
+    keep = [c for c in wl_cols if wl_min <= float(c) <= wl_max]
+    d = pd.read_csv(path, usecols=["outlier_flag_1", "season", "reference_no", "dry_matter", "instrument"] + keep,
+                    dtype={"reference_no": str})
+    d = d[(d["outlier_flag_1"] == 0) & d["instrument"].isin(instruments)]
+    d["key"] = d["season"].astype(str) + "_" + d["reference_no"].astype(str)
+    g = d.groupby(["key", "instrument"])[keep].mean()
+    keys = sorted(d["key"].unique())
+    y = d.groupby("key")["dry_matter"].mean().reindex(keys).to_numpy(float)
+    spectra, present = {}, {}
+    for i in instruments:
+        X = np.full((len(keys), len(keep)), np.nan)
+        gi = g.xs(i, level="instrument")
+        idx = pd.Index(keys).get_indexer(gi.index)
+        X[idx] = gi.to_numpy(float)
+        spectra[i], present[i] = X, ~np.isnan(X).any(1)
+    wl = np.array([float(c) for c in keep])
+    np.savez_compressed(cache, instruments=np.array(instruments), y=y, wl=wl,
+                        **{f"X_{i}": spectra[i] for i in instruments}, **{f"P_{i}": present[i] for i in instruments})
+    return PairedInstrumentData("mango_inst", spectra, y, present, wl)
