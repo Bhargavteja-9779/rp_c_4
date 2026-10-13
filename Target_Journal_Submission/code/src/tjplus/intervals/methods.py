@@ -162,6 +162,15 @@ def gauss_loo(tf, alpha):
     t = stats.t.ppf(1 - alpha / 2, max(tf.m - 1, 1))
     return tf.mu_full_test - t * rmse, tf.mu_full_test + t * rmse
 
+def gauss_loo_normalised(tf, alpha, sigma):
+    """Review-round-8 competitor: heteroscedastic Gaussian interval
+    mu(x) +/- t_{m-1} * RMS(R_i) * sigma(x), with R_i the sigma-normalised leave-one-out residuals."""
+    s_i = sigma(tf.t2_loo_i, tf.q_loo_i)
+    rms = np.sqrt(np.mean((tf.r_loo / s_i) ** 2))
+    t = stats.t.ppf(1 - alpha / 2, max(tf.m - 1, 1))
+    half = t * rms * sigma(*tf.diag_full_test)
+    return tf.mu_full_test - half, tf.mu_full_test + half
+
 def astm_pi(tf, source, alpha):
     """Classical parametric PLS prediction interval (ASTM E1655-style): t * SEC * sqrt(1 + h)."""
     n, A = source.model.n_train_, source.A

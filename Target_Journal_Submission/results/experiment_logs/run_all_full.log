@@ -623,3 +623,4 @@
 2026-10-13 23:37:38,319 INFO analysis done: 8254 summary rows, 3075 paired tests
 2026-10-13 23:38:12,048 INFO figures written to /home/user/rp_c_4/Target_Journal_Submission/figures
 2026-10-13 23:38:12,048 INFO finished in 199s; outputs in /home/user/rp_c_4/Target_Journal_Submission/results
+2026-10-13 23:41:50,807 INFO mode=full jobs=4 device=cpu (all computations are CPU/numpy; device only used by the optional CNN)

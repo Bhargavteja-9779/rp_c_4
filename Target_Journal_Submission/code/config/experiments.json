@@ -444,6 +444,109 @@
       ],
       "methods": "ALL",
       "_comment": "Added after review round 5 (external validity), specified before any E8 result was computed"
+    },
+    "E9_competitor_corn": {
+      "dataset": "corn",
+      "properties": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "pairs": [
+        [
+          "m5",
+          "mp5"
+        ],
+        [
+          "m5",
+          "mp6"
+        ]
+      ],
+      "m_values": [
+        10,
+        15,
+        20
+      ],
+      "kinds": [
+        "pds"
+      ],
+      "reps_full": 200,
+      "reps_quick": 2,
+      "methods": "COMPETITOR",
+      "_comment": "Review round 8: normalised Gaussian competitor; specified before results"
+    },
+    "E9_competitor_tablets": {
+      "dataset": "tablets",
+      "properties": [
+        0,
+        1,
+        2
+      ],
+      "m_values": [
+        10,
+        20,
+        30,
+        50
+      ],
+      "kinds": [
+        "pds"
+      ],
+      "reps_full": 200,
+      "reps_quick": 2,
+      "methods": "COMPETITOR",
+      "_comment": "Review round 8: normalised Gaussian competitor; specified before results"
+    },
+    "E9_competitor_mango": {
+      "dataset": "mango",
+      "properties": [
+        0
+      ],
+      "m_values": [
+        10,
+        20,
+        30,
+        50
+      ],
+      "kinds": [
+        "sbc"
+      ],
+      "reps_full": 200,
+      "reps_quick": 2,
+      "methods": "COMPETITOR",
+      "_comment": "Review round 8: normalised Gaussian competitor; specified before results"
+    },
+    "E9_competitor_mango_inst": {
+      "dataset": "mango_inst",
+      "properties": [
+        0,
+        1,
+        2
+      ],
+      "targets": [
+        15016,
+        15014,
+        15029
+      ],
+      "m_values": [
+        10,
+        20,
+        30,
+        50
+      ],
+      "kinds": [
+        "pds",
+        "sbc"
+      ],
+      "reps_full": 200,
+      "reps_quick": 2,
+      "methods": "COMPETITOR",
+      "_comment": "Review round 8: normalised Gaussian competitor; specified before results"
     }
-  }
+  },
+  "competitor_methods": [
+    "TJ+N",
+    "Gauss-LOO",
+    "Gauss-LOO-N"
+  ]
 }

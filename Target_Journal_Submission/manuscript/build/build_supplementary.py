@@ -51,6 +51,14 @@ def main():
     if os.path.exists(scp):
         z = pd.read_csv(scp).round(4)
         parts.append("# Table S7. Scaling of computational cost with m\n\n" + md(z, "**Table S7.** Wall-clock time of a single transfer fit with prediction and of TJ+N (including five CV+ refits) versus the number of standards m (single CPU core, median of 10 runs)."))
+    e9 = S[S.experiment.str.startswith("E9_")]
+    if len(e9):
+        rows = []
+        for (ex, mth, al), x in e9.groupby(["experiment", "method", "alpha"]):
+            rows.append([ex.replace("E9_competitor_", ""), mth, al, f"{x.coverage_mean.mean():.3f}", f"{int(x.under_covering.sum())}/{len(x)}",
+                         f"{x.IS_median.median():.3g}", f"{x.width_median.median():.3g}"])
+        z = pd.DataFrame(rows, columns=["Set", "Method", "α", "Mean coverage", "Under-covering", "Median IS", "Median width"])
+        parts.append("# Table S8. Normalised Gaussian competitor (E9)\n\n" + md(z, "**Table S8.** TJ+N versus Gaussian leave-one-out intervals without (Gauss-LOO) and with (Gauss-LOO-N) difficulty normalisation (200 repetitions; corn and tablets PDS, mango SBC, mango instruments PDS and SBC)."))
     parts.append("# Fig. S1. CNN training\n\n![**Fig. S1.** Training and validation loss of the 1D-CNN (mango, seasons 1–3).](figures/figS1_cnn_training.png){width=12cm}\n\n")
     parts.append("# Fig. S2. Friedman ranks\n\n![**Fig. S2.** Mean Friedman ranks of the scenario median interval score over the 40 primary scenarios (1 = best).](figures/figS2_friedman_ranks.png){width=12cm}\n")
     mdp = os.path.join(HERE, "supplementary_filled.md"); open(mdp, "w").write("\n".join(parts))

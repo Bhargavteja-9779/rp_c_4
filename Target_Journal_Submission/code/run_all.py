@@ -17,7 +17,7 @@ def expand(name, spec, cfg_all, mode, raw_dir):
     base = {k: v for k, v in spec.items() if k not in ("variants", "half_windows", "lv_offsets", "reps_full", "reps_quick", "dataset")}
     base["raw_dir"] = raw_dir
     base.setdefault("alphas", cfg_all["alphas"])
-    base["methods"] = ALL_METHODS if spec["methods"] == "ALL" else cfg_all["key_methods"]
+    base["methods"] = {"ALL": ALL_METHODS, "COMPETITOR": cfg_all.get("competitor_methods")}.get(spec["methods"], cfg_all["key_methods"])
     if mode == "quick":
         base["m_values"] = base["m_values"][:2]
     runs = []

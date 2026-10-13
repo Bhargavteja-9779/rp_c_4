@@ -41,6 +41,7 @@ def evaluate(source, sigmas, e_pool, Xs_pool, kind, Xt_std, y_std, Xs_std, X_tes
             elif name == "SCP-T-split-N": lo, hi = M.scp_target_split(tf, X_test, Xt_std, alpha, s_tq, seed)
             elif name == "SCP-T-split": lo, hi = M.scp_target_split(tf, X_test, Xt_std, alpha, None, seed)
             elif name == "Gauss-LOO": lo, hi = M.gauss_loo(tf, alpha)
+            elif name == "Gauss-LOO-N": lo, hi = M.gauss_loo_normalised(tf, alpha, s_tq)
             elif name == "ASTM-PI": lo, hi = M.astm_pi(tf, source, alpha)
             elif name == "SCP-S": lo, hi = M.scp_source(tf, e_pool, alpha)
             elif name == "WCP-S": lo, hi = M.wcp_source(tf, source, e_pool, Xs_pool, X_target_unlab, X_test, alpha)

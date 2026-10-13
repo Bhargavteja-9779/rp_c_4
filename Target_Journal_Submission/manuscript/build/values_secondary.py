@@ -100,6 +100,30 @@ def values(S, T, RES, CFG, md_table, primary):
         V["e8_tjn_under_allalpha"] = f"{int(allA8['under_covering'].sum())}/{len(allA8)}"
         g8a = S[S["experiment"].str.startswith("E8_") & (S.method == "Gauss-LOO")]
         V["e8_gauss_under_allalpha"] = f"{int(g8a['under_covering'].sum())}/{len(g8a)}"
+    # ------------------------------------------------------------ E9 competitor (normalised Gaussian)
+    e9 = S[S["experiment"].str.startswith("E9_")]
+    if len(e9):
+        for mth, k in (("TJ+N", "tjn"), ("Gauss-LOO", "gauss"), ("Gauss-LOO-N", "gaussn")):
+            x = e9[e9.method == mth]
+            V[f"e9_{k}_under"] = f"{int(x['under_covering'].sum())}/{len(x)}"
+            for a_ in (0.05, 0.1, 0.2):
+                xa = x[x.alpha == a_]
+                V[f"e9_{k}_under_{str(a_).replace('.', '')}"] = f"{int(xa['under_covering'].sum())}/{len(xa)}"
+        e9a = e9[e9.alpha == a]
+        piv = e9a.pivot_table(index=["experiment", "property", "target", "kind", "m"], columns="method", values="IS_median")
+        V["e9_n_scen"] = len(piv)
+        V["e9_gaussn_better"] = int((piv["Gauss-LOO-N"] < piv["TJ+N"]).sum())
+        V["e9_gaussn_rel_is"] = f"{(piv['Gauss-LOO-N'] / piv['TJ+N']).median():.3f}"
+        rows = []
+        for exp_ in sorted(e9["experiment"].unique()):
+            for mth in ("TJ+N", "Gauss-LOO", "Gauss-LOO-N"):
+                row = [exp_.replace("E9_competitor_", ""), mth]
+                for a_ in (0.05, 0.1, 0.2):
+                    x = e9[(e9.experiment == exp_) & (e9.method == mth) & (e9.alpha == a_)]
+                    row.append(f"{x['coverage_mean'].mean():.3f} ({int(x['under_covering'].sum())}/{len(x)})")
+                rows.append(row)
+        V["table_e9"] = md_table(pd.DataFrame(rows, columns=["Data/pipeline set", "Method", "α = 0.05", "α = 0.10", "α = 0.20"]),
+                                 "Competitor analysis (E9): mean coverage (under-covering / scenarios).")
     # ------------------------------------------------------------ sensitivity
     e7 = s[s["experiment"].str.startswith("E7_")].copy(); e7["setting"] = e7["experiment"].str.split("__").str[1]
     t = e7[e7.method == "TJ+N"]
