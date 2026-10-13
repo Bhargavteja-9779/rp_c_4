@@ -1,2 +1,4 @@
 2026-10-13 13:18:36,315 INFO mode=full jobs=4 device=cpu (all computations are CPU/numpy; device only used by the optional CNN)
 2026-10-13 13:23:02,207 INFO [E1_main_corn] 50/500 reps (266s)
+2026-10-13 13:27:05,168 INFO [E1_main_corn] 100/500 reps (509s)
+2026-10-13 13:30:58,284 INFO [E1_main_corn] 150/500 reps (742s)

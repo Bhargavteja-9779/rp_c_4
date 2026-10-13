@@ -1,0 +1,675 @@
+{
+ "barber2021": {
+  "doi": "10.1214/20-aos1965",
+  "verified": true,
+  "authors": [
+   "Barber, Rina Foygel",
+   "Cand\u00e8s, Emmanuel J.",
+   "Ramdas, Aaditya",
+   "Tibshirani, Ryan J."
+  ],
+  "title": "Predictive inference with the jackknife+",
+  "year": 2021,
+  "venue": "The Annals of Statistics",
+  "volume": "49",
+  "issue": "1",
+  "pages": "486-507",
+  "type": "journal-article"
+ },
+ "lei2018": {
+  "doi": "10.1080/01621459.2017.1307116",
+  "verified": true,
+  "authors": [
+   "Lei, Jing",
+   "G\u2019Sell, Max",
+   "Rinaldo, Alessandro",
+   "Tibshirani, Ryan J.",
+   "Wasserman, Larry"
+  ],
+  "title": "Distribution-Free Predictive Inference for Regression",
+  "year": 2018,
+  "venue": "Journal of the American Statistical Association",
+  "volume": "113",
+  "issue": "523",
+  "pages": "1094-1111",
+  "type": "journal-article"
+ },
+ "vovk2005": {
+  "doi": "10.1007/b106715",
+  "verified": true,
+  "authors": [],
+  "title": "Algorithmic Learning in a Random World",
+  "year": 2005,
+  "venue": "Springer-Verlag",
+  "volume": null,
+  "issue": null,
+  "pages": null,
+  "type": "book"
+ },
+ "angelopoulos2023": {
+  "doi": "10.1561/2200000101",
+  "verified": true,
+  "authors": [
+   "Angelopoulos, Anastasios N.",
+   "Bates, Stephen"
+  ],
+  "title": "Conformal Prediction: A Gentle Introduction",
+  "year": 2023,
+  "venue": "Foundations and Trends\u00ae in Machine Learning",
+  "volume": "16",
+  "issue": "4",
+  "pages": "494-591",
+  "type": "journal-article"
+ },
+ "papadopoulos2011": {
+  "doi": "10.1613/jair.3198",
+  "verified": true,
+  "authors": [
+   "Papadopoulos, H.",
+   "Vovk, V.",
+   "Gammerman, A."
+  ],
+  "title": "Regression Conformal Prediction with Nearest Neighbours",
+  "year": 2011,
+  "venue": "Journal of Artificial Intelligence Research",
+  "volume": "40",
+  "issue": null,
+  "pages": "815-840",
+  "type": "journal-article"
+ },
+ "fontana2023": {
+  "doi": "10.3150/21-BEJ1447",
+  "verified": true,
+  "authors": [
+   "Fontana, Matteo",
+   "Zeni, Gianluca",
+   "Vantini, Simone"
+  ],
+  "title": "Conformal prediction: A unified review of theory and new challenges",
+  "year": 2023,
+  "venue": "Bernoulli",
+  "volume": "29",
+  "issue": "1",
+  "pages": "1-23",
+  "type": "journal-article"
+ },
+ "wang1991": {
+  "doi": "10.1021/ac00023a016",
+  "verified": true,
+  "authors": [
+   "Wang, Yongdong.",
+   "Veltkamp, David J.",
+   "Kowalski, Bruce R."
+  ],
+  "title": "Multivariate instrument standardization",
+  "year": 1991,
+  "venue": "Analytical Chemistry",
+  "volume": "63",
+  "issue": "23",
+  "pages": "2750-2756",
+  "type": "journal-article"
+ },
+ "bouveresse1996": {
+  "doi": "10.1016/0169-7439(95)00074-7",
+  "verified": true,
+  "authors": [
+   "Bouveresse, E.",
+   "Massart, D.L."
+  ],
+  "title": "Improvement of the piecewise direct standardisation procedure for the transfer of NIR spectra for multivariate calibration",
+  "year": 1996,
+  "venue": "Chemometrics and Intelligent Laboratory Systems",
+  "volume": "32",
+  "issue": "2",
+  "pages": "201-213",
+  "type": "journal-article"
+ },
+ "feudale2002": {
+  "doi": "10.1016/S0169-7439(02)00085-0",
+  "verified": true,
+  "authors": [
+   "Feudale, Robert N.",
+   "Woody, Nathaniel A.",
+   "Tan, Huwei",
+   "Myles, Anthony J.",
+   "Brown, Steven D.",
+   "Ferr\u00e9, Joan"
+  ],
+  "title": "Transfer of multivariate calibration models: a review",
+  "year": 2002,
+  "venue": "Chemometrics and Intelligent Laboratory Systems",
+  "volume": "64",
+  "issue": "2",
+  "pages": "181-192",
+  "type": "journal-article"
+ },
+ "workman2018": {
+  "doi": "10.1177/0003702817736064",
+  "verified": true,
+  "authors": [
+   "Workman, Jerome J."
+  ],
+  "title": "A Review of Calibration Transfer Practices and Instrument Differences in Spectroscopy",
+  "year": 2018,
+  "venue": "Applied Spectroscopy",
+  "volume": "72",
+  "issue": "3",
+  "pages": "340-365",
+  "type": "journal-article"
+ },
+ "nikzad2018": {
+  "doi": "10.1021/acs.analchem.8b00498",
+  "verified": true,
+  "authors": [
+   "Nikzad-Langerodi, Ramin",
+   "Zellinger, Werner",
+   "Lughofer, Edwin",
+   "Saminger-Platz, Susanne"
+  ],
+  "title": "Domain-Invariant Partial-Least-Squares Regression",
+  "year": 2018,
+  "venue": "Analytical Chemistry",
+  "volume": "90",
+  "issue": "11",
+  "pages": "6693-6701",
+  "type": "journal-article"
+ },
+ "fonseca2022": {
+  "doi": "10.1016/j.aca.2022.340154",
+  "verified": true,
+  "authors": [
+   "Fonseca Diaz, Valeria",
+   "Roger, Jean-Michel",
+   "Saeys, Wouter"
+  ],
+  "title": "Unsupervised dynamic orthogonal projection. An efficient approach to calibration transfer without standard samples",
+  "year": 2022,
+  "venue": "Analytica Chimica Acta",
+  "volume": "1225",
+  "issue": null,
+  "pages": "340154",
+  "type": "journal-article"
+ },
+ "xie2024": {
+  "doi": "10.1016/j.aca.2024.342404",
+  "verified": true,
+  "authors": [
+   "Xie, Zhonghao",
+   "Chen, Xiaojing",
+   "Roger, Jean-Michel",
+   "Ali, Shujat",
+   "Huang, Guangzao",
+   "Shi, Wen"
+  ],
+  "title": "Calibration transfer via filter learning",
+  "year": 2024,
+  "venue": "Analytica Chimica Acta",
+  "volume": "1298",
+  "issue": null,
+  "pages": "342404",
+  "type": "journal-article"
+ },
+ "huang2026": {
+  "doi": "10.1016/j.aca.2026.346104",
+  "verified": true,
+  "authors": [
+   "Huang, Xudong",
+   "Chen, Xiaojing",
+   "Huang, Guangzao",
+   "Xie, Zhonghao",
+   "Shi, Wen",
+   "Chen, Xi",
+   "Yuan, Leiming",
+   "Liang, Pei",
+   "Zhu, Jiangpeng",
+   "He, Yong"
+  ],
+  "title": "UCT-LMIR: A standard-free unsupervised calibration transfer method without model recalibration",
+  "year": 2026,
+  "venue": "Analytica Chimica Acta",
+  "volume": "1423",
+  "issue": null,
+  "pages": "346104",
+  "type": "journal-article"
+ },
+ "fan2025": {
+  "doi": "10.1016/j.aca.2025.344151",
+  "verified": true,
+  "authors": [
+   "Fan, Xiaqiong",
+   "Gao, Lingling",
+   "Lv, Jingjing",
+   "Li, Bo",
+   "Xu, Kejing",
+   "Li, Xuefeng",
+   "Shao, Yuwen",
+   "Yang, Tiejun",
+   "Chen, Xiaolong",
+   "Ji, Hongchao"
+  ],
+  "title": "A systematic calibration transfer and quantification method based on principal components extreme learning machine for near-infrared spectroscopy",
+  "year": 2025,
+  "venue": "Analytica Chimica Acta",
+  "volume": "1361",
+  "issue": null,
+  "pages": "344151",
+  "type": "journal-article"
+ },
+ "allegrini2016": {
+  "doi": "10.1016/j.aca.2015.11.028",
+  "verified": true,
+  "authors": [
+   "Allegrini, Franco",
+   "Wentzell, Peter D.",
+   "Olivieri, Alejandro C."
+  ],
+  "title": "Generalized error-dependent prediction uncertainty in multivariate calibration",
+  "year": 2016,
+  "venue": "Analytica Chimica Acta",
+  "volume": "903",
+  "issue": null,
+  "pages": "51-60",
+  "type": "journal-article"
+ },
+ "olivieri2006": {
+  "doi": "10.1351/pac200678030633",
+  "verified": true,
+  "authors": [
+   "Olivieri, Alejandro C.",
+   "Faber, Nicolaas M.",
+   "Ferr\u00e9, Joan",
+   "Boqu\u00e9, Ricard",
+   "Kalivas, John H.",
+   "Mark, Howard"
+  ],
+  "title": "Uncertainty estimation and figures of merit for multivariate calibration (IUPAC Technical Report)",
+  "year": 2006,
+  "venue": "Pure and Applied Chemistry",
+  "volume": "78",
+  "issue": "3",
+  "pages": "633-661",
+  "type": "journal-article"
+ },
+ "bouckaert2011": {
+  "doi": "10.1016/j.chemolab.2011.08.008",
+  "verified": true,
+  "authors": [
+   "Bouckaert, Remco R.",
+   "Frank, Eibe",
+   "Holmes, Geoffrey",
+   "Fletcher, Dale"
+  ],
+  "title": "A comparison of methods for estimating prediction intervals in NIR spectroscopy: Size matters",
+  "year": 2011,
+  "venue": "Chemometrics and Intelligent Laboratory Systems",
+  "volume": "109",
+  "issue": "2",
+  "pages": "139-145",
+  "type": "journal-article"
+ },
+ "jovic2025": {
+  "doi": "10.1016/j.foodchem.2025.145387",
+  "verified": true,
+  "authors": [
+   "Jovic, Ozren"
+  ],
+  "title": "Conformal predictors in chemometric study of mid-infrared food adulteration: quantification of prediction uncertainty",
+  "year": 2025,
+  "venue": "Food Chemistry",
+  "volume": "492",
+  "issue": null,
+  "pages": "145387",
+  "type": "journal-article"
+ },
+ "maxime2025": {
+  "doi": "10.1016/j.chemolab.2025.105532",
+  "verified": true,
+  "authors": [
+   "Maxime, Metz",
+   "Lamdibih, Khadija",
+   "Roger, Jean-Michel",
+   "Esteve, David",
+   "Bendoula, Ryad",
+   "Abdelghafour, Florent"
+  ],
+  "title": "Simple methods for uncertainty estimation in neural networks applied to spectral data processing: A case study on mango dry matter prediction",
+  "year": 2025,
+  "venue": "Chemometrics and Intelligent Laboratory Systems",
+  "volume": "267",
+  "issue": null,
+  "pages": "105532",
+  "type": "journal-article"
+ },
+ "anderson2020": {
+  "doi": "10.1016/j.postharvbio.2020.111202",
+  "verified": true,
+  "authors": [
+   "Anderson, N.T.",
+   "Walsh, K.B.",
+   "Subedi, P.P.",
+   "Hayes, C.H."
+  ],
+  "title": "Achieving robustness across season, location and cultivar for a NIRS model for intact mango fruit dry matter content",
+  "year": 2020,
+  "venue": "Postharvest Biology and Technology",
+  "volume": "168",
+  "issue": null,
+  "pages": "111202",
+  "type": "journal-article"
+ },
+ "walsh2024": {
+  "doi": "10.1016/j.saa.2024.124003",
+  "verified": true,
+  "authors": [
+   "Walsh, Jeremy",
+   "Neupane, Arjun",
+   "Li, Michael"
+  ],
+  "title": "Evaluation of 1D convolutional neural network in estimation of mango dry matter content",
+  "year": 2024,
+  "venue": "Spectrochimica Acta Part A: Molecular and Biomolecular Spectroscopy",
+  "volume": "311",
+  "issue": null,
+  "pages": "124003",
+  "type": "journal-article"
+ },
+ "mishra2022": {
+  "doi": "10.1016/j.trac.2022.116804",
+  "verified": true,
+  "authors": [
+   "Mishra, Puneet",
+   "Passos, D\u00e1rio",
+   "Marini, Federico",
+   "Xu, Junli",
+   "Amigo, Jose M.",
+   "Gowen, Aoife A.",
+   "Jansen, Jeroen J.",
+   "Biancolillo, Alessandra",
+   "Roger, Jean Michel",
+   "Rutledge, Douglas N.",
+   "Nordon, Alison"
+  ],
+  "title": "Deep learning for near-infrared spectral data modelling: Hypes and benefits",
+  "year": 2022,
+  "venue": "TrAC Trends in Analytical Chemistry",
+  "volume": "157",
+  "issue": null,
+  "pages": "116804",
+  "type": "journal-article"
+ },
+ "kennard1969": {
+  "doi": "10.1080/00401706.1969.10490666",
+  "verified": true,
+  "authors": [
+   "Kennard, R. W.",
+   "Stone, L. A."
+  ],
+  "title": "Computer Aided Design of Experiments",
+  "year": 1969,
+  "venue": "Technometrics",
+  "volume": "11",
+  "issue": "1",
+  "pages": "137-148",
+  "type": "journal-article"
+ },
+ "wold2001": {
+  "doi": "10.1016/S0169-7439(01)00155-1",
+  "verified": true,
+  "authors": [
+   "Wold, Svante",
+   "Sj\u00f6str\u00f6m, Michael",
+   "Eriksson, Lennart"
+  ],
+  "title": "PLS-regression: a basic tool of chemometrics",
+  "year": 2001,
+  "venue": "Chemometrics and Intelligent Laboratory Systems",
+  "volume": "58",
+  "issue": "2",
+  "pages": "109-130",
+  "type": "journal-article"
+ },
+ "savitzky1964": {
+  "doi": "10.1021/ac60214a047",
+  "verified": true,
+  "authors": [
+   "Savitzky, Abraham.",
+   "Golay, M. J. E."
+  ],
+  "title": "Smoothing and Differentiation of Data by Simplified Least Squares Procedures.",
+  "year": 1964,
+  "venue": "Analytical Chemistry",
+  "volume": "36",
+  "issue": "8",
+  "pages": "1627-1639",
+  "type": "journal-article"
+ },
+ "barnes1989": {
+  "doi": "10.1366/0003702894202201",
+  "verified": true,
+  "authors": [
+   "Barnes, R. J.",
+   "Dhanoa, M. S.",
+   "Lister, Susan J."
+  ],
+  "title": "Standard Normal Variate Transformation and De-Trending of Near-Infrared Diffuse Reflectance Spectra",
+  "year": 1989,
+  "venue": "Applied Spectroscopy",
+  "volume": "43",
+  "issue": "5",
+  "pages": "772-777",
+  "type": "journal-article"
+ },
+ "pasquini2018": {
+  "doi": "10.1016/j.aca.2018.04.004",
+  "verified": true,
+  "authors": [
+   "Pasquini, Celio"
+  ],
+  "title": "Near infrared spectroscopy: A mature analytical technique with new perspectives \u2013 A review",
+  "year": 2018,
+  "venue": "Analytica Chimica Acta",
+  "volume": "1026",
+  "issue": null,
+  "pages": "8-36",
+  "type": "journal-article"
+ },
+ "gneiting2007": {
+  "doi": "10.1198/016214506000001437",
+  "verified": true,
+  "authors": [
+   "Gneiting, Tilmann",
+   "Raftery, Adrian E"
+  ],
+  "title": "Strictly Proper Scoring Rules, Prediction, and Estimation",
+  "year": 2007,
+  "venue": "Journal of the American Statistical Association",
+  "volume": "102",
+  "issue": "477",
+  "pages": "359-378",
+  "type": "journal-article"
+ },
+ "booksh2025": {
+  "doi": "10.1002/cem.70017",
+  "verified": true,
+  "authors": [
+   "Booksh, Karl\u00a0S.",
+   "Celani, Caelin\u00a0P.",
+   "Ralbovsky, Nicole\u00a0M.",
+   "Smith, Joseph\u00a0P."
+  ],
+  "title": "Assessing Classification Models of Pharmaceuticals With Conformal Prediction",
+  "year": 2025,
+  "venue": "Journal of Chemometrics",
+  "volume": "39",
+  "issue": "3",
+  "pages": "e70017",
+  "type": "journal-article"
+ },
+ "redd2024": {
+  "doi": "10.1002/cem.3639",
+  "verified": true,
+  "authors": [
+   "Redd, Hyrum\u00a0J.",
+   "Kalivas, John\u00a0H."
+  ],
+  "title": "Assessment of Conformal Prediction and Standard Normal Distribution for Autonomous Consensus One\u2010Class Classification",
+  "year": 2025,
+  "venue": "Journal of Chemometrics",
+  "volume": "39",
+  "issue": "1",
+  "pages": "e3639",
+  "type": "journal-article"
+ },
+ "gu2019": {
+  "doi": "10.1177/0003702819831017",
+  "verified": true,
+  "authors": [
+   "Gu, Jiao",
+   "Liu, Huaibo",
+   "Ma, Chaoqun",
+   "Li, Lei",
+   "Zhu, Chun",
+   "Glorieux, Christ",
+   "Chen, Guoqing"
+  ],
+  "title": "Conformal Prediction Based on Raman Spectra for the Classification of Chinese Liquors",
+  "year": 2019,
+  "venue": "Applied Spectroscopy",
+  "volume": "73",
+  "issue": "7",
+  "pages": "759-766",
+  "type": "journal-article"
+ },
+ "norinder2014": {
+  "doi": "10.1021/ci5001168",
+  "verified": true,
+  "authors": [
+   "Norinder, Ulf",
+   "Carlsson, Lars",
+   "Boyer, Scott",
+   "Eklund, Martin"
+  ],
+  "title": "Introducing Conformal Prediction in Predictive Modeling. A Transparent and Flexible Alternative to Applicability Domain Determination",
+  "year": 2014,
+  "venue": "Journal of Chemical Information and Modeling",
+  "volume": "54",
+  "issue": "6",
+  "pages": "1596-1603",
+  "type": "journal-article"
+ },
+ "fonollosa2016": {
+  "doi": "10.1016/j.snb.2016.05.089",
+  "verified": true,
+  "authors": [
+   "Fonollosa, J.",
+   "Fern\u00e1ndez, L.",
+   "Guti\u00e9rrez-G\u00e1lvez, A.",
+   "Huerta, R.",
+   "Marco, S."
+  ],
+  "title": "Calibration transfer and drift counteraction in chemical sensor arrays using Direct Standardization",
+  "year": 2016,
+  "venue": "Sensors and Actuators B: Chemical",
+  "volume": "236",
+  "issue": null,
+  "pages": "1044-1053",
+  "type": "journal-article"
+ },
+ "mishra2020dipls": {
+  "doi": "10.1016/j.infrared.2020.103547",
+  "verified": true,
+  "authors": [
+   "Mishra, Puneet",
+   "Nikzad-Langerodi, Ramin"
+  ],
+  "title": "Partial least square regression versus domain invariant partial least square regression with application to near-infrared spectroscopy of fresh fruit",
+  "year": 2020,
+  "venue": "Infrared Physics &amp; Technology",
+  "volume": "111",
+  "issue": null,
+  "pages": "103547",
+  "type": "journal-article"
+ },
+ "anderson2021": {
+  "doi": "10.1016/j.postharvbio.2020.111358",
+  "verified": true,
+  "authors": [
+   "Anderson, N.T.",
+   "Walsh, K.B.",
+   "Flynn, J.R.",
+   "Walsh, J.P."
+  ],
+  "title": "Achieving robustness across season, location and cultivar for a NIRS model for intact mango fruit dry matter content. II. Local PLS and nonlinear models",
+  "year": 2021,
+  "venue": "Postharvest Biology and Technology",
+  "volume": "171",
+  "issue": null,
+  "pages": "111358",
+  "type": "journal-article"
+ },
+ "astm_e1655": {
+  "doi": "10.1520/E1655-17",
+  "verified": true,
+  "authors": [
+   ""
+  ],
+  "title": "Practices for Infrared Multivariate Quantitative Analysis",
+  "year": null,
+  "venue": "ASTM International",
+  "volume": null,
+  "issue": null,
+  "pages": null,
+  "type": "standard"
+ },
+ "qian2024": {
+  "doi": "10.1016/j.chemolab.2024.105225",
+  "verified": true,
+  "authors": [
+   "Qian, Xiaoyu",
+   "Wu, Jinru",
+   "Wei, Ligong",
+   "Lin, Youwu"
+  ],
+  "title": "Random projection ensemble conformal prediction for high-dimensional classification",
+  "year": 2024,
+  "venue": "Chemometrics and Intelligent Laboratory Systems",
+  "volume": "253",
+  "issue": null,
+  "pages": "105225",
+  "type": "journal-article"
+ },
+ "guan2022": {
+  "doi": "10.1093/biomet/asac040",
+  "verified": true,
+  "authors": [
+   "Guan, Leying"
+  ],
+  "title": "Localized conformal prediction: a generalized inference framework for conformal prediction",
+  "year": 2023,
+  "venue": "Biometrika",
+  "volume": "110",
+  "issue": "1",
+  "pages": "33-50",
+  "type": "journal-article"
+ },
+ "faber1997": {
+  "doi": "10.1002/(SICI)1099-128X(199705)11:3<181::AID-CEM459>3.0.CO;2-7",
+  "verified": true,
+  "authors": [
+   "Faber, Klaas",
+   "Kowalski, Bruce R."
+  ],
+  "title": "Propagation of measurement errors for the validation of predictions obtained by principal component regression and partial least squares",
+  "year": 1997,
+  "venue": "Journal of Chemometrics",
+  "volume": "11",
+  "issue": "3",
+  "pages": "181-238",
+  "type": "journal-article"
+ },
+ "mango_data": {
+  "doi": "10.17632/46htwnp833.6",
+  "verified": false,
+  "error": "HTTP Error 404: Not Found"
+ }
+}
