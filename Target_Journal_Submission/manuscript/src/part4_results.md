@@ -5,7 +5,7 @@
 Calibration transfer was necessary, but it was not equally beneficial everywhere (Table 2).
 - **Corn:** applying the master models directly to mp5/mp6 spectra gave RMSEP values {{corn_none_vs_pds}} times larger than after PDS with *m* = 20 standards.
 - **Tablets:** PDS reduced the assay RMSEP from {{tab_assay_rmsep_m10}} mg (*m* = 10) to {{tab_assay_rmsep_m50}} mg (*m* = 50). The weight and hardness predictions were insensitive to the transfer.
-- **Mango:** SBC did not improve on the uncorrected source model (RMSEP {{mango_sbc_rmsep}} vs {{mango_none_rmsep}} %), consistent with reports that models built over several seasons are already fairly robust [@anderson2020].
+- **Mango:** SBC did not improve on the uncorrected source model (RMSEP {{mango_sbc_rmsep}} vs {{mango_none_rmsep}} % DM), consistent with reports that models built over several seasons are already fairly robust [@anderson2020].
 
 The transfer settings (PDS window 5, SBC slope and bias, LV numbers) were fixed in advance and were not tuned on target data. They are therefore not the most accurate possible: on corn, SBC gave lower RMSEP than the pre-registered PDS for all four properties, and a 3-channel PDS window was more accurate than the 5-channel one (§4.8). This does not affect the comparison of interval methods. All interval methods share the same point predictor within a pipeline, so the comparisons isolate the interval construction, and interval validity is reported for every pipeline (§4.3).
 
@@ -13,7 +13,7 @@ The transfer settings (PDS window 5, SBC slope and bias, LV numbers) were fixed 
 
 ## 4.2. Conventional intervals after transfer (RQ1)
 
-Source-calibrated intervals under-covered whenever the transfer added error that the source calibration had not seen (Fig. 3; Table 3).
+Source-calibrated intervals under-covered when the transfer added substantial error that the source calibration had not seen (Fig. 3; Table 3; compare Table 2).
 - **Corn:** the mean coverage of nominal 90% intervals was {{src_cov_range_corn}} for ASTM-PI, SCP-S and WCP-S, which were flagged as under-covering in {{src_under_corn}} scenario × method cells.
 - **Mango:** coverage was {{src_cov_range_mango}} ({{src_under_mango}} cells under-covering).
 - **Tablets:** the picture was mixed ({{src_cov_range_tablets}}; {{src_under_tablets}} cells under-covering). Severe under-coverage occurred for the assay with *m* = 10 (all three methods, {{tab_assay_m10_src}}), where PDS fitted on ten standards inflated the error. For weight, SCP-S and WCP-S under-covered slightly but systematically at every *m* ({{tab_weight_scps}}), while hardness intervals were valid.
@@ -83,13 +83,13 @@ On corn and mango, the Q residual of the shifted spectra inflated σ(x) and reco
 
 
 
-## 4.6. Generalisation across pipelines, directions and model classes (RQ5)
+## 4.6. Generalisation across pipelines, directions, model classes and instruments (RQ5)
 
 The conclusions did not depend on the primary pipeline, the transfer direction or the model class (Table 7).
 - **Transfer pipelines.** With DS, SBC or no transfer instead of PDS, TJ+N and TJ+ were never flagged as under-covering (§4.3).
 - **Reverse direction.** Transferring from mp5 to m5 gave the same picture: no under-coverage for TJ+N, and under-coverage of the source-calibrated intervals.
 - **Ridge regression.** With ridge source models, TJ+N was valid on all three data sets.
-- **1D-CNN on mango.** The CNN ({{cnn_params}} parameters, early stopping after {{cnn_epochs}} epochs, {{cnn_train_s}} s on a CPU) reached RMSEP {{cnn_rmsep}} % after SBC. On top of it:
+- **1D-CNN on mango.** The CNN ({{cnn_params}} parameters, early stopping after {{cnn_epochs}} epochs, {{cnn_train_s}} s on a CPU) reached RMSEP {{cnn_rmsep}} % DM after SBC. On top of it:
   - TJ+N gave coverage {{cnn_tjn_cov}} with the lowest interval score ({{cnn_tjn_is}}).
   - Gauss-LOO under-covered in {{cnn_gauss_under}} scenarios (coverage {{cnn_gauss_cov}}; score {{cnn_gauss_is}}).
   - MC-dropout intervals [@gal2016], a common deep-learning uncertainty estimate for spectra [@maxime2025], under-covered in {{cnn_mc_under}} scenarios (coverage {{cnn_mc_cov}}), presumably because dropout variance captures model uncertainty but not the systematic error introduced by the season shift.
@@ -103,7 +103,7 @@ Over all generalisation settings, TJ+N under-covered in {{gen_tjn_under}} of {{g
 - *m* = 10–50 standards, 200 repetitions.
 
 The results reproduced the main findings (Table 8).
-- Source-calibrated intervals under-covered in every scenario: coverage {{e8_src_cov_pds}} after PDS and {{e8_src_cov_sbc}} after SBC.
+- ASTM-PI and SCP-S under-covered in every scenario: coverage {{e8_fin_cov_pds}} after PDS ({{e8_fin_under_pds}} scenarios) and {{e8_fin_cov_sbc}} after SBC ({{e8_fin_under_sbc}}). WCP-S under-covered after PDS ({{e8_wcp_cov_pds}}). After SBC it returned unbounded intervals in {{e8_wcp_inf_sbc}} of repetitions: valid, but uninformative.
 - TJ+N was valid: mean coverage {{e8_tjn_cov_pds}} (PDS) and {{e8_tjn_cov_sbc}} (SBC). It was never flagged at any α ({{e8_tjn_under_allalpha}} under-covering scenarios), whereas Gauss-LOO was flagged in {{e8_gauss_under_allalpha}}.
 - PDS proved a poor transfer for these instruments (RMSEP {{e8_rmsep_pds}} % DM, against {{e8_rmsep_sbc}} % with SBC). TJ+N made this visible through wide intervals (median width {{e8_width_pds}} vs {{e8_width_sbc}} % DM), whereas the source-calibrated intervals remained narrow and missed most samples. Valid intervals are thus also a diagnostic of transfer quality.
 
@@ -117,7 +117,7 @@ The label-free LF-conv interval uses only paired, unlabelled standards. It was n
 
 ## 4.8. Sensitivity to transfer and model settings
 
-Changing the PDS window (3, 7 or 11 channels instead of the pre-registered 5) or the number of latent variables (±2) changed point accuracy considerably. For example, the mean corn RMSEP with *m* = 15 was {{sens_corn_rmsep_w5}} with the pre-registered 5-channel window and {{sens_corn_rmsep_hw}} with the other windows. The pre-registered window was thus not the most accurate choice for corn; it was nevertheless kept, since it was fixed before any target data were analysed. Interval validity was unaffected: TJ+N under-covered in {{sens_tjn_under}} of {{sens_n}} sensitivity scenarios (coverage {{sens_tjn_cov}}; Table S3). The source-calibrated intervals under-covered in {{sens_src_under}} cases. Their validity also depended on the setting; for example, ASTM-PI coverage fell to {{sens_tab_lvm2_astm}} for the tablet assay with two latent variables fewer. Because TJ+ calibrates on the deployed pipeline itself, poorer transfer settings are reflected in wider, but still valid, intervals.
+Changing the PDS window (3, 7 or 11 channels instead of the pre-registered 5) or the number of latent variables (±2) changed point accuracy considerably. For example, the mean corn RMSEP with *m* = 15 was {{sens_corn_rmsep_w5}} with the pre-registered 5-channel window and {{sens_corn_rmsep_hw}} with the other windows. The pre-registered window was thus not the most accurate choice for corn; it was nevertheless kept, since it was fixed before any target data were analysed. Interval validity was unaffected: TJ+N under-covered in {{sens_tjn_under}} of {{sens_n}} sensitivity scenarios (coverage {{sens_tjn_cov}}; Table S3). The source-calibrated intervals under-covered in {{sens_src_under}} cases. Their validity also depended on the setting. For example, with an 11-channel PDS window the tablet-assay coverage of ASTM-PI and SCP-S fell to {{sens_tab_hw5_astm}} and {{sens_tab_hw5_scps}}. Because TJ+ calibrates on the deployed pipeline itself, poorer transfer settings are reflected in wider, but still valid, intervals.
 
 ## 4.9. Error analysis
 

@@ -1,0 +1,22 @@
+    dataset kind   m  n_test                              step  median_s
+0      corn  pds  10      20  single transfer fit + prediction  0.004714
+1      corn  pds  10      20          TJ+N (m LOO + 5 CV fits)  0.100987
+2      corn  pds  20      10  single transfer fit + prediction  0.004441
+3      corn  pds  20      10          TJ+N (m LOO + 5 CV fits)  0.146010
+4   tablets  pds  10     450  single transfer fit + prediction  0.034899
+5   tablets  pds  10     450          TJ+N (m LOO + 5 CV fits)  0.802789
+6   tablets  pds  20     440  single transfer fit + prediction  0.023886
+7   tablets  pds  20     440          TJ+N (m LOO + 5 CV fits)  1.247716
+8   tablets  pds  30     430  single transfer fit + prediction  0.024797
+9   tablets  pds  30     430          TJ+N (m LOO + 5 CV fits)  1.739867
+10  tablets  pds  50     410  single transfer fit + prediction  0.022656
+11  tablets  pds  50     410          TJ+N (m LOO + 5 CV fits)  2.559985
+12    mango  sbc  10     715  single transfer fit + prediction  0.000414
+13    mango  sbc  10     715          TJ+N (m LOO + 5 CV fits)  0.022579
+14    mango  sbc  20     705  single transfer fit + prediction  0.000498
+15    mango  sbc  20     705          TJ+N (m LOO + 5 CV fits)  0.032961
+16    mango  sbc  30     695  single transfer fit + prediction  0.000385
+17    mango  sbc  30     695          TJ+N (m LOO + 5 CV fits)  0.042461
+18    mango  sbc  50     675  single transfer fit + prediction  0.000418
+19    mango  sbc  50     675          TJ+N (m LOO + 5 CV fits)  0.063412
+SCALING_DONE

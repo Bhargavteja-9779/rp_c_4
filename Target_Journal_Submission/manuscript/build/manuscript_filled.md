@@ -12,7 +12,7 @@ title: "Valid prediction intervals for transferred NIR calibrations: reusing the
 
 **Background:** Calibrations built on one spectrometer or season are routinely transferred to others using a few transfer standards. Whether the prediction intervals of a transferred calibration keep their nominal coverage has not been studied systematically, and splitting the scarce standards between transfer and uncertainty calibration wastes them.
 
-**Results:** We propose a transfer jackknife+ (TJ+N). Each standard is left out in turn, the transfer step (e.g., piecewise direct standardisation) is re-fitted on the others, and the leave-one-out residuals, normalised by a difficulty function of Hotelling T² and Q residuals learned from source data, define distribution-free intervals with coverage ≥ 1−2α for exchangeable standards. On three public NIR data sets (instrument and season shift; 40 pre-registered scenarios, up to 500 repetitions each), source-calibrated intervals under-covered after transfer, with coverage as low as 0.03 for a nominal 0.90. TJ+N had a mean coverage of 0.922 and was never flagged as under-covering, at α = 0.05, 0.10 or 0.20, under four transfer pipelines, or with PLS, ridge and 1D-CNN models. Splitting the standards gave unbounded intervals for *m* ≤ 15. Gaussian intervals from leave-one-out residuals were similarly efficient at 90% but under-covered in 14 of 40 scenarios at 95%. All methods failed under wavelength drift occurring after standardisation.
+**Results:** We propose a transfer jackknife+ (TJ+N). Each standard is left out in turn and the transfer step (e.g., piecewise direct standardisation) is re-fitted on the others. The leave-one-out residuals, normalised by a source-learned function of Hotelling T² and Q residuals, define distribution-free intervals with coverage ≥ 1−2α for exchangeable standards. On three public NIR data sets (instrument and season shift; 40 pre-registered scenarios, up to 500 repetitions each), source-calibrated intervals under-covered after transfer, with coverage as low as 0.03 for a nominal 0.90. TJ+N had a mean coverage of 0.922 and was never flagged as under-covering, at α = 0.05, 0.10 or 0.20, under four transfer pipelines, or with PLS, ridge and 1D-CNN models, including an independent transfer between handheld fruit spectrometers. Splitting the standards gave unbounded intervals for *m* ≤ 15. Gaussian intervals from leave-one-out residuals were similarly efficient at 90% but under-covered in 14 of 40 scenarios at 95%. All methods failed under wavelength drift occurring after standardisation.
 
 **Significance:** TJ+N gives finite-sample-valid uncertainty for transferred NIR calibrations from the standards that calibration transfer already requires, at the cost of *m* refits of the transfer step (seconds or less).
 
@@ -24,19 +24,41 @@ Near-infrared (NIR) spectroscopy with multivariate calibration is a mature analy
 
 Calibration-transfer studies are almost always judged by point-prediction accuracy (RMSEP, bias). Analytical results, however, must be accompanied by a statement of uncertainty, and multivariate calibration has a long tradition of uncertainty estimation and figures of merit [@faber1997; @olivieri2006; @allegrini2016]. In routine practice, approximate prediction intervals are derived from the calibration error and the leverage of the new sample, as in ASTM E1655-type procedures [@astm_e1655]. These intervals use the *source* calibration error model. After an instrument or season change, that error model no longer describes the deployed predictor. The transfer step adds its own error, and the standardisation is estimated from only a few standards.
 
-Conformal prediction provides intervals with finite-sample, distribution-free coverage guarantees under exchangeability [@vovk2005; @lei2018; @angelopoulos2023; @fontana2023]. In chemometrics it has been used mainly for classification [@gu2019; @redd2024; @qian2024; @booksh2025] and for in-distribution regression. Examples are normalised conformal regression of mid-infrared spectra [@jovic2025], conformal-inspired intervals for PLS and PCR [@duma2025], and QSAR applicability domains [@norinder2014]. Coverage guarantees break when calibration and deployment data are not exchangeable, which is exactly the calibration-transfer situation. Weighted conformal prediction corrects for covariate shift [@tibshirani2019], but an instrument change alters the relation between spectrum and property, not only the spectral distribution. Transporting calibration data between paired domains has very recently been proposed for classification [@doula2026]. We found no study of interval validity for transferred spectroscopic calibrations.
+Conformal prediction provides intervals with finite-sample, distribution-free coverage guarantees under exchangeability [@vovk2005; @lei2018; @angelopoulos2023; @fontana2023]. In chemometrics it has been used mainly for classification [@gu2019; @redd2024; @qian2024; @booksh2025] and for in-distribution regression. Examples are normalised conformal regression of mid-infrared spectra [@jovic2025], conformal-inspired intervals for PLS and PCR [@duma2025], and QSAR applicability domains [@norinder2014]. Coverage guarantees break when calibration and deployment data are not exchangeable, which is exactly the calibration-transfer situation. Weighted conformal prediction [@tibshirani2019] and its jackknife+ counterpart JAWS [@prinster2022] correct for covariate shift using labelled source data. An instrument change, however, alters the relation between spectrum and property, not only the spectral distribution, which violates the covariate-shift assumption. Outside spectroscopy, the growth of uncertainty after calibration transfer has been characterised empirically for networks of low-cost air-quality sensors [@zhivkov2026], without finite-sample guarantees. Transporting calibration data between paired domains has very recently been proposed for classification [@doula2026]. In searches of Crossref, arXiv and the web (2015–2026; terms combining conformal prediction, jackknife+, prediction intervals and uncertainty with calibration transfer, model transfer, standardisation, near-infrared and spectroscopy), we found no study of interval validity for transferred spectroscopic calibrations.
 
 A practical constraint shapes the problem. The only target-domain data with reference values are typically the *m* transfer standards, often 10–30 samples, and they are already needed to fit the transfer. A valid but naïve solution splits them: half fit the transfer and half calibrate a split-conformal interval. With *m* < 18 at α = 0.1, the calibration half is too small to give finite intervals. The jackknife+ [@barber2021] avoids sample splitting through leave-one-out refits, with a coverage guarantee of 1−2α. We use this to construct intervals for *transferred* calibrations by re-fitting the transfer step, not the source model, inside the leave-one-out loop. All standards are therefore reused for both purposes.
+
+**What is and is not new.** The inference engine is the jackknife+ [@barber2021], and normalised nonconformity scores are established [@papadopoulos2011; @jovic2025]; we claim no new conformal theory. What we contribute is the instantiation of the method for calibration transfer, together with the evidence that it is needed:
+
+- **Which step to re-fit.** Only the transfer step is placed inside the leave-one-out loop. The source model is kept fixed, and in practice it often cannot be re-fitted because it belongs to another instrument or season.
+
+- **Why the obvious alternatives fall short.** The two natural practices are residuals of the fitted transfer and Gaussian intervals from the leave-one-standard-out RMSE. Neither carries a guarantee, and both are shown to fail in identifiable conditions.
+
+- **Practical consequences** for analytical laboratories: the minimum number of standards, the requirement on how standards are selected, and the failure under drift after standardisation.
 
 The contributions of this work are:
 
 1. A transfer jackknife+ (TJ+) for transferred multivariate calibrations, with a finite-sample coverage statement under explicit conditions on how the standards are selected (Appendix A).
 
-2. A chemometric normalisation (TJ+N), using a source-learned difficulty function of Hotelling T² and Q residuals of the *transferred* spectrum, so that interval width adapts to the sample.
+2. A chemometric normalisation (TJ+N). A source-learned difficulty function of Hotelling T² and Q residuals is evaluated on the *transferred* spectrum within each leave-one-out fit, so that interval width adapts to the sample and to spectra that the transfer maps poorly.
 
 3. A pre-registered benchmark on three public NIR data sets covering instrument and season shift. It compares classical, source-calibrated, shift-weighted, transport-based, split-standards and Gaussian intervals, and includes ablation, robustness, model-class (PLS, ridge, 1D-CNN), sensitivity, computational and error analyses.
 
 4. An exploratory label-free variant for the case in which the transfer standards have no reference values.
+
+The study addresses the following research questions:
+
+- **RQ1.** Do conventional intervals remain valid after transfer?
+
+- **RQ2.** Is TJ+N valid and efficient for realistic numbers of standards?
+
+- **RQ3.** Which components of TJ+N matter?
+
+- **RQ4.** How robust is it to standard selection, noise, drift and reduced source data?
+
+- **RQ5.** Does it generalise across transfer pipelines, directions, model classes and instruments?
+
+- **RQ6.** What does it cost?
 
 All code and the complete reproduction pipeline are publicly available.
 
@@ -60,7 +82,7 @@ For a new target sample $(\mathbf{x}^T_{m+1},y_{m+1})$ we seek an interval $\hat
 
 ## 2.2. Difficulty function
 
-A heteroscedastic, sample-specific scale is obtained from PLS diagnostics. For a (transferred) spectrum, let $T^2(\mathbf{x})=\sum_{a=1}^{A} t_a^2/s_{t_a}^2$ (Hotelling T² in the $A$-dimensional score space) and $Q(\mathbf{x})=\lVert \mathbf{x}_c-\mathbf{t}\mathbf{P}^{\mathsf T}\rVert^2$ (the squared spectral residual). We set
+A heteroscedastic, sample-specific scale is obtained from PLS diagnostics. For a (transferred) spectrum, let $T^2(\mathbf{x})=\sum_{a=1}^{A} t_a^2/s_{t_a}^2$ (Hotelling T² in the $A$-dimensional score space) and $Q(\mathbf{x})=\lVert \mathbf{x}_c-\mathbf{t}\mathbf{P}^{\mathsf T}\rVert^2$ (the squared spectral residual), both computed in the preprocessed, mean-centred spectral space of the source model. We set
 
 $$\sigma(\mathbf{x}) = \max\left\{\varepsilon,\; c_0 + c_1\sqrt{T^2(\mathbf{x})} + c_2\sqrt{Q(\mathbf{x})}\right\}, \qquad (2)$$
 
@@ -97,15 +119,15 @@ Three remarks clarify the scope of the guarantee.
 
 All methods share the same deployed point predictor $\mu_{\mathcal{D}}$ fitted on all $m$ standards. They differ only in the interval.
 
-- **ASTM-PI** (classical parametric): $\mu(\mathbf{x})\pm t_{1-\alpha/2,\,n-A-1}\,\mathrm{SEC}\sqrt{1+h(\mathbf{x})}$, with the source standard error of calibration and the leverage $h$ of the transferred spectrum [@astm_e1655].
+- **ASTM-PI** (classical parametric): $\mu(\mathbf{x})\pm t_{1-\alpha/2,\,n-A-1}\,\mathrm{SEC}\sqrt{1+h(\mathbf{x})}$, with the source standard error of calibration and the leverage $h$ of the transferred spectrum [@astm_e1655]. For ridge models, the leverage and degrees of freedom of the companion PLS model are used (an approximation).
 
 - **SCP-S:** split conformal prediction with the pooled source residuals (out-of-fold residuals of the source training set plus source-calibration residuals), assuming no shift [@lei2018].
 
-- **WCP-S:** weighted conformal prediction for covariate shift [@tibshirani2019]. Likelihood ratios come from a logistic domain classifier on the PLS scores of source spectra versus transferred, unlabelled target spectra.
+- **WCP-S:** weighted conformal prediction for covariate shift [@tibshirani2019]. Likelihood ratios come from a logistic domain classifier on the PLS scores of source spectra versus transferred, unlabelled target spectra; the test spectra themselves are included (transductive use).
 
-- **Transport:** a regression analogue of transported conformal calibration [@doula2026]. Source-calibration spectra are mapped into the target space by a master→secondary PDS fitted on the standards, passed through the deployed pipeline, and their residuals calibrate a split-conformal quantile. It applies to paired transfers only.
+- **Transport:** a regression analogue of transported conformal calibration [@doula2026]. Source-calibration spectra are mapped into the target space by a master→secondary PDS fitted on the standards, passed through the deployed pipeline, and their residuals calibrate a split-conformal quantile. It applies to paired transfers only. This baseline implements only the transport idea of [@doula2026]; the mismatch correction (TCC-KS) and weighting proposed there for classification were not adapted to regression here.
 
-- **Gauss-LOO:** $\mu(\mathbf{x})\pm t_{1-\alpha/2,\,m-1}\,\mathrm{RMSE}_{\text{LOO}}$, using the leave-one-standard-out residuals. This mimics recomputing the RMSEP on the standards.
+- **Gauss-LOO:** $\mu(\mathbf{x})\pm t_{1-\alpha/2,\,m-1}\,\mathrm{RMSE}_{\text{LOO}}$, using the leave-one-standard-out residuals. This mimics the common practice of validating a transfer by its prediction error on check samples.
 
 - **SCP-T-split(-N):** the standards are split at random into halves. The first half fits the transfer and the second half calibrates (normalised) split conformal prediction. This is valid, at the cost of halving both sets.
 
@@ -132,9 +154,9 @@ Three public NIR data sets with documented domain shifts were used (Table 1; Fig
 
 **Corn** [@eigenvector_data]. Eighty corn samples were measured on three NIR spectrometers: m5 (master), mp5 and mp6. The range is 1100–2498 nm at 2 nm intervals (700 channels). Moisture, oil, protein and starch were determined by reference methods. Instrument shift: m5→mp5 and m5→mp6, plus mp5→m5 as a reverse-direction check.
 
-**Pharmaceutical tablets (IDRC Shootout 2002)** [@eigenvector_data]. 655 tablets were measured on two spectrometers (600–1898 nm, 650 channels), with reference weight, hardness and active-ingredient assay. The distributed calibrate (155), validate (40) and test (460) partition was retained. Instrument 1 is the master.
+**Pharmaceutical tablets (IDRC Shootout 2002)** [@eigenvector_data]. 655 tablets were measured on two spectrometers (600–1898 nm, 650 channels), with reference weight, hardness and active-ingredient assay. The distributed calibrate (155), validate (40) and test (460) partition was retained; the target pool is therefore the organisers' test set. Instrument 1 is the master.
 
-**Mango dry matter** [@anderson2020; @mango_data]. The data comprise 11,691 NIR spectra (684–990 nm used, 103 channels) of intact mango fruit from four harvest seasons, with dry-matter content (DMC) as reference. As recommended by the data providers, replicate scans of the same fruit (2–6 scans; one subset scanned at three temperatures) must never be split between training and test sets. Replicates were therefore averaged per fruit, giving 4,677 fruit. Season shift: seasons 1–3 (source) → season 4 (target, the providers' external validation season).
+**Mango dry matter** [@anderson2020; @mango_data]. The data comprise 11,691 NIR spectra (684–990 nm used, 103 channels) of intact mango fruit from four harvest seasons, with dry-matter content (DMC) as reference. As recommended by the data providers, replicate scans of the same fruit (2–6 scans; one subset scanned at three temperatures) must never be split between training and test sets. Replicates were therefore averaged per fruit (fruit identified by season, region, harvest date, maturity type, cultivar, population and DM value), giving 4,677 fruit (file version 1 of the data record). For the additional instrument-shift test (§4.6), the providers' extended file (record version 6) was used. Spectra flagged as outliers by the providers were excluded, and replicates were averaged per fruit and instrument. Season shift: seasons 1–3 (source) → season 4 (target, the providers' external validation season).
 
 | Data set | Size | Shift | Range (channels) | Responses | Source train / source cal. / target pool | m |
 |:--|--:|--:|--:|--:|--:|--:|
@@ -152,7 +174,7 @@ Table: **Table 1.** Data sets and splitting protocol.
 
 The design, including all hyperparameters, seeds, metrics, tests and the validity criterion, was fixed before any target-domain result was computed. It is documented with a deviation log in the repository.
 
-**Source models.** Preprocessing was chosen among none, SNV [@barnes1989], Savitzky–Golay [@savitzky1964] first derivative (window 11, order 2) and second derivative (window 13, order 2). The number of PLS latent variables [@wold2001] (≤15 for corn and tablets, ≤25 for mango) was chosen by 10-fold cross-validation (one-standard-error rule) on the source training data only. The out-of-fold residuals of this cross-validation were used to fit σ (Eq. (2)). For model-class generalisation, ridge regression (penalty by 10-fold CV, same preprocessing) and a small 1D-CNN were used. The CNN (mango only) has two convolutional layers and dropout 0.2, and was trained once on seasons 1–3 with early stopping on a 10% split of the source training data.
+**Source models.** Preprocessing was chosen among none, SNV [@barnes1989], Savitzky–Golay [@savitzky1964] first derivative (window 11, order 2) and second derivative (window 13, order 2). The number of PLS latent variables [@wold2001] (≤15 for corn and tablets, ≤25 for mango) was chosen by 10-fold cross-validation (one-standard-error rule) on the source training data only. The out-of-fold residuals of this cross-validation were used to fit σ (Eq. (2)). For model-class generalisation, ridge regression (penalty by 10-fold CV, same preprocessing) and a small 1D-CNN were used. The CNN (mango only) takes SNV-corrected, channel-standardised spectra. It has two 1D convolutional layers (16 and 32 filters, kernel 7, the second with stride 2), a dense layer of 64 units, ReLU activations and dropout 0.2. It was trained once on seasons 1–3 (Adam, learning rate 10⁻³, weight decay 10⁻⁵, batch 128, at most 150 epochs, early stopping with patience 20 on a 10% split of the source training data).
 
 **Splits.**
 
@@ -164,7 +186,7 @@ The design, including all hyperparameters, seeds, metrics, tests and the validit
 
 Standards were never used to train the source model, and test samples were never standards. Repetitions: 500 (corn, tablets) and 300 (mango) for the main experiment, 200 for the secondary experiments, with seeds fixed in advance.
 
-**Transfer.** PDS (window 5, truncated pseudo-inverse with relative tolerance 0.01, with intercept) [@wang1991; @bouveresse1996], DS, SBC and no transfer were applied. Spectral preprocessing was applied after spectral standardisation. The pre-registered primary pipelines were PDS for corn and tablets and SBC for mango; the other pipelines are reported as secondary results.
+**Transfer.** PDS (window 5, truncated pseudo-inverse with relative tolerance 0.01, with intercept; windows truncated at the spectral edges) [@wang1991; @bouveresse1996], DS, SBC and no transfer were applied. Spectral preprocessing was applied after spectral standardisation. The pre-registered primary pipelines were PDS for corn and tablets and SBC for mango; the other pipelines are reported as secondary results.
 
 **Metrics.** For each repetition and method we recorded:
 
@@ -182,7 +204,7 @@ Standards were never used to train the source model, and test samples were never
 
 The primary miscoverage level was α = 0.10; α = 0.05 and 0.20 were sensitivity analyses.
 
-**Statistics.** Mean coverage over repetitions is reported with a 95% percentile-bootstrap confidence interval (2000 resamples of repetitions). A method was pre-registered as *under-covering* in a scenario when the upper limit of this interval was below 1−α. Interval scores were compared only between methods that were not under-covering. Within each scenario, TJ+N was compared with every other method by a two-sided Wilcoxon signed-rank test on the per-repetition interval score, paired by repetition (identical splits). Holm's correction [@holm1979] was applied within the scenario, and the matched-pairs rank-biserial correlation was used as effect size. Unbounded intervals were assigned the worst rank. Across scenarios, methods were compared with a Friedman test on the scenario-level median interval score, followed by Holm-corrected pairwise Wilcoxon tests against TJ+N [@demsar2006]. Repetitions are independent random draws of the splits from fixed data sets, so inferences are conditional on the data sets.
+**Statistics.** Mean coverage over repetitions is reported with a 95% percentile-bootstrap confidence interval (2000 resamples of repetitions). A method was pre-registered as *under-covering* in a scenario when the upper limit of this interval was below 1−α. Interval scores were compared only between methods that were not under-covering. Within each scenario, TJ+N was compared with every other method by a two-sided Wilcoxon signed-rank test on the per-repetition interval score, paired by repetition (identical splits). Holm's correction [@holm1979] was applied within the scenario, and the matched-pairs rank-biserial correlation was used as effect size. Unbounded intervals were assigned the worst rank. Across scenarios, methods were compared with a Friedman test on the scenario-level median interval score, followed by Holm-corrected pairwise Wilcoxon tests against TJ+N [@demsar2006]. Repetitions are independent random draws of the splits from fixed data sets, so inferences are conditional on the data sets. Every method is evaluated on identical standards and test samples in each repetition (paired design). Scenarios that share a data set are not independent (corn properties share samples; the *m* levels share splits). The Friedman ranks are therefore interpreted descriptively, and inferential statements rest on the within-scenario paired tests. Because the under-coverage flag is applied per scenario without multiplicity correction, it errs towards flagging, which works against the proposed method rather than in its favour.
 
 **Robustness and sensitivity.** Robustness conditions were:
 
@@ -209,7 +231,7 @@ Calibration transfer was necessary, but it was not equally beneficial everywhere
 
 - **Tablets:** PDS reduced the assay RMSEP from 6.43 mg (*m* = 10) to 4.65 mg (*m* = 50). The weight and hardness predictions were insensitive to the transfer.
 
-- **Mango:** SBC did not improve on the uncorrected source model (RMSEP 1.06–1.15 vs 1.05 %), consistent with reports that models built over several seasons are already fairly robust [@anderson2020].
+- **Mango:** SBC did not improve on the uncorrected source model (RMSEP 1.06–1.15 vs 1.05 % DM), consistent with reports that models built over several seasons are already fairly robust [@anderson2020].
 
 The transfer settings (PDS window 5, SBC slope and bias, LV numbers) were fixed in advance and were not tuned on target data. They are therefore not the most accurate possible: on corn, SBC gave lower RMSEP than the pre-registered PDS for all four properties, and a 3-channel PDS window was more accurate than the 5-channel one (§4.8). This does not affect the comparison of interval methods. All interval methods share the same point predictor within a pipeline, so the comparisons isolate the interval construction, and interval validity is reported for every pipeline (§4.3).
 
@@ -229,7 +251,7 @@ Table: **Table 2.** Point accuracy (mean RMSEP over repetitions; corn averaged o
 
 ## 4.2. Conventional intervals after transfer (RQ1)
 
-Source-calibrated intervals under-covered whenever the transfer added error that the source calibration had not seen (Fig. 3; Table 3).
+Source-calibrated intervals under-covered when the transfer added substantial error that the source calibration had not seen (Fig. 3; Table 3; compare Table 2).
 
 - **Corn:** the mean coverage of nominal 90% intervals was 0.03–0.74 for ASTM-PI, SCP-S and WCP-S, which were flagged as under-covering in 72 of 72 scenario × method cells.
 
@@ -237,7 +259,7 @@ Source-calibrated intervals under-covered whenever the transfer added error that
 
 - **Tablets:** the picture was mixed (0.81–0.95; 11 of 36 cells under-covering). Severe under-coverage occurred for the assay with *m* = 10 (all three methods, coverage 0.81–0.85), where PDS fitted on ten standards inflated the error. For weight, SCP-S and WCP-S under-covered slightly but systematically at every *m* (0.894–0.895), while hardness intervals were valid.
 
-Weighting the source residuals for covariate shift (WCP-S) did not repair coverage, and it produced unbounded intervals in 59% of corn repetitions. When the domains are almost perfectly separable, the estimated likelihood ratios degenerate. More fundamentally, an instrument change alters the conditional relation between spectrum and property, which violates the covariate-shift assumption. The transport baseline, which maps source-calibration spectra into the secondary-instrument space with a master→secondary PDS, recovered part of the coverage on corn (mean coverage 0.75, range 0.29–0.92). It still under-covered in 14 of 24 scenarios, because the transported residuals inherit the source error distribution and only approximate the transfer error.
+The failure is not an artefact of the in-sample calibration error used by ASTM-PI: SCP-S, which uses cross-validated (out-of-fold) source residuals, under-covered almost as severely. Weighting the source residuals for covariate shift (WCP-S) did not repair coverage either, and it produced unbounded intervals in 59% of corn repetitions. When the domains are almost perfectly separable, the estimated likelihood ratios degenerate. More fundamentally, an instrument change alters the conditional relation between spectrum and property, which violates the covariate-shift assumption. The transport baseline, which maps source-calibration spectra into the secondary-instrument space with a master→secondary PDS, recovered part of the coverage on corn (mean coverage 0.75, range 0.29–0.92). It still under-covered in 14 of 24 scenarios, because the transported residuals inherit the source error distribution and only approximate the transfer error.
 
 | Method | Corn coverage | Corn under | Tablets coverage | Tablets under | Mango coverage | Mango under | Unbounded (% reps) | Friedman rank (IS) |
 |:--|--:|--:|--:|--:|--:|--:|--:|--:|
@@ -260,7 +282,7 @@ Table: **Table 3.** Coverage of nominal 90% intervals (α = 0.10) for the primar
 
 ## 4.3. Validity and efficiency of the transfer jackknife+ (RQ2)
 
-TJ+N was not flagged as under-covering in any of the 40 primary scenarios. Its mean coverage was 0.922 (range over scenarios 0.898–0.959) at α = 0.10, and the same held at α = 0.05 and 0.20 (0 under-covering scenarios over all three levels; Table 4). Coverage exceeded the nominal level most clearly for *m* = 10–15. This is expected from the discrete rank $\lceil (1-\alpha)(m+1)\rceil$: with *m* = 10 the upper bound is the largest of the ten leave-one-out bounds. In practice, this conservativeness means somewhat wider intervals than necessary when few standards are available; it decreases as *m* grows (Fig. 3).
+TJ+N was not flagged as under-covering in any of the 40 primary scenarios. Given the precision of the coverage estimates (median half-width of the 95% CI: corn ±0.008, mango ±0.007, tablets ±0.005), this means that no scenario was significantly below nominal at that resolution. Its mean coverage was 0.922 (range over scenarios 0.898–0.959) at α = 0.10, and the same held at α = 0.05 and 0.20 (0 under-covering scenarios over all three levels; Table 4). Coverage exceeded the nominal level most clearly for *m* = 10–15. This is expected from the discrete rank $\lceil (1-\alpha)(m+1)\rceil$: with *m* = 10 the upper bound is the largest of the ten leave-one-out bounds. In practice, this conservativeness means somewhat wider intervals than necessary when few standards are available; it decreases as *m* grows (Fig. 3).
 
 **Against the valid split-standards baseline.** Halving the standards made SCP-T-split unbounded in every repetition for *m* ≤ 15 at α = 0.10 (20 of 40 scenarios, all with m ≤ 15). Where both methods gave bounded intervals, TJ+N had a lower interval score in 20 of 20 scenarios (paired Wilcoxon, Holm-adjusted *p* < 0.05), with a median rank-biserial correlation of -0.52. Reusing every standard for both transfer and calibration is therefore the main practical gain.
 
@@ -272,9 +294,9 @@ Interval widths relative to the RMSEP of the deployed predictor are shown in Fig
 
 - It was never flagged as under-covering at this level.
 
-- It had the best mean rank of interval score in the Friedman analysis (Fig. S2; χ² = 145.5, *p* = 3.6×10^−^28; mean ranks Gauss-LOO 2.17, TJ+N 2.52, TJ+ 3.12).
+- It had the best mean rank of interval score across scenarios (Fig. S2; mean ranks Gauss-LOO 2.17, TJ+N 2.52, TJ+ 3.12; Friedman χ² = 145.5, nominal *p* = 3.6×10^−^28, which overstates the evidence because scenarios are dependent).
 
-- It did not differ significantly from TJ+N after Holm correction (*p* = 0.11).
+- Across scenarios, it did not differ significantly from TJ+N after Holm correction (*p* = 0.11).
 
 - Per scenario (Holm-adjusted *p* < 0.05), Gauss-LOO had the lower interval score in 14 of 24 corn scenarios. On tablets and mango, TJ+N was better in 9 and Gauss-LOO in 5 of 16 scenarios.
 
@@ -379,7 +401,7 @@ Table: **Table 6.** Robustness (E4; α = 0.10; corn m = 15, tablets assay and ma
 
 
 
-## 4.6. Generalisation across pipelines, directions and model classes (RQ5)
+## 4.6. Generalisation across pipelines, directions, model classes and instruments (RQ5)
 
 The conclusions did not depend on the primary pipeline, the transfer direction or the model class (Table 7).
 
@@ -389,7 +411,7 @@ The conclusions did not depend on the primary pipeline, the transfer direction o
 
 - **Ridge regression.** With ridge source models, TJ+N was valid on all three data sets.
 
-- **1D-CNN on mango.** The CNN (110,369 parameters, early stopping after 101 epochs, 36 s on a CPU) reached RMSEP 1.22 % after SBC. On top of it:
+- **1D-CNN on mango.** The CNN (110,369 parameters, early stopping after 101 epochs, 36 s on a CPU) reached RMSEP 1.22 % DM after SBC. On top of it:
 
   - TJ+N gave coverage 0.910 with the lowest interval score (5.24).
 
@@ -399,6 +421,46 @@ The conclusions did not depend on the primary pipeline, the transfer direction o
 
 Over all generalisation settings, TJ+N under-covered in 0 of 22 scenarios.
 
+**Independent instrument shift (mango, E8).** Prompted by the review process, we added a test that was not part of the pre-registered design: transfer between handheld spectrometers on intact fruit, using the data providers' extended data set with paired spectra of the same fruit on several instruments [@mango_data_v6]. The design was fixed before any result was computed:
+
+- source instrument 15006;
+
+- the three target instruments with most shared fruit;
+
+- PDS and SBC pipelines;
+
+- *m* = 10–50 standards, 200 repetitions.
+
+The results reproduced the main findings (Table 8).
+
+- ASTM-PI and SCP-S under-covered in every scenario: coverage 0.20–0.51 after PDS (24/24 scenarios) and 0.73–0.81 after SBC (24/24). WCP-S under-covered after PDS (0.15–0.47). After SBC it returned unbounded intervals in 100% of repetitions: valid, but uninformative.
+
+- TJ+N was valid: mean coverage 0.931 (PDS) and 0.906 (SBC). It was never flagged at any α (0/72 under-covering scenarios), whereas Gauss-LOO was flagged in 4/72.
+
+- PDS proved a poor transfer for these instruments (RMSEP 2.03–7.40 % DM, against 1.06–1.22 % with SBC). TJ+N made this visible through wide intervals (median width 11.1 vs 4.0 % DM), whereas the source-calibrated intervals remained narrow and missed most samples. Valid intervals are thus also a diagnostic of transfer quality.
+
+| Pipeline | Method | Coverage (range) | Under | Unbounded (% reps) | Median width (% DM) | RMSEP (% DM) |
+|:--|--:|--:|--:|--:|--:|--:|
+| PDS | TJ+N | 0.931 (0.91–0.97) | 0/12 | 0 | 11.05 | 4.03 |
+| PDS | TJ+ | 0.929 (0.90–0.97) | 0/12 | 0 | 12.79 | 4.03 |
+| PDS | SCP-T-split-N | 0.943 (0.91–1.00) | 0/12 | 25 | 11.15 | 4.03 |
+| PDS | Gauss-LOO | 0.916 (0.90–0.93) | 0/12 | 0 | 12.13 | 4.03 |
+| PDS | ASTM-PI | 0.355 (0.22–0.51) | 12/12 | 0 | 2.71 | 4.03 |
+| PDS | SCP-S | 0.342 (0.20–0.50) | 12/12 | 0 | 2.60 | 4.03 |
+| PDS | WCP-S | 0.292 (0.15–0.47) | 12/12 | 25 | 2.24 | 4.03 |
+| PDS | Transport | 0.978 (0.95–0.99) | 0/12 | 0 | 24.63 | 4.03 |
+| PDS | LF-conv | 0.887 (0.86–0.91) | 6/12 | 0 | 11.83 | 4.03 |
+| SBC | TJ+N | 0.906 (0.90–0.92) | 0/12 | 0 | 4.00 | 1.14 |
+| SBC | TJ+ | 0.906 (0.90–0.92) | 0/12 | 0 | 3.87 | 1.14 |
+| SBC | SCP-T-split-N | 0.941 (0.90–1.00) | 0/12 | 25 | 4.56 | 1.14 |
+| SBC | Gauss-LOO | 0.900 (0.89–0.91) | 0/12 | 0 | 3.85 | 1.14 |
+| SBC | ASTM-PI | 0.781 (0.74–0.81) | 12/12 | 0 | 2.66 | 1.14 |
+| SBC | SCP-S | 0.762 (0.73–0.80) | 12/12 | 0 | 2.60 | 1.14 |
+| SBC | WCP-S | 1.000 (1.00–1.00) | 0/12 | 100 | 4.54 | 1.14 |
+
+Table: **Table 7.** Independent instrument shift (E8): mango dry matter, source instrument 15006, three target instruments × four values of m (12 scenarios per pipeline; α = 0.10; 200 repetitions).
+
+
 | Setting | TJ+N | TJ+ | Gauss-LOO | SCP-T-split-N | ASTM-PI | SCP-S | WCP-S | MC-dropout |
 |:--|--:|--:|--:|--:|--:|--:|--:|--:|
 | Corn mp5→m5, PLS, PDS | 0.931 (0/12); 1.11 | 0.932 (0/12); 1.21 | 0.905 (0/12); 1.17 | 0.971 (0/12); inf | 0.657 (12/12); 1.34 | 0.757 (12/12); 1.25 | 0.800 (11/12); 1.53 | – |
@@ -407,7 +469,7 @@ Over all generalisation settings, TJ+N under-covered in 0 of 22 scenarios.
 | Mango, ridge, SBC | 0.898 (0/1); 4.5 | 0.899 (0/1); 4.57 | 0.899 (0/1); 4.52 | 0.902 (0/1); 4.97 | 0.729 (1/1); 5.1 | 0.716 (1/1); 5.2 | 0.742 (1/1); inf | – |
 | Mango, 1D-CNN, SBC | 0.910 (0/4); 5.24 | 0.909 (0/4); 5.51 | 0.894 (2/4); 5.42 | 0.945 (0/4); 5.59 | 0.714 (4/4); 6.48 | 0.693 (4/4); 6.71 | 0.780 (4/4); inf | 0.807 (4/4); 5.66 |
 
-Table: **Table 7.** Generalisation (E5; α = 0.10). Each cell: mean coverage (under-covering / scenarios); median interval score (lower is better).
+Table: **Table 8.** Generalisation (E5; α = 0.10). Each cell: mean coverage (under-covering / scenarios); median interval score (lower is better).
 
 
 ## 4.7. Label-free variant (exploratory)
@@ -416,7 +478,7 @@ The label-free LF-conv interval uses only paired, unlabelled standards. It was n
 
 ## 4.8. Sensitivity to transfer and model settings
 
-Changing the PDS window (3, 7 or 11 channels instead of the pre-registered 5) or the number of latent variables (±2) changed point accuracy considerably. For example, the mean corn RMSEP with *m* = 15 was 0.281 with the pre-registered 5-channel window and 0.237 (3 channels), 0.348 (7 channels), 0.503 (11 channels) with the other windows. The pre-registered window was thus not the most accurate choice for corn; it was nevertheless kept, since it was fixed before any target data were analysed. Interval validity was unaffected: TJ+N under-covered in 0 of 27 sensitivity scenarios (coverage 0.899–0.972; Table S3). The source-calibrated intervals under-covered in 49 of 54 cases. Their validity also depended on the setting; for example, ASTM-PI coverage fell to 0.78 for the tablet assay with two latent variables fewer. Because TJ+ calibrates on the deployed pipeline itself, poorer transfer settings are reflected in wider, but still valid, intervals.
+Changing the PDS window (3, 7 or 11 channels instead of the pre-registered 5) or the number of latent variables (±2) changed point accuracy considerably. For example, the mean corn RMSEP with *m* = 15 was 0.281 with the pre-registered 5-channel window and 0.237 (3 channels), 0.348 (7 channels), 0.503 (11 channels) with the other windows. The pre-registered window was thus not the most accurate choice for corn; it was nevertheless kept, since it was fixed before any target data were analysed. Interval validity was unaffected: TJ+N under-covered in 0 of 27 sensitivity scenarios (coverage 0.898–0.972; Table S3). The source-calibrated intervals under-covered in 48 of 54 cases. Their validity also depended on the setting. For example, with an 11-channel PDS window the tablet-assay coverage of ASTM-PI and SCP-S fell to 0.87 and 0.84. Because TJ+ calibrates on the deployed pipeline itself, poorer transfer settings are reflected in wider, but still valid, intervals.
 
 ## 4.9. Error analysis
 
@@ -430,7 +492,19 @@ Coverage is a property of the procedure, not of one realised set of standards. A
 
 ## 4.10. Computational cost (RQ6)
 
-TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits for the optional CV+ comparison included in our timing). On a single CPU core, one transfer fit with prediction took 4.6 ms (corn, *m* = 20), 24.3 ms (tablets, *m* = 50, 410 test spectra) and 0.4 ms (mango SBC). The complete TJ+N interval computation took 0.15 s, 2.79 s and 0.06 s, respectively, with peak memory below 15 MB (Fig. 10). The source model is never re-fitted. The added cost is therefore negligible for routine laboratory use, and it scales linearly with *m* and with the cost of one transfer fit.
+TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits for the optional CV+ comparison included in our timing). On a single CPU core, one transfer fit with prediction took 4.6 ms (corn, *m* = 20), 24.3 ms (tablets, *m* = 50, 410 test spectra) and 0.4 ms (mango SBC). The complete TJ+N interval computation took 0.15 s, 2.79 s and 0.06 s, respectively, with peak memory below 15 MB (Fig. 10). The source model is never re-fitted. Measured over *m* = 10–50, the cost of TJ+N grew approximately linearly with the number of standards (corn: 0.10 s at m = 10 to 0.15 s at m = 20; tablets: 0.80 s at m = 10 to 2.56 s at m = 50; mango: 0.02 s at m = 10 to 0.06 s at m = 50; Supplementary Table S7). These timings include the five CV+ refits and are thus upper bounds.
+
+**Deployment.**
+
+- The *m* leave-one-out transfers are fitted once, when the instrument is standardised.
+
+- For each routine spectrum, TJ+N then requires *m* applications of a stored transfer map and *m* predictions of the source model. For PDS, each map is a *p* × 5 coefficient array (about 28 kB for 700 channels); for SBC, it is two numbers.
+
+- Energy use is negligible at these scales.
+
+- For computationally expensive adaptation methods, for example domain-adaptive PLS with hyperparameter search or neural domain adaptation, the five-fold CV+ variant reduces the cost to five refits. It remained valid in all scenarios, at the price of somewhat wider intervals (§4.4).
+
+The added cost is therefore negligible for routine laboratory use.
 
 
 ![**Fig. 10.** Wall-clock time per test batch (single CPU core, median of 20 runs, logarithmic scale).](figures/fig9_timing.png){width=16.5cm}
@@ -484,7 +558,9 @@ TJ+N is complementary. It provides an empirically calibrated coverage statement 
 
 4. **Scope of the evidence.**
 
-   - Three public NIR data sets were used, one of them small (corn, *n* = 80), with two instrument pairs and one season shift.
+   - Three public NIR data sets were used, one of them small (corn, *n* = 80). They cover two instrument pairs for corn, one for tablets, one season shift and three handheld-instrument pairs for mango.
+
+   - Coverage refers to the samples in these data sets. Test samples recur across repetitions, so the results characterise the procedure on these populations, not on all possible samples.
 
    - The noise, wavelength-shift and source-size perturbations are simulated.
 
@@ -520,7 +596,7 @@ We recommend:
 
 **Funding.** [To be completed by the authors; e.g. "This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors."]
 
-**Data availability.** All data sets are public: corn and IDRC Shootout 2002 tablets from Eigenvector Research [@eigenvector_data], and mango DMC from Mendeley Data (doi:10.17632/46htwnp833, CC BY 4.0) [@mango_data]. All code, configuration, raw per-repetition results and the scripts regenerating every table and figure are available at [repository URL / archived DOI to be inserted on acceptance].
+**Data availability.** All data sets are public: corn and IDRC Shootout 2002 tablets from Eigenvector Research [@eigenvector_data], and mango DMC from Mendeley Data (CC BY 4.0). Record version 1 (doi:10.17632/46htwnp833.1) was used for the season shift [@mango_data], and record version 6 (doi:10.17632/46htwnp833.6) for the instrument shift [@mango_data_v6]. All code, configuration, raw per-repetition results and the scripts regenerating every table and figure are available at [repository URL / archived DOI to be inserted on acceptance].
 
 **Acknowledgements.** We thank the providers of the public data sets: Cargill and Eigenvector Research (corn), the International Diffuse Reflectance Conference (Shootout 2002), and N. Anderson, K. Walsh, P. Subedi and J. Walsh (mango).
 
@@ -551,5 +627,7 @@ $$\{y_{m+1}\notin\hat C(\mathbf{x}^T_{m+1})\}\subseteq\Big\{\textstyle\sum_{i\le
 - The normalisation enters only through the definition of the scores. Steps 2–4 hold for any score of the form $\lvert y_i-\mu_{-ij}(\mathbf{x}_i)\rvert/\sigma_{-ij}(\mathbf{x}_i)$ with $\sigma>0$, provided the pair $(\mu,\sigma)$ is produced by a symmetric algorithm.
 
 - Fitting the transfer on all $m$ standards and reusing it to compute residuals (TJ-insample) breaks Step 1: the residual of standard $i$ is then computed with a fit that has seen $i$, and the exchangeability with the future sample's residual is lost. The resulting under-coverage is observed in §4.4.
+
+- Ties between scores have probability zero for continuous data; with ties, the strict inequalities in Step 2 make the interval only more conservative.
 
 - If the standards are chosen by a data-dependent design such as Kennard–Stone, they are no longer exchangeable with a random future sample, and Step 4 does not apply.

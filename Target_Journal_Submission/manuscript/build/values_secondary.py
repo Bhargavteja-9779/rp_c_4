@@ -88,6 +88,14 @@ def values(S, T, RES, CFG, md_table, primary):
             V[f"e8_src_under_{kind}"] = f"{int(src8['under_covering'].sum())}/{len(src8)}"
             g8 = e8[(e8.kind == kind) & (e8.method == "Gauss-LOO")]
             V[f"e8_gauss_under_{kind}"] = f"{int(g8['under_covering'].sum())}/{len(g8)}"
+        fin = e8[e8.method.isin(["ASTM-PI", "SCP-S"])]
+        for kind in ("pds", "sbc"):
+            x = fin[fin.kind == kind]
+            V[f"e8_fin_cov_{kind}"] = f"{x['coverage_mean'].min():.2f}–{x['coverage_mean'].max():.2f}"
+            V[f"e8_fin_under_{kind}"] = f"{int(x['under_covering'].sum())}/{len(x)}"
+        w = e8[(e8.method == "WCP-S")]
+        V["e8_wcp_inf_sbc"] = f"{100 * w[w.kind == 'sbc']['frac_reps_any_inf'].mean():.0f}%"
+        V["e8_wcp_cov_pds"] = f"{w[w.kind == 'pds']['coverage_mean'].min():.2f}–{w[w.kind == 'pds']['coverage_mean'].max():.2f}"
         allA8 = S[S["experiment"].str.startswith("E8_") & (S.method == "TJ+N")]
         V["e8_tjn_under_allalpha"] = f"{int(allA8['under_covering'].sum())}/{len(allA8)}"
         g8a = S[S["experiment"].str.startswith("E8_") & (S.method == "Gauss-LOO")]
@@ -108,8 +116,9 @@ def values(S, T, RES, CFG, md_table, primary):
     V["tab_weight_scps"] = f"{wt['coverage_mean'].min():.3f}–{wt['coverage_mean'].max():.3f}"
     src = e7[e7.method.isin(["ASTM-PI", "SCP-S"])]
     V["sens_src_under"] = f"{int(src['under_covering'].sum())} of {len(src)}"
-    lvt = e7[(e7.dataset == "tablets") & (e7.setting == "lv-2")]
-    V["sens_tab_lvm2_astm"] = f"{lvt[lvt.method == 'ASTM-PI']['coverage_mean'].mean():.2f}"
+    hw5 = e7[(e7.dataset == "tablets") & (e7.setting == "hw5")]
+    V["sens_tab_hw5_astm"] = f"{hw5[hw5.method == 'ASTM-PI']['coverage_mean'].mean():.2f}"
+    V["sens_tab_hw5_scps"] = f"{hw5[hw5.method == 'SCP-S']['coverage_mean'].mean():.2f}"
     # ------------------------------------------------------------ timing
     tm = pd.read_csv(os.path.join(RES, "raw", "E6_timing.csv"))
     def tsec(ds, step_prefix):

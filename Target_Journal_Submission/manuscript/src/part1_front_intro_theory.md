@@ -12,7 +12,7 @@ title: "Valid prediction intervals for transferred NIR calibrations: reusing the
 
 **Background:** Calibrations built on one spectrometer or season are routinely transferred to others using a few transfer standards. Whether the prediction intervals of a transferred calibration keep their nominal coverage has not been studied systematically, and splitting the scarce standards between transfer and uncertainty calibration wastes them.
 
-**Results:** We propose a transfer jackknife+ (TJ+N). Each standard is left out in turn, the transfer step (e.g., piecewise direct standardisation) is re-fitted on the others, and the leave-one-out residuals, normalised by a difficulty function of Hotelling T² and Q residuals learned from source data, define distribution-free intervals with coverage ≥ 1−2α for exchangeable standards. On three public NIR data sets (instrument and season shift; {{n_scen_main}} pre-registered scenarios, up to 500 repetitions each), source-calibrated intervals under-covered after transfer, with coverage as low as {{min_cov_source}} for a nominal 0.90. TJ+N had a mean coverage of {{tjn_cov_mean}} and was never flagged as under-covering, at α = 0.05, 0.10 or 0.20, under four transfer pipelines, or with PLS, ridge and 1D-CNN models. Splitting the standards gave unbounded intervals for *m* ≤ 15. Gaussian intervals from leave-one-out residuals were similarly efficient at 90% but under-covered in {{gauss_under_005}} of 40 scenarios at 95%. All methods failed under wavelength drift occurring after standardisation.
+**Results:** We propose a transfer jackknife+ (TJ+N). Each standard is left out in turn and the transfer step (e.g., piecewise direct standardisation) is re-fitted on the others. The leave-one-out residuals, normalised by a source-learned function of Hotelling T² and Q residuals, define distribution-free intervals with coverage ≥ 1−2α for exchangeable standards. On three public NIR data sets (instrument and season shift; {{n_scen_main}} pre-registered scenarios, up to 500 repetitions each), source-calibrated intervals under-covered after transfer, with coverage as low as {{min_cov_source}} for a nominal 0.90. TJ+N had a mean coverage of {{tjn_cov_mean}} and was never flagged as under-covering, at α = 0.05, 0.10 or 0.20, under four transfer pipelines, or with PLS, ridge and 1D-CNN models, including an independent transfer between handheld fruit spectrometers. Splitting the standards gave unbounded intervals for *m* ≤ 15. Gaussian intervals from leave-one-out residuals were similarly efficient at 90% but under-covered in {{gauss_under_005}} of 40 scenarios at 95%. All methods failed under wavelength drift occurring after standardisation.
 
 **Significance:** TJ+N gives finite-sample-valid uncertainty for transferred NIR calibrations from the standards that calibration transfer already requires, at the cost of *m* refits of the transfer step (seconds or less).
 
@@ -40,6 +40,15 @@ The contributions of this work are:
 2. A chemometric normalisation (TJ+N). A source-learned difficulty function of Hotelling T² and Q residuals is evaluated on the *transferred* spectrum within each leave-one-out fit, so that interval width adapts to the sample and to spectra that the transfer maps poorly.
 3. A pre-registered benchmark on three public NIR data sets covering instrument and season shift. It compares classical, source-calibrated, shift-weighted, transport-based, split-standards and Gaussian intervals, and includes ablation, robustness, model-class (PLS, ridge, 1D-CNN), sensitivity, computational and error analyses.
 4. An exploratory label-free variant for the case in which the transfer standards have no reference values.
+
+The study addresses the following research questions:
+
+- **RQ1.** Do conventional intervals remain valid after transfer?
+- **RQ2.** Is TJ+N valid and efficient for realistic numbers of standards?
+- **RQ3.** Which components of TJ+N matter?
+- **RQ4.** How robust is it to standard selection, noise, drift and reduced source data?
+- **RQ5.** Does it generalise across transfer pipelines, directions, model classes and instruments?
+- **RQ6.** What does it cost?
 
 All code and the complete reproduction pipeline are publicly available.
 

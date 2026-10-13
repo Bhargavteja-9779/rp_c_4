@@ -1,0 +1,21 @@
+dataset,kind,m,n_test,step,median_s
+corn,pds,10,20,single transfer fit + prediction,0.0047143444999164785
+corn,pds,10,20,TJ+N (m LOO + 5 CV fits),0.10098663100052363
+corn,pds,20,10,single transfer fit + prediction,0.004440612499820418
+corn,pds,20,10,TJ+N (m LOO + 5 CV fits),0.14601034250063094
+tablets,pds,10,450,single transfer fit + prediction,0.034898957499535754
+tablets,pds,10,450,TJ+N (m LOO + 5 CV fits),0.8027894300003027
+tablets,pds,20,440,single transfer fit + prediction,0.023886029499408323
+tablets,pds,20,440,TJ+N (m LOO + 5 CV fits),1.2477162754994424
+tablets,pds,30,430,single transfer fit + prediction,0.024796890999823518
+tablets,pds,30,430,TJ+N (m LOO + 5 CV fits),1.7398665334994803
+tablets,pds,50,410,single transfer fit + prediction,0.022656297499452194
+tablets,pds,50,410,TJ+N (m LOO + 5 CV fits),2.5599852345003455
+mango,sbc,10,715,single transfer fit + prediction,0.0004141989993513562
+mango,sbc,10,715,TJ+N (m LOO + 5 CV fits),0.022578875499675632
+mango,sbc,20,705,single transfer fit + prediction,0.0004976760001227376
+mango,sbc,20,705,TJ+N (m LOO + 5 CV fits),0.03296128200054227
+mango,sbc,30,695,single transfer fit + prediction,0.0003851275005217758
+mango,sbc,30,695,TJ+N (m LOO + 5 CV fits),0.04246078449978086
+mango,sbc,50,675,single transfer fit + prediction,0.00041835049978544703
+mango,sbc,50,675,TJ+N (m LOO + 5 CV fits),0.06341155349946348

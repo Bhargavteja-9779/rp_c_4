@@ -11,9 +11,9 @@ I tried to invalidate the central claim ("TJ+N stays valid after transfer where 
 | D4 | **Deployment realism.** In routine use, intervals are needed sample by sample over months; standards are measured once. Drift after standardisation (E4) invalidated all methods. | A real risk. | Already reported. Strengthen the recommendation to monitor Q and to re-standardise. Point out that TJ+N, unlike source intervals, makes a failed transfer visible through wide intervals (E8 PDS). |
 
 ## E8 results (independent instrument shift; generated after this review)
-- Source-calibrated intervals under-covered in all scenarios: with PDS, coverage {{e8_src_cov_pds}} (under-covering {{e8_src_under_pds}}); with SBC, {{e8_src_cov_sbc}} ({{e8_src_under_sbc}}).
-- TJ+N was valid with both pipelines: PDS {{e8_tjn_cov_pds}} ({{e8_tjn_under_pds}} under-covering); SBC {{e8_tjn_cov_sbc}} ({{e8_tjn_under_sbc}}). At all α levels: {{e8_tjn_under_allalpha}}.
-- PDS was a poor transfer for these handheld fruit spectrometers (RMSEP {{e8_rmsep_pds}} % DM vs {{e8_rmsep_sbc}} % with SBC). TJ+N reflected this in wide intervals (median width {{e8_width_pds}} vs {{e8_width_sbc}} % DM), whereas the source-calibrated intervals stayed narrow and missed most samples.
+- With PDS, all source-calibrated intervals under-covered (coverage 0.15–0.51; 36/36 method × scenario cells). With SBC, ASTM-PI and SCP-S under-covered in all 24 cells (0.73–0.81), while WCP-S returned unbounded intervals in almost every repetition (valid but uninformative).
+- TJ+N was valid with both pipelines: PDS 0.931 (0/12 under-covering); SBC 0.906 (0/12). At all α levels: 0/72.
+- PDS was a poor transfer for these handheld fruit spectrometers (RMSEP 2.03–7.40 % DM vs 1.06–1.22 % with SBC). TJ+N reflected this in wide intervals (median width 11.1 vs 4.0 % DM), whereas the source-calibrated intervals stayed narrow and missed most samples.
 - Conclusion: the central claim survives an independent test that was not part of the original design.
 
 ## MODERATE
