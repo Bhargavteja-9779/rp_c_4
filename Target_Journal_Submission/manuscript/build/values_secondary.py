@@ -100,6 +100,10 @@ def values(S, T, RES, CFG, md_table, primary):
         V["e8_tjn_under_allalpha"] = f"{int(allA8['under_covering'].sum())}/{len(allA8)}"
         g8a = S[S["experiment"].str.startswith("E8_") & (S.method == "Gauss-LOO")]
         V["e8_gauss_under_allalpha"] = f"{int(g8a['under_covering'].sum())}/{len(g8a)}"
+    allc = S[S["experiment"].str.startswith("E1_main") | S["experiment"].str.startswith("E8_")]
+    for mth, k in (("TJ+N", "tjn"), ("TJ-naive-N", "naive"), ("TJ-insample-N", "insample"), ("TCV+N", "tcv"), ("Gauss-LOO", "gauss")):
+        x = allc[allc.method == mth]
+        V[f"allcells_{k}_under"] = f"{int(x['under_covering'].sum())} of {len(x)}"
     # ------------------------------------------------------------ E9 competitor (normalised Gaussian)
     e9 = S[S["experiment"].str.startswith("E9_")]
     if len(e9):

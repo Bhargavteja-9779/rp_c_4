@@ -309,7 +309,7 @@ def fig_graphical_abstract(summary, cfg, figdir, alpha=0.1):
         ax0.text(x + w / 2, y + h / 2, t, ha="center", va="center", fontsize=7.5, color=INK, linespacing=1.3)
     b(0.3, 6.6, 4.2, 2.6, "Master instrument /\npast seasons\nPLS model", INK2)
     b(5.5, 6.6, 4.2, 2.6, "New instrument /\nnew season\nm transfer standards", INK2)
-    b(1.2, 0.8, 7.6, 4.0, "Transfer jackknife+:\nre-fit the transfer m times,\nleave-one-standard-out residuals\n→ valid intervals (≥ 1 − 2α)", SLOT[0])
+    b(1.2, 2.0, 7.6, 3.0, "Transfer jackknife+:\nre-fit the transfer m times,\nleave-one-standard-out residuals\n→ valid intervals (≥ 1 − 2α)", SLOT[0])
     ax0.add_patch(FancyArrowPatch((2.4, 6.5), (4.0, 4.9), arrowstyle="-|>", mutation_scale=9, lw=0.9, color=INK2))
     ax0.add_patch(FancyArrowPatch((7.6, 6.5), (6.0, 4.9), arrowstyle="-|>", mutation_scale=9, lw=0.9, color=INK2))
     ax = fig.add_axes([0.52, 0.2, 0.46, 0.68])
@@ -317,7 +317,7 @@ def fig_graphical_abstract(summary, cfg, figdir, alpha=0.1):
     for j, meth in enumerate(meths):
         vals = [s[(s["dataset"] == ds) & (s["method"] == meth)]["coverage_mean"].mean() for ds in dss]
         col, mk = METHOD_STYLE[meth]
-        ax.bar(np.arange(3) + (j - 2) * 0.16, vals, width=0.14, color=col, label=meth)
+        ax.bar(np.arange(3) + (j - 2) * 0.16, vals, width=0.15, color=col, label=meth, edgecolor=SURF, linewidth=1.0)
     ax.axhline(1 - alpha, color=INK, lw=0.9); ax.text(2.55, 1 - alpha + 0.01, "nominal 0.90", fontsize=6.5, color=INK2, ha="right")
     ax.set_xticks(range(3)); ax.set_xticklabels(["Corn", "Tablets", "Mango"]); ax.set_ylim(0, 1.05)
     ax.set_ylabel("Mean coverage after transfer"); ax.legend(frameon=False, fontsize=6.3, ncol=5, loc="upper center", bbox_to_anchor=(0.5, 1.2))
