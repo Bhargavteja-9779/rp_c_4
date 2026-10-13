@@ -297,6 +297,34 @@ def fig_friedman(out, figdir):
     ax.set_title(f"Friedman χ² = {fr['friedman_chi2']:.1f}, p = {fr['p_value']:.1e} ({fr['n_scenarios']} scenarios)", loc="left", fontsize=7)
     fig.tight_layout(); _save(fig, figdir, "figS2_friedman_ranks")
 
+
+def fig_graphical_abstract(summary, cfg, figdir, alpha=0.1):
+    """Graphical abstract (Elsevier: >= 1328 x 531 px, ~5:2): pipeline + key evidence (mean coverage)."""
+    s = _primary(summary, cfg, alpha)
+    meths = ["ASTM-PI", "SCP-S", "WCP-S", "Gauss-LOO", "TJ+N"]
+    fig = plt.figure(figsize=(8.0, 3.2))
+    ax0 = fig.add_axes([0.0, 0.0, 0.42, 1.0]); ax0.set_axis_off(); ax0.set_xlim(0, 10); ax0.set_ylim(0, 10)
+    def b(x, y, w, h, t, ec):
+        ax0.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.15,rounding_size=0.3", fc="white", ec=ec, lw=1.0))
+        ax0.text(x + w / 2, y + h / 2, t, ha="center", va="center", fontsize=7.5, color=INK, linespacing=1.3)
+    b(0.3, 6.6, 4.2, 2.6, "Master instrument /\npast seasons\nPLS model", INK2)
+    b(5.5, 6.6, 4.2, 2.6, "New instrument /\nnew season\nm transfer standards", INK2)
+    b(1.2, 0.8, 7.6, 4.0, "Transfer jackknife+:\nre-fit the transfer m times,\nleave-one-standard-out residuals\n→ valid intervals (≥ 1 − 2α)", SLOT[0])
+    ax0.add_patch(FancyArrowPatch((2.4, 6.5), (4.0, 4.9), arrowstyle="-|>", mutation_scale=9, lw=0.9, color=INK2))
+    ax0.add_patch(FancyArrowPatch((7.6, 6.5), (6.0, 4.9), arrowstyle="-|>", mutation_scale=9, lw=0.9, color=INK2))
+    ax = fig.add_axes([0.52, 0.2, 0.46, 0.68])
+    dss = ["corn", "tablets", "mango"]
+    for j, meth in enumerate(meths):
+        vals = [s[(s["dataset"] == ds) & (s["method"] == meth)]["coverage_mean"].mean() for ds in dss]
+        col, mk = METHOD_STYLE[meth]
+        ax.bar(np.arange(3) + (j - 2) * 0.16, vals, width=0.14, color=col, label=meth)
+    ax.axhline(1 - alpha, color=INK, lw=0.9); ax.text(2.55, 1 - alpha + 0.01, "nominal 0.90", fontsize=6.5, color=INK2, ha="right")
+    ax.set_xticks(range(3)); ax.set_xticklabels(["Corn", "Tablets", "Mango"]); ax.set_ylim(0, 1.05)
+    ax.set_ylabel("Mean coverage after transfer"); ax.legend(frameon=False, fontsize=6.3, ncol=5, loc="upper center", bbox_to_anchor=(0.5, 1.2))
+    fig.savefig(os.path.join(figdir, "graphical_abstract.png"), dpi=300, bbox_inches="tight")
+    fig.savefig(os.path.join(figdir, "graphical_abstract.pdf"), bbox_inches="tight")
+    plt.close(fig)
+
 def make_all_figures(out, cfg, log=None):
     _style()
     from ..statistics.analysis import output_dir
@@ -308,5 +336,5 @@ def make_all_figures(out, cfg, log=None):
     fig_coverage_vs_m(summary, cfg, figdir); fig_efficiency_vs_m(summary, cfg, figdir)
     fig_ablation(summary, cfg, figdir); fig_robustness(summary, figdir); fig_conditional(summary, cfg, figdir)
     fig_errors(out, figdir); fig_timing(out, figdir); fig_cov_distribution(out, cfg, figdir)
-    fig_cnn_history(out, figdir); fig_friedman(out, figdir)
+    fig_cnn_history(out, figdir); fig_friedman(out, figdir); fig_graphical_abstract(summary, cfg, figdir)
     if log: log.info(f"figures written to {os.path.abspath(figdir)}")
