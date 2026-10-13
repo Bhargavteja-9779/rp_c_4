@@ -1,0 +1,192 @@
+### conformal prediction spectroscopy
+2022 | Localized conformal prediction: a generalized inference framework for conformal prediction | Guan | Biometrika | 10.1093/biomet/asac040 | cites=70
+2020 | The role of morphology in all-dielectric SERS: A comparison between conformal (T-rex) and non conformal TiO2 s | Vassalini, Sisman, Comini, Alessandri | Vibrational Spectroscopy | 10.1016/j.vibspec.2020.103085 | cites=6
+2019 | Conformal Prediction Based on Raman Spectra for the Classification of Chinese Liquors | Gu, Liu, Ma, Li | Applied Spectroscopy | 10.1177/0003702819831017 | cites=11
+2025 | Conformal e-prediction | Vovk | Pattern Recognition | 10.1016/j.patcog.2025.111674 | cites=10
+2026 | Density-sorted prediction set: Efficient conformal prediction for multi-target regression | Luo, Zhou | Pattern Recognition | 10.1016/j.patcog.2025.112513 | cites=3
+2025 | Hybrid Deep Learning with Conformal Prediction for Recycled Aggregate Self-Compacting Concrete Strength Predic | Dong, Zhang | Buildings | 10.3390/buildings15244419 | cites=5
+2026 | Conformal prediction-based multi-sensor classification | Siahkali, Gupta | Neurocomputing | 10.1016/j.neucom.2026.133182 | cites=1
+2025 | TECP: Token-Entropy Conformal Prediction for LLMs | Xu, Lu | Mathematics | 10.3390/math13203351 | cites=2
+2025 | Enhanced Prediction and Uncertainty Modeling of Pavement Roughness Using Machine Learning and Conformal Predic | Ghavami, Naseri, Safi Jahanshahi | Infrastructures | 10.3390/infrastructures10070166 | cites=10
+2025 | Expanding conformal prediction to system identification | Msaddi, Kumbasar | Pattern Recognition | 10.1016/j.patcog.2025.111758 | cites=5
+2026 | Conformal Prediction for Earthquake Early Warning: Finite-Sample Coverage Guarantees for Prediction Intervals  | Shin, Jeong | Geophysical Journal International | 10.1093/gji/ggag415 | cites=0
+2026 | Quantifying central canal stenosis prediction uncertainty in SpineNet with conformal prediction | Cina, Monzon, Galbusera, Jutzeler | Scientific Reports | 10.1038/s41598-026-35343-6 | cites=0
+### conformal prediction chemometrics
+2025 | Assessing Classification Models of Pharmaceuticals With Conformal Prediction | Booksh, Celani, Ralbovsky, Smith | Journal of Chemometrics | 10.1002/cem.70017 | cites=3
+2024 | Assessment of Conformal Prediction and Standard Normal Distribution for Autonomous Consensus One‐Class Classif | Redd, Kalivas | Journal of Chemometrics | 10.1002/cem.3639 | cites=6
+2024 | Random projection ensemble conformal prediction for high-dimensional classification | Qian, Wu, Wei, Lin | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2024.105225 | cites=4
+2024 | Corrigendum to “Random projection ensemble conformal prediction for high-dimensional classification” [Chemomet | Qian, Wu, Wei, Lin | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2024.105235 | cites=0
+2022 | Localized conformal prediction: a generalized inference framework for conformal prediction | Guan | Biometrika | 10.1093/biomet/asac040 | cites=70
+2021 | Contingency tables, confusion matrices, classifiers and quality of prediction | Brereton | Journal of Chemometrics | 10.1002/cem.3331 | cites=27
+2019 | Comparison of multi-response prediction methods | Rimal, Almøy, Sæbø | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2019.05.004 | cites=11
+2019 | Image analytical sandstone plug poro-perm prediction using angle measure technique (AMT) and chemometrics – A  | Halstensen, Kvaal, Esbensen | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2019.103847 | cites=2
+2019 | A multi-scale prediction model based on empirical mode decomposition and chaos theory for industrial melt inde | Zhang, Zhou, Jie, Liu | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2019.01.008 | cites=18
+2023 | ASER: Adapted squared error relevance for rare cases prediction in imbalanced regression | Kou, Fu | Journal of Chemometrics | 10.1002/cem.3515 | cites=5
+2018 | Quality prediction via semisupervised Bayesian regression with application to propylene polymerization | Sun, Liu, Zhang | Journal of Chemometrics | 10.1002/cem.3052 | cites=6
+2018 | Finding the optimal time resolution for batch-end quality prediction: MRQP – A framework for multi-resolution  | Gins, Van Impe, Reis | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2017.12.006 | cites=27
+### conformal prediction near-infrared
+2019 | Temperature and moisture insensitive prediction of biomass calorific value from near infrared spectra using ex | Hans, Allison | Journal of Near Infrared Spectroscopy | 10.1177/0967033519840742 | cites=14
+2023 | Quantitative and qualitative prediction of sulfur content in diesel by near infrared spectroscopy | Zheng, Huang, Zhu, Qi | Journal of Near Infrared Spectroscopy | 10.1177/09670335231153960 | cites=6
+2020 | Prediction of water content in biscuits using near infrared hyperspectral imaging spectroscopy and chemometric | Lancelot, Courcoux, Chevallier, Le-Bail | Journal of Near Infrared Spectroscopy | 10.1177/0967033520902538 | cites=6
+2019 | Prediction of microfibril angle in Dahurian larch wood using visible–near infrared spectroscopy and chemometri | Li, Via, Cheng, Li | Journal of Near Infrared Spectroscopy | 10.1177/0967033519849725 | cites=1
+2018 | A study on prediction performance of the mechanical properties of rubber using Fourier-transform near infrared | Pornprasit, Pornprasit, Boonma, Natwichai | Journal of Near Infrared Spectroscopy | 10.1177/0967033518805277 | cites=4
+2021 | Rapid prediction of chemical composition and degree of starch cook of multi-species aquafeeds by near infrared | Bourne, Blyth, Simon | Journal of Near Infrared Spectroscopy | 10.1177/0967033521999116 | cites=5
+2026 | Prediction models for Larix species via near infrared spectroscopy as a high-throughput phenotyping approach | Sagar, Belmokhtar, Boizot, Alves | Journal of Near Infrared Spectroscopy | 10.1177/09670335261476250 | cites=0
+2018 | Prediction of saponin content in soapnut (
+                    <i>Sapindus mukorossi</i>
+                    G | Li, Shao, Dong, Jiang | Journal of Near Infrared Spectroscopy | 10.1177/0967033518762440 | cites=5
+2022 | Transfer of a calibration model for the prediction of lignin in pulpwood among four portable near infrared spe | Zhang, Chen, Xiong, Siesler | Journal of Near Infrared Spectroscopy | 10.1177/09670335221110013 | cites=16
+2022 | Prediction of formaldehyde and residual methanol concentration in formalin using near infrared spectroscopy | Magalhães, Paiva, Ferra, Magalhães | Journal of Near Infrared Spectroscopy | 10.1177/09670335221078355 | cites=4
+2025 | Conformal predictors in chemometric study of mid-infrared food adulteration: quantification of prediction unce | Jovic | Food Chemistry | 10.1016/j.foodchem.2025.145387 | cites=3
+2022 | Non-destructive near infrared spectroscopy externally validated using large number sets for creation of robust | Marečková, Danková, Zelený, Suran | Journal of Near Infrared Spectroscopy | 10.1177/09670335211054299 | cites=3
+### conformal predictors mid-infrared food adulteration uncertainty
+2025 | Conformal predictors in chemometric study of mid-infrared food adulteration: quantification of prediction unce | Jovic | Food Chemistry | 10.1016/j.foodchem.2025.145387 | cites=3
+2024 | Comparison of Near-Infrared and Mid-Infrared spectroscopy for the identification and quantification of argan o | El Maouardi, De Braekeleer, Bouklouze, Vander Heyden | Food Control | 10.1016/j.foodcont.2024.110671 | cites=47
+2025 | Detecting carob powder adulteration in cocoa using near and mid-infrared spectroscopy: A comprehensive classif | Turgut, Ayvaz, Dogan, Marín | Food Research International | 10.1016/j.foodres.2025.116132 | cites=12
+2023 | Identification of geographical origin and adulteration of Northeast China soybeans by mid-infrared spectroscop | Xiao, Cai, Ni | Journal of Consumer Protection and Food Safety | 10.1007/s00003-023-01471-8 | cites=9
+2026 | Quantitative
+Detection of Virgin Olive Oil Adulteration
+with Oil Obtained from Ground-Picked Olives Using Mid- | Ayvaz, Öğütcü, Doğan, Aydın | ACS Food Science &amp; Technology | 10.1021/acsfoodscitech.6c00545 | cites=0
+### jackknife+ predictive inference
+2021 | Predictive inference with the jackknife+ | Barber, Candès, Ramdas, Tibshirani | The Annals of Statistics | 10.1214/20-aos1965 | cites=309
+2024 | Jackknife empirical likelihood confidence intervals for the categorical Gini correlation | Hewage, Sang | Journal of Statistical Planning and Inference | 10.1016/j.jspi.2023.106123 | cites=5
+2024 | Bayesian jackknife empirical likelihood‐based inference for missing data and causal inference | Chen, Wang, Zhao | Canadian Journal of Statistics | 10.1002/cjs.11825 | cites=2
+2021 | Jackknife empirical likelihood for the mean difference of two zero-inflated skewed populations | Satter, Zhao | Journal of Statistical Planning and Inference | 10.1016/j.jspi.2020.07.009 | cites=8
+2019 | Jackknife empirical likelihood methods for Gini correlations and their equality testing | Sang, Dang, Zhao | Journal of Statistical Planning and Inference | 10.1016/j.jspi.2018.05.004 | cites=17
+2018 | Jackknife empirical likelihood inference for the accelerated failure time model | Yu, Zhao | TEST | 10.1007/s11749-018-0601-7 | cites=7
+2021 | Optimal bias correction of the log-periodogram estimator of the fractional parameter: A jackknife approach | Nadarajah, Martin, Poskitt | Journal of Statistical Planning and Inference | 10.1016/j.jspi.2020.04.010 | cites=5
+2025 | Cluster-robust jackknife and bootstrap inference for logistic regression models | MacKinnon, Nielsen, Webb | Econometric Reviews | 10.1080/07474938.2025.2515161 | cites=2
+2020 | Jackknife empirical likelihood inference for the Pietra ratio | Zhao, Su, Yang | Computational Statistics &amp; Data Analysis | 10.1016/j.csda.2020.107049 | cites=8
+2026 | Dissociating Predictive and Postdictive Audiovisual Inference | Fischer, Fukuda | JoCN Forum | 10.21428/8e6ba8ef.6e52df25 | cites=0
+2020 | Jackknife empirical likelihood based inference for probability weighted moments | Bhati, Kattumannil, Sreelakshmi | Journal of the Korean Statistical Society | 10.1007/s42952-020-00062-9 | cites=3
+2024 | Jackknife empirical likelihood inference for the lifetime performance index | Estabraqi, Mahmoudi, Nadeb | Communications in Statistics - Simulation and Computation | 10.1080/03610918.2024.2443217 | cites=1
+### conformal prediction under distribution shift weighted
+2026 | Conformal selective prediction with cost aware deferral for safe clinical triage under distribution shift | Kwon, Kim | Scientific Reports | 10.1038/s41598-026-40637-w | cites=8
+2026 | Distribution-Free Selective Prediction for LLM-RAG Hallucination Detection: Word-Level Conformal Risk Control  | Lin | Stout in Mathematics and Statistics | 10.61424/ka6yps02 | cites=0
+2026 | Heterogeneous-Horizon Conformal Ensembles for Online Prediction Under Distribution Shift: An Empirical Compari | Amiri Shahbazi, Baheri | Forecasting | 10.3390/forecast8050077 | cites=0
+2026 | Shift-Responsive Conformal Ensembling for Reliable Selective Classification Under Distribution Shift |  | International Journal of Progressive Research in Engineering Management and Science | 10.58257/ijprems54397 | cites=0
+2025 | CUQDS: Conformal Uncertainty Quantification Under Distribution Shift for Trajectory Prediction | Huang, He, Miao | Proceedings of the AAAI Conference on Artificial Intelligence | 10.1609/aaai.v39i16.33915 | cites=9
+2025 | Model-free selective inference under covariate shift via weighted conformal
+                    <i>p</i>
+      | Jin, Candès | Biometrika | 10.1093/biomet/asaf066 | cites=3
+2026 | Uncertainty-Aware Brain-Tumor Type Classification From MRI: Segmentation-Guided ROI, Conformal Prediction, and | Nguyen, van Huynh, van Dang | IEEE Access | 10.1109/access.2026.3729887 | cites=0
+2026 | Reliability of Prediction Intervals for Local Pier Scour under Distribution Shift: A Comparison of Split Confo | Kim, Kang, Lee, Lee | Journal of Ocean Engineering and Technology | 10.26748/ksoe.2026.043 | cites=0
+2026 | Generative Conformal Prediction Under Covariate Shift | Li, Zheng, Lin | Journal of Computational and Graphical Statistics | 10.1080/10618600.2026.2703276 | cites=0
+2026 | Rolling-Calibrated Conformal Decision Support for Seasonal Airport Taxi-Time Planning under Distribution Shift | Momtaz | Statistics, Optimization &amp; Information Computing | 10.19139/soic-2310-5070-3782 | cites=0
+2025 | Uncertainty Quantification Based on Conformal Prediction for Industrial Time Series With Distribution Shift | Zhang, Zhou | IEEE Transactions on Industrial Informatics | 10.1109/tii.2025.3529920 | cites=12
+2025 | A Mathematical Framework for Adaptive Rolling Conformal Quantile Boosting under Temporal Distribution Shift: A |  | Prospects for Applied Mathematics and Data Analysis | 10.54216/pamda.050203 | cites=0
+### conformal prediction few labeled target domain adaptation
+2024 | Self-Labeling Framework for Open-Set Domain Adaptation With Few Labeled Samples | Yu, Irie, Aizawa | IEEE Transactions on Multimedia | 10.1109/tmm.2023.3282538 | cites=6
+2023 | Dynamic applicability domain (dAD): compound–target binding affinity estimates with local conformal prediction | Oršolić, Šmuc | Bioinformatics | 10.1093/bioinformatics/btad465 | cites=7
+2023 | Causal Factor Disentanglement for Few-Shot Domain Adaptation in Video Prediction | Cornille, Laenen, Sun, Moens | Entropy | 10.3390/e25111554 | cites=0
+2023 | Contrastive Domain Adaptation-Based Sparse SAR Target Classification under Few-Shot Cases | Bi, Liu, Deng, Ji | Remote Sensing | 10.3390/rs15020469 | cites=15
+2022 | Unsupervised domain adaptation with post-adaptation labeled domain performance preservation | Badr, Wanas, Fayek | Machine Learning with Applications | 10.1016/j.mlwa.2022.100439 | cites=2
+2022 | Generalized Meta-FDMixup: Cross-Domain Few-Shot Learning Guided by Labeled Target Data | Fu, Fu, Chen, Jiang | IEEE Transactions on Image Processing | 10.1109/tip.2022.3219237 | cites=30
+2026 | When Labels Shift: Few-Shot Fine-Tuning Versus Unsupervised Domain Adaptation for Cross-Dataset Battery Cycle- | Zhao | Applied and Computational Engineering | 10.54254/2755-2721/2026.ld37070 | cites=0
+2025 | Latent manifold preservation and target prediction balance for unsupervised domain adaptation | Wang, Liu | Signal, Image and Video Processing | 10.1007/s11760-025-04920-z | cites=0
+2024 | CAT-DTI: cross-attention and Transformer network with domain adaptation for drug-target interaction prediction | Zeng, Chen, Lei | BMC Bioinformatics | 10.1186/s12859-024-05753-2 | cites=46
+2025 | Adversarial Semi-supervised domain adaptation for semantic segmentation: A new role for labeled target samples | Kechaou, Alaya, Hérault, Gasso | Computer Vision and Image Understanding | 10.1016/j.cviu.2025.104305 | cites=3
+2023 | Interpretable bilinear attention network with domain adaptation improves drug–target prediction | Bai, Miljković, John, Lu | Nature Machine Intelligence | 10.1038/s42256-022-00605-1 | cites=386
+2026 | Prototype-Based Transferability Analysis for Few-Shot Domain Adaptation in Cross-Domain Intrusion Detection | Kim | Applied Sciences | 10.3390/app16146957 | cites=0
+### prediction intervals near-infrared PLS comparison size matters
+2011 | A comparison of methods for estimating prediction intervals in NIR spectroscopy: Size matters | Bouckaert, Frank, Holmes, Fletcher | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2011.08.008 | cites=6
+2024 | Comparison of Near-Infrared and Mid-Infrared spectroscopy for the identification and quantification of argan o | El Maouardi, De Braekeleer, Bouklouze, Vander Heyden | Food Control | 10.1016/j.foodcont.2024.110671 | cites=47
+2022 | Piecewise preprocessing of near-infrared spectra for improving prediction ability of a PLS model | Yang, Xiong, Xu, Li | Infrared Physics &amp; Technology | 10.1016/j.infrared.2022.104359 | cites=43
+2008 | When Size Matters—Near Infrared Reflection Spectroscopy of Nanostructured Materials | Heigl, Petter, Najam-Ul-Haq, Rainer | Journal of Near Infrared Spectroscopy | 10.1255/jnirs.780 | cites=7
+2011 | Noise Robustness Comparison for near Infrared Prediction Models | Roussel, Igne, Funk, Hurburgh | Journal of Near Infrared Spectroscopy | 10.1255/jnirs.916 | cites=11
+2026 | Prediction of o-nitrotoluene concentration based on near-infrared spectroscopy and segmented PLS | Huang, Chen, Chen, Shi | Microchemical Journal | 10.1016/j.microc.2026.117935 | cites=0
+2022 | At-line and inline prediction of droplet size in mayonnaise with near-infrared spectroscopy | Mishra, Dijk, Wintermeyer, Sabater | Infrared Physics &amp; Technology | 10.1016/j.infrared.2022.104155 | cites=9
+2021 | PLS-R Calibration Models for Wine Spirit Volatile Phenols Prediction by Near-Infrared Spectroscopy | Anjos, Caldeira, Fernandes, Pedro | Sensors | 10.3390/s22010286 | cites=30
+2011 | The Effect of Region of Interest Size on Model Calibration for Soil Organic Carbon Prediction from Hyperspectr | O'Rourke, Argentati, Holden | Journal of Near Infrared Spectroscopy | 10.1255/jnirs.930 | cites=12
+2024 | Quantitative detection of zearalenone in wheat using intervals selection coupled to near-infrared spectroscopy | Zhao, Zhu, Jiang | Infrared Physics &amp; Technology | 10.1016/j.infrared.2023.105004 | cites=12
+2010 | Prediction of Oriented Strand Board Wood Strand Density by near Infrared and Fourier Transform Infrared Reflec | Via | Journal of Near Infrared Spectroscopy | 10.1255/jnirs.893 | cites=9
+2022 | Comparison of Calibration Models for Rapid Prediction of Lignin Content in Lignocellulosic Biomass Based on In | Herdlevær, Løhre, Nodland, Barth | SSRN Electronic Journal | 10.2139/ssrn.4117046 | cites=0
+### uncertainty estimation neural networks spectral data mango dry matter
+2025 | Simple methods for uncertainty estimation in neural networks applied to spectral data processing: A case study | Maxime, Lamdibih, Roger, Esteve | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2025.105532 | cites=3
+2024 | Evaluation of 1D convolutional neural network in estimation of mango dry matter content | Walsh, Neupane, Li | Spectrochimica Acta Part A: Molecular and Biomolecular Spectroscopy | 10.1016/j.saa.2024.124003 | cites=36
+2025 | CreINNs: Credal-Set Interval Neural Networks for Uncertainty Estimation in Classification Tasks | Wang, Shariatmadar, Manchingal, Cuzzolin | Neural Networks | 10.1016/j.neunet.2025.107198 | cites=9
+2026 | Dynamic Reservoir Property Estimation With Uncertainty Quantification From 4D Seismic Data Using Bayesian Neur | Sukar, Côrte, MacBeth | Geophysical Prospecting | 10.1111/1365-2478.70228 | cites=1
+2026 | Improving uncertainty estimation in deep neural networks by modeling class and instance uncertainty | Spanos, Passalis, Tefas | Pattern Recognition | 10.1016/j.patcog.2025.112267 | cites=12
+2026 | A new framework for spectral data augmentation based on vicinal risk minimization: Application to the predicti | Tumoine, Metz, Abdelghafour, Esteve | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2026.105769 | cites=0
+2026 | Self-Supervised joint flow and depth estimation via Multi-Cue uncertainty modeling | Abdein, Li, Chen, Li | Neural Networks | 10.1016/j.neunet.2026.108771 | cites=1
+2025 | Methods of Spectral Matching for Remote Sensing Data | Borisov | Optical Memory and Neural Networks | 10.3103/s1060992x25602398 | cites=0
+2026 | Range estimation and uncertainty quantification of single-hydrophone underwater acoustic data using invertible | Goldwater, Zitterbart, Bonnel | The Journal of the Acoustical Society of America | 10.1121/10.0045500 | cites=0
+2026 | Uncertainty-constrained fusion of single-view and multi-view depth estimation for AR virtual-real occlusion | Liu, Ding, Li, Wang | Neural Networks | 10.1016/j.neunet.2025.108219 | cites=2
+2023 | Estimation of Uncertainty for Technology Evaluation Factors via Bayesian Neural Networks | Lee, Park, Lee | Axioms | 10.3390/axioms12020145 | cites=4
+2024 | On a framework of data assimilation for hyperparameter estimation of spiking neuronal networks | Zhang, Chen, Feng, Lu | Neural Networks | 10.1016/j.neunet.2023.11.016 | cites=6
+### calibration transfer review near infrared spectroscopy
+2023 | Forage calibration transfer from laboratory to portable near infrared spectrometers | Yang, Cherney, Casler, Berzaghi | Journal of Near Infrared Spectroscopy | 10.1177/09670335231173136 | cites=8
+2016 | Improving Calibration Transfer between Shortwave near Infrared Silicon Photodiode Array Instruments | Hayes, Walsh, Greensill | Journal of Near Infrared Spectroscopy | 10.1255/jnirs.1194 | cites=14
+2017 | Calibration transfer across near infrared spectrometers for measuring hematocrit in the blood of grazing cattl | Luo, Ikehata, Sashida, Piao | Journal of Near Infrared Spectroscopy | 10.1177/0967033516686658 | cites=14
+2024 | Transfer of near infrared calibration for gasoline octane number based on screening consistent wavelengths com | Honghong, Hui, Zhixin | Journal of Near Infrared Spectroscopy | 10.1177/09670335241232093 | cites=5
+2022 | Transfer of a calibration model for the prediction of lignin in pulpwood among four portable near infrared spe | Zhang, Chen, Xiong, Siesler | Journal of Near Infrared Spectroscopy | 10.1177/09670335221110013 | cites=16
+2017 | Linear transformations of multivariate calibration models in near infrared spectroscopy: A comparative study | Dubrovkin | Journal of Near Infrared Spectroscopy | 10.1177/0967033517723253 | cites=2
+2023 | Calibration transfer for near-infrared (NIR) spectroscopy based on local preserving projection | Bin, Yan, Liu, Kang | Vibrational Spectroscopy | 10.1016/j.vibspec.2023.103538 | cites=5
+2018 | A data-driven near infrared calibration process including near infrared spectral thumbprints | Nielsen, Russell, Kelly, Fox | Journal of Near Infrared Spectroscopy | 10.1177/0967033518782765 | cites=1
+2022 | Development of a calibration model for near infrared spectroscopy using a convolutional neural network | Li, Pan, Bai, Chen | Journal of Near Infrared Spectroscopy | 10.1177/09670335211057234 | cites=20
+2015 | Correcting Multivariate Calibration Model for near Infrared Spectral Analysis without Using Standard Samples | Li, Cai, Shao | Journal of Near Infrared Spectroscopy | 10.1255/jnirs.1165 | cites=36
+2023 | Transferring near infrared spectral calibration models without standards via multistep wavelength selection | Ni, Zhang, Zhang, Luan | Journal of Near Infrared Spectroscopy | 10.1177/09670335231168437 | cites=3
+2022 | Near infrared spectroscopy calibration strategies to predict multiple nutritional parameters of pasture specie | Catunda, Churchill, Power, Moore | Journal of Near Infrared Spectroscopy | 10.1177/09670335221114746 | cites=14
+### piecewise direct standardization calibration transfer
+2020 | Calibration transfer for bioprocess Raman monitoring using Kennard Stone piecewise direct standardization and  | Pétillot, Pewny, Wolf, Sanchez | Engineering Reports | 10.1002/eng2.12230 | cites=21
+2026 | Calibration transfer for laser-induced breakdown spectroscopy via piecewise direct standardization with artifi | Sun, Sun, Li, Yang | Spectrochimica Acta Part B: Atomic Spectroscopy | 10.1016/j.sab.2026.107479 | cites=1
+2019 | NIR model transfer of alkali-soluble polysaccharides in
+                    <i>Poria cocos</i>
+                | Wang, Huck, Yang | NIR news | 10.1177/0960336019855218 | cites=3
+2026 | Calibration transfer between benchtop and handheld near-infrared instruments for predictive models of commerci | Ní Fhuaráin, Guedes, Zhao, Ferreira | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2026.105809 | cites=0
+2022 | Model transfer method based on piecewise direct standardization in laser-induced-breakdown spectroscopy | Xie, Sun, Shang, Gao | Applied Optics | 10.1364/ao.471891 | cites=7
+2022 | Piecewise direct standardization assisted with second-order calibration methods to solve signal instability in | Chen, Wu, Wang, Liu | Journal of Chromatography A | 10.1016/j.chroma.2022.462851 | cites=10
+2016 | Calibration transfer and drift counteraction in chemical sensor arrays using Direct Standardization | Fonollosa, Fernández, Gutiérrez-Gálvez, Huerta | Sensors and Actuators B: Chemical | 10.1016/j.snb.2016.05.089 | cites=234
+2024 | Transfer of near infrared calibration for gasoline octane number based on screening consistent wavelengths com | Honghong, Hui, Zhixin | Journal of Near Infrared Spectroscopy | 10.1177/09670335241232093 | cites=5
+2019 | Calibration strategies to correct for matrix effects in direct analysis of urine by ICP OES: internal standard | Barros, Pinheiro, Nóbrega | Analytical Methods | 10.1039/c9ay00907h | cites=23
+2023 | Enhancing standardization through score-augmented projection-based calibration transfer | Ghaffari, Abdollahi | Chemometrics and Intelligent Laboratory Systems | 10.1016/j.chemolab.2023.105026 | cites=1
+2015 | Improved estimates of organic carbon using proximally sensed vis–
+                    <scp>NIR</scp>
+          | Ji, Viscarra Rossel, Shi | European Journal of Soil Science | 10.1111/ejss.12271 | cites=74
+2023 | Novel Hybrid Calibration Transfer Method Based on Nonlinear Dimensionality Reduction for Robust Standardizatio | Li, Li | Analytical Letters | 10.1080/00032719.2023.2178449 | cites=5
+### domain-invariant partial least squares calibration transfer
+2018 | Domain-Invariant Partial-Least-Squares Regression | Nikzad-Langerodi, Zellinger, Lughofer, Saminger-Platz | Analytical Chemistry | 10.1021/acs.analchem.8b00498 | cites=111
+2026 | Robust Monitoring of 2,3-Butanediol Production Through Standard-Free Calibration Transfer of Partial Least Squ | Ly, Dia, Faye | ChemEngineering | 10.3390/chemengineering10040048 | cites=0
+2024 | Nonlinear dynamic transfer partial least squares for domain adaptive regression | Zhao, Yan, Ren, Cheng | ISA Transactions | 10.1016/j.isatra.2024.08.002 | cites=10
+2020 | Calibration Transfer of Partial Least Squares Regression
+Models between Desktop Nuclear Magnetic Resonance Spe | Galvan, Bona, Borsato, Danieli | Analytical Chemistry | 10.1021/acs.analchem.0c00902 | cites=39
+2022 | Dynamic transfer partial least squares for domain adaptive regression | Zhao, Yan, Ren, Cheng | Journal of Process Control | 10.1016/j.jprocont.2022.08.011 | cites=27
+2017 | Comparison of partial least squares regression, least squares support vector machines, and Gaussian process re | Cui, Fearn | Journal of Near Infrared Spectroscopy | 10.1177/0967033516678515 | cites=57
+2022 | Quantitative Analysis of Methanol in Methanol Gasoline by Calibration Transfer Strategy Based on Kernel Domain | Xu, Li, Feng, Jiao | Chemical Research in Chinese Universities | 10.1007/s40242-022-1327-3 | cites=2
+2020 | Partial least square regression versus domain invariant partial least square regression with application to ne | Mishra, Nikzad-Langerodi | Infrared Physics &amp; Technology | 10.1016/j.infrared.2020.103547 | cites=63
+2018 | Estimating Detection Limits in Chromatography from Calibration Data: Ordinary Least Squares Regression vs. Wei | Sanchez | Separations | 10.3390/separations5040049 | cites=29
+2023 | Two sides of the same coin: Kernel partial least-squares (KPLS) for linear and non-linear multivariate calibra | Allegrini, Olivieri | Talanta Open | 10.1016/j.talo.2023.100235 | cites=15
+2020 | Global Least Squares Path Modeling: A Full-Information Alternative to Partial Least Squares Path Modeling | Hwang, Cho | Psychometrika | 10.1007/s11336-020-09733-2 | cites=21
+2017 | Determination of Quercetin and Luteolin in Paprika Samples by Voltammetry and Partial Least Squares Calibratio | Chamizo‐González, Monago‐Maraña, Galeano‐Díaz | Electroanalysis | 10.1002/elan.201700403 | cites=5
+### transfer component analysis near infrared calibration
+2023 | Forage calibration transfer from laboratory to portable near infrared spectrometers | Yang, Cherney, Casler, Berzaghi | Journal of Near Infrared Spectroscopy | 10.1177/09670335231173136 | cites=8
+2023 | Improved Principal Component Analysis (IPCA): A Novel Method for Quantitative Calibration Transfer between Dif | Zhang, Tan, Lin, Yang | Molecules | 10.3390/molecules28010406 | cites=17
+2019 | PLS Subspace-Based Calibration Transfer for Near-Infrared Spectroscopy Quantitative Analysis | Zhao, Yu, Shan, Zhao | Molecules | 10.3390/molecules24071289 | cites=20
+2017 | Calibration transfer across near infrared spectrometers for measuring hematocrit in the blood of grazing cattl | Luo, Ikehata, Sashida, Piao | Journal of Near Infrared Spectroscopy | 10.1177/0967033516686658 | cites=14
+2024 | Transfer of near infrared calibration for gasoline octane number based on screening consistent wavelengths com | Honghong, Hui, Zhixin | Journal of Near Infrared Spectroscopy | 10.1177/09670335241232093 | cites=5
+2022 | Transfer of a calibration model for the prediction of lignin in pulpwood among four portable near infrared spe | Zhang, Chen, Xiong, Siesler | Journal of Near Infrared Spectroscopy | 10.1177/09670335221110013 | cites=16
+2017 | Segregating wood wastes by repetitive principal component analysis of near infrared spectra | Kobori, Higa, Tsuchikawa, Kojima | Journal of Near Infrared Spectroscopy | 10.1177/0967033517714344 | cites=5
+2018 | A data-driven near infrared calibration process including near infrared spectral thumbprints | Nielsen, Russell, Kelly, Fox | Journal of Near Infrared Spectroscopy | 10.1177/0967033518782765 | cites=1
+2017 | Calibration transfer of near-infrared spectroscopy by canonical correlation analysis coupled with wavelet tran | Bin, Li, Fan, Zhou | The Analyst | 10.1039/c7an00280g | cites=34
+2018 | Qualitative Analysis of Maize Haploid Kernels Based on Calibration Transfer by Near-Infrared Spectroscopy | Li, Yu, Ge, An | Analytical Letters | 10.1080/00032719.2018.1459656 | cites=5
+2017 | Linear transformations of multivariate calibration models in near infrared spectroscopy: A comparative study | Dubrovkin | Journal of Near Infrared Spectroscopy | 10.1177/0967033517723253 | cites=2
+2022 | Investigating the water structures in reverse micelles by temperature-dependent near infrared spectroscopy com | Wang, Sun, Duan, Cai | Journal of Near Infrared Spectroscopy | 10.1177/09670335221082220 | cites=8
+### prediction uncertainty multivariate calibration error in variables PLS
+2016 | Generalized error-dependent prediction uncertainty in multivariate calibration | Allegrini, Wentzell, Olivieri | Analytica Chimica Acta | 10.1016/j.aca.2015.11.028 | cites=37
+2005 | The prediction error in CLS and PLS: the importance of feature selection prior to multivariate calibration | Nadler, Coifman | Journal of Chemometrics | 10.1002/cem.915 | cites=106
+2019 | Prediction and calibration for multiple correlated variables | Bhaumik, Nordgren | Journal of Multivariate Analysis | 10.1016/j.jmva.2019.03.001 | cites=0
+2014 | A simple method for multivariate calibration with minimization of the prediction relative error | Wu, Liu, Li | Analytical Methods | 10.1039/c4ay00620h | cites=3
+2009 | Performance of PLS regression coefficients in selecting variables for each response of a multivariate PLS for  | Palermo | Advances and Applications in Bioinformatics and Chemistry | 10.2147/aabc.s3619 | cites=42
+2015 | Consistent test of error-in-variables partially linear model with auxiliary variables | Sun, Ye, Sun | Journal of Multivariate Analysis | 10.1016/j.jmva.2015.07.007 | cites=8
+2009 | Uncertainty under a multivariate nested-error regression model with logarithmic transformation | Molina | Journal of Multivariate Analysis | 10.1016/j.jmva.2008.09.007 | cites=10
+2017 | Effect of heteroscedasticity treatment in residual error models on model calibration and prediction uncertaint | Sun, Yuan, Liu | Journal of Hydrology | 10.1016/j.jhydrol.2017.09.041 | cites=32
+2026 | Uncertainty-aware Cartesian error compensation in industrial robots via point interval prediction and residual | Haq, Alfonso, Longo, Fedele | Discover Robotics | 10.1007/s44430-026-00017-5 | cites=8
+2011 | A multivariate ultrastructural errors-in-variables model with equation error | Patriota, Bolfarine, Arellano-Valle | Journal of Multivariate Analysis | 10.1016/j.jmva.2010.08.013 | cites=2
+2005 | Uncertainty Estimation and Figures of Merit for Multivariate Calibration |  | Chemistry International -- Newsmagazine for IUPAC | 10.1515/ci.2005.27.3.19b | cites=0
+2020 | A New Parameter for Measuring the Prediction Uncertainty Produced by Rotational Ambiguity in Second-Order Cali | Pellegrino Vidal, Olivieri | Analytical Chemistry | 10.1021/acs.analchem.0c01395 | cites=17
+### mango dry matter NIRS robustness season location cultivar
+2020 | Achieving robustness across season, location and cultivar for a NIRS model for intact mango fruit dry matter c | Anderson, Walsh, Subedi, Hayes | Postharvest Biology and Technology | 10.1016/j.postharvbio.2020.111202 | cites=111
+2021 | Achieving robustness across season, location and cultivar for a NIRS model for intact mango fruit dry matter c | Anderson, Walsh, Flynn, Walsh | Postharvest Biology and Technology | 10.1016/j.postharvbio.2020.111358 | cites=71
+2020 | Achieving robustness to temperature change of a NIRS-PLSR model for intact mango fruit dry matter content | Sun, Subedi, Walsh | Postharvest Biology and Technology | 10.1016/j.postharvbio.2019.111117 | cites=53
+2023 | Vis/NIR model development and robustness in prediction of potato dry matter content with influence of cultivar | Wang, Yan, Tian, Tian | Postharvest Biology and Technology | 10.1016/j.postharvbio.2022.112202 | cites=32
+2022 | Achieving robustness across different ages and cultivars for an NIRS-PLSR model of fresh cassava root starch a | Maraphum, Saengprachatanarug, Wongpichet, Phuphuphud | Computers and Electronics in Agriculture | 10.1016/j.compag.2022.106872 | cites=42
