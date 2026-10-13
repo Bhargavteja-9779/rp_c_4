@@ -4,3 +4,7 @@ __pycache__/
 .pytest_cache/
 **/data/raw/
 Target_Journal_Submission/results_quick/
+# TEMPORARY while experiments run (removed at completion)
+Target_Journal_Submission/results/raw/E8_mango_instruments@r0100-0200.csv.gz
+Target_Journal_Submission/results/raw/E7_lv_*
+Target_Journal_Submission/results/raw/E6b_*

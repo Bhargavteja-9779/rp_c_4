@@ -541,3 +541,4 @@
 2026-10-13 23:21:41,826 INFO mode=full jobs=4 device=cpu (all computations are CPU/numpy; device only used by the optional CNN)
 2026-10-13 23:22:40,187 INFO [E8_mango_instruments] 10/100 reps (58s)
 2026-10-13 23:23:15,739 INFO [E8_mango_instruments] 20/100 reps (94s)
+2026-10-13 23:24:06,587 INFO [E8_mango_instruments] 30/100 reps (145s)
