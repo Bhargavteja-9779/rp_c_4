@@ -46,6 +46,22 @@ def main():
     subprocess.run(["soffice", "--headless", "--convert-to", "pdf", "--outdir", os.path.dirname(out_docx), out_docx],
                    check=True, capture_output=True)
     print("built", out_docx)
+    # cover letter (same placeholder mechanism)
+    cl = open(os.path.join(HERE, "..", "src_cover", "cover_letter.md"), encoding="utf-8").read()
+    cl = re.sub(r"\{\{(\w+)\}\}", lambda m: str(vals.get(m.group(1), f"[[{m.group(1)}]]")), cl)
+    clmd = os.path.join(HERE, "cover_letter_filled.md"); open(clmd, "w", encoding="utf-8").write(cl)
+    cl_docx = os.path.join(ROOT, "manuscript", "cover_letter.docx")
+    subprocess.run(["pandoc", clmd, "-o", cl_docx, "--reference-doc", os.path.join(HERE, "reference_letter.docx")], check=True)
+    subprocess.run(["soffice", "--headless", "--convert-to", "pdf", "--outdir", os.path.dirname(cl_docx), cl_docx], check=True, capture_output=True)
+    # review records: fill numeric placeholders from the same values (rendered copies)
+    rdir = os.path.join(ROOT, "REVIEW")
+    for f in sorted(os.listdir(rdir)):
+        if f.endswith(".md"):
+            t = open(os.path.join(rdir, f), encoding="utf-8").read()
+            if "{{" in t:
+                t = re.sub(r"\{\{(\w+)\}\}", lambda m: str(vals.get(m.group(1), f"[[{m.group(1)}]]")), t)
+                open(os.path.join(rdir, f), "w", encoding="utf-8").write(t)
+    print("built cover letter and filled review records")
 
 if __name__ == "__main__":
     main()
