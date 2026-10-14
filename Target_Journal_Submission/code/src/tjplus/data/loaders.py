@@ -29,18 +29,43 @@ def _sha256(path):
             h.update(chunk)
     return h.hexdigest()
 
-def fetch(name, raw_dir):
+def fetch(name, raw_dir, retries=5):
+    """Download (streamed, with retries) into a temporary file, verify SHA-256, then rename atomically.
+    Partial downloads never leave a file under the final name."""
+    import time
     url, sha, fname = SOURCES[name]
     os.makedirs(raw_dir, exist_ok=True)
     path = os.path.join(raw_dir, fname)
     if not os.path.exists(path):
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (tjplus reproducibility)"})
-        with urllib.request.urlopen(req, timeout=300) as r, open(path, "wb") as f:
-            f.write(r.read())
+        tmp = path + f".part{os.getpid()}"
+        for attempt in range(retries):
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (tjplus reproducibility)"})
+                with urllib.request.urlopen(req, timeout=300) as r, open(tmp, "wb") as f:
+                    while True:
+                        chunk = r.read(1 << 20)
+                        if not chunk:
+                            break
+                        f.write(chunk)
+                if _sha256(tmp) != sha:
+                    raise IOError("checksum mismatch after download")
+                os.replace(tmp, path)
+                break
+            except Exception as e:
+                if os.path.exists(tmp):
+                    os.remove(tmp)
+                if attempt == retries - 1:
+                    raise RuntimeError(f"Download of {name} failed after {retries} attempts: {e}. "
+                                       f"Download {url} manually into {raw_dir}/{fname}.")
+                time.sleep(2 ** (attempt + 1))
     got = _sha256(path)
     if got != sha:
         raise RuntimeError(f"Checksum mismatch for {path}: {got} != {sha}. Delete the file and retry.")
     return path
+
+def prefetch_all(raw_dir):
+    """Fetch every data set once (called in the main process before parallel workers start)."""
+    return {k: fetch(k, raw_dir) for k in SOURCES}
 
 def _ds(mobj):
     """Extract the .data field of a PLS_Toolbox DataSet object read by scipy."""

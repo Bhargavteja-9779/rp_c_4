@@ -56,6 +56,9 @@ def main():
     only = set(filter(None, a.only.split(",")))
     t0 = time.time()
     if not a.skip_experiments:
+        from tjplus.data.loaders import prefetch_all, load_mango_instruments
+        prefetch_all(raw_dir)            # download once, before any worker process starts (no download races)
+        load_mango_instruments(raw_dir)  # build the processed E8 cache once
         for name, spec in cfg["experiments"].items():
             if only and name not in only:
                 continue

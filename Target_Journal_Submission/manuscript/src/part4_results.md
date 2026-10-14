@@ -41,14 +41,14 @@ Interval widths relative to the RMSEP of the deployed predictor are shown in Fig
 - Across scenarios, it did not differ significantly from TJ+N after Holm correction (*p* = {{p_tjn_gauss}}).
 - Per scenario (Holm-adjusted *p* < 0.05), Gauss-LOO had the lower interval score in {{gauss_better_corn}} of 24 corn scenarios. On tablets and mango, TJ+N was better in {{tjn_better_gauss_other}} and Gauss-LOO in {{gauss_better_other}} of 16 scenarios.
 
-Its validity, however, depends on approximately Gaussian errors. At α = 0.05 it under-covered in {{gauss_under_005}} of 40 scenarios, and at α = 0.20 in {{gauss_under_020}}, whereas TJ+N and TJ+ never did. The price of distribution-free validity at α = 0.05 is that TJ+N needs *m* ≥ 19 standards. With fewer standards it returns unbounded intervals rather than over-confident ones.
+Its validity, however, depends on approximately Gaussian errors. At α = 0.05 it under-covered in {{gauss_under_005}} of {{n_scen_main}} scenarios, and at α = 0.20 in {{gauss_under_020}}, whereas TJ+N and TJ+ never did. The price of distribution-free validity at α = 0.05 is that TJ+N needs *m* ≥ 19 standards. With fewer standards it returns unbounded intervals rather than over-confident ones.
 
 **Normalised Gaussian competitor (E9).** One might expect a heteroscedastic Gaussian interval using the same difficulty function to combine the efficiency of Gauss-LOO with the adaptivity of TJ+N: μ(x) ± t₁₋α/₂,ₘ₋₁ · RMS(Rᵢ) · σ(x), with Rᵢ from Eq. (3) (Gauss-LOO-N). We tested this in an additional experiment specified during review (200 repetitions; all primary pipelines and the instrument shift of E8; three α levels; Table S8).
 - Under-covering scenarios over all α levels: TJ+N {{e9_tjn_under}}, Gauss-LOO {{e9_gauss_under}}, Gauss-LOO-N {{e9_gaussn_under}}.
 - At α = 0.05: {{e9_tjn_under_005}}, {{e9_gauss_under_005}} and {{e9_gaussn_under_005}}, respectively.
 - At α = 0.10, Gauss-LOO-N had a lower median interval score than TJ+N in {{e9_gaussn_better}} of {{e9_n_scen}} scenarios (median score ratio {{e9_gaussn_rel_is}}).
 
-The normalised Gaussian interval was therefore slightly more efficient, by about 3% in interval score, but it under-covered in several scenarios, mostly at 95%. TJ+N trades this small loss of efficiency for validity without distributional assumptions. Where a few percent of interval width matter more than a coverage guarantee, Gauss-LOO-N is a defensible pragmatic choice, provided its coverage is checked.
+The normalised Gaussian interval was therefore slightly more efficient, by about {{e9_pct_better}}% in median interval score, but it under-covered in several scenarios, mostly at 95%. TJ+N trades this small loss of efficiency for validity without distributional assumptions. Where a few percent of interval width matter more than a coverage guarantee, Gauss-LOO-N is a defensible pragmatic choice, provided its coverage is checked.
  Over all four transfer pipelines (PDS, DS, SBC and no transfer) and the three data sets, TJ+N under-covered in {{allpipe_tjn_under}} pipeline × scenario combinations at α = 0.10. The corresponding numbers were {{allpipe_gauss_under}} for Gauss-LOO, {{allpipe_astm_under}} for ASTM-PI and {{allpipe_scps_under}} for SCP-S (Table S2).
 
 {{table_alpha}}

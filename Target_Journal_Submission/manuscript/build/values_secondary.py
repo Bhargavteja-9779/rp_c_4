@@ -138,6 +138,7 @@ def values(S, T, RES, CFG, md_table, primary):
         V["e9_n_scen"] = len(piv)
         V["e9_gaussn_better"] = int((piv["Gauss-LOO-N"] < piv["TJ+N"]).sum())
         V["e9_gaussn_rel_is"] = f"{(piv['Gauss-LOO-N'] / piv['TJ+N']).median():.3f}"
+        V["e9_pct_better"] = f"{100 * (1 - (piv['Gauss-LOO-N'] / piv['TJ+N']).median()):.0f}"
         rows = []
         for exp_ in sorted(e9["experiment"].unique()):
             for mth in ("TJ+N", "Gauss-LOO", "Gauss-LOO-N"):

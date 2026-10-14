@@ -146,6 +146,7 @@
  "e9_n_scen": 64,
  "e9_gaussn_better": 59,
  "e9_gaussn_rel_is": "0.970",
+ "e9_pct_better": "3",
  "table_e9": "| Data/pipeline set | Method | α = 0.05 | α = 0.10 | α = 0.20 |\n|:--|--:|--:|--:|--:|\n| corn | TJ+N | 0.986 (0/24) | 0.932 (0/24) | 0.835 (0/24) |\n| corn | Gauss-LOO | 0.945 (6/24) | 0.903 (0/24) | 0.818 (0/24) |\n| corn | Gauss-LOO-N | 0.951 (0/24) | 0.905 (0/24) | 0.811 (0/24) |\n| mango | TJ+N | 0.968 (0/4) | 0.902 (0/4) | 0.803 (0/4) |\n| mango | Gauss-LOO | 0.955 (0/4) | 0.902 (0/4) | 0.792 (1/4) |\n| mango | Gauss-LOO-N | 0.956 (0/4) | 0.902 (0/4) | 0.790 (2/4) |\n| mango_inst | TJ+N | 0.974 (0/24) | 0.919 (0/24) | 0.827 (0/24) |\n| mango_inst | Gauss-LOO | 0.950 (4/24) | 0.908 (0/24) | 0.820 (0/24) |\n| mango_inst | Gauss-LOO-N | 0.958 (6/24) | 0.915 (0/24) | 0.810 (3/24) |\n| tablets | TJ+N | 0.971 (0/12) | 0.912 (0/12) | 0.820 (0/12) |\n| tablets | Gauss-LOO | 0.949 (6/12) | 0.910 (0/12) | 0.825 (1/12) |\n| tablets | Gauss-LOO-N | 0.948 (2/12) | 0.907 (1/12) | 0.819 (0/12) |\n\nTable: Competitor analysis (E9): mean coverage (under-covering / scenarios).\n",
  "sens_tjn_under": 0,
  "sens_n": 27,
