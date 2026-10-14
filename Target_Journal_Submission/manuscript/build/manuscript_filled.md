@@ -12,7 +12,7 @@ title: "Valid prediction intervals for transferred NIR calibrations: reusing the
 
 **Background:** Calibrations built on one spectrometer or season are routinely transferred to others using a few transfer standards. Whether the prediction intervals of a transferred calibration keep their nominal coverage has not been studied systematically, and splitting the scarce standards between transfer and uncertainty calibration wastes them.
 
-**Results:** We propose a transfer jackknife+ (TJ+N). Each standard is left out in turn and the transfer step (e.g., piecewise direct standardisation) is re-fitted on the others. The leave-one-out residuals, normalised by a source-learned function of Hotelling T² and Q residuals, define distribution-free intervals with coverage ≥ 1−2α for exchangeable standards. On three public NIR data sets (instrument and season shift; 40 pre-registered scenarios, up to 500 repetitions each), source-calibrated intervals under-covered after transfer, with coverage as low as 0.03 for a nominal 0.90. TJ+N had a mean coverage of 0.922 and was never flagged as under-covering, at α = 0.05, 0.10 or 0.20, under four transfer pipelines, or with PLS, ridge and 1D-CNN models, including an independent transfer between handheld fruit spectrometers. Splitting the standards gave unbounded intervals for *m* ≤ 15. Gaussian intervals from leave-one-out residuals were similarly efficient at 90% but under-covered in 14 of 40 scenarios at 95%. All methods failed under wavelength drift occurring after standardisation.
+**Results:** We propose a transfer jackknife+ (TJ+N). Each standard is left out in turn and the transfer step (e.g., piecewise direct standardisation) is re-fitted on the others. The leave-one-out residuals, normalised by a source-learned function of Hotelling T² and Q residuals, define distribution-free intervals with coverage ≥ 1−2α for exchangeable standards. On three public NIR data sets (instrument and season shift; 40 pre-registered scenarios, up to 500 repetitions each), source-calibrated intervals under-covered after transfer, with coverage as low as 0.03 for a nominal 0.90. TJ+N had a mean coverage of 0.922 and was never flagged as under-covering, at α = 0.05, 0.10 or 0.20, under four transfer pipelines, or with PLS, ridge and 1D-CNN models, including an independent transfer between handheld fruit spectrometers. Splitting the standards gave unbounded intervals for *m* ≤ 15. Gaussian intervals from leave-one-out residuals were similarly efficient at 90% but under-covered in 14 of 40 scenarios at 95%. Wavelength drift after standardisation, even by a quarter channel, compromised all methods.
 
 **Significance:** TJ+N gives finite-sample-valid uncertainty for transferred NIR calibrations from the standards that calibration transfer already requires, at the cost of *m* refits of the transfer step (seconds or less).
 
@@ -304,9 +304,9 @@ Its validity, however, depends on approximately Gaussian errors. At α = 0.05 it
 
 **Normalised Gaussian competitor (E9).** One might expect a heteroscedastic Gaussian interval using the same difficulty function to combine the efficiency of Gauss-LOO with the adaptivity of TJ+N: μ(x) ± t₁₋α/₂,ₘ₋₁ · RMS(Rᵢ) · σ(x), with Rᵢ from Eq. (3) (Gauss-LOO-N). We tested this in an additional experiment specified during review (200 repetitions; all primary pipelines and the instrument shift of E8; three α levels; Table S8).
 
-- Under-covering scenarios over all α levels: TJ+N 0/192, Gauss-LOO 19/192, Gauss-LOO-N 14/192.
+- Under-covering scenarios over all α levels: TJ+N 0/192, Gauss-LOO 18/192, Gauss-LOO-N 14/192.
 
-- At α = 0.05: 0/64, 17/64 and 8/64, respectively.
+- At α = 0.05: 0/64, 16/64 and 8/64, respectively.
 
 - At α = 0.10, Gauss-LOO-N had a lower median interval score than TJ+N in 59 of 64 scenarios (median score ratio 0.970).
 
@@ -387,7 +387,15 @@ Apart from post-standardisation drift, TJ+N was not flagged as under-covering in
 
 - Mango: TJ+N 0.73–0.97, against 0.08–0.22 for TJ+ and 0.07–0.21 for Gauss-LOO.
 
-On corn and mango, the Q residual of the shifted spectra inflated σ(x) and recovered a large part of the coverage. On tablets, where the assay information is concentrated in a few sharp bands, it did not. Drift after standardisation must therefore be detected (for example by monitoring Q) and corrected by re-standardisation. No interval method compensates for it reliably.
+On corn and mango, the Q residual of the shifted spectra inflated σ(x) and recovered a large part of the coverage. On tablets, where the assay information is concentrated in a few sharp bands, it did not. A one-channel shift is a large drift. In an additional test with a sub-channel shift of ±0.25 channel (linear interpolation; specified during review; Supplementary Table S10), coverage was:
+
+- TJ+N: corn 0.84–0.96, tablets 0.59–0.62, mango 0.86–0.96 (4/12 scenarios under-covering);
+
+- Gauss-LOO: corn 0.62–0.71, tablets 0.66–0.66, mango 0.78–0.83 (12/12);
+
+- ASTM-PI: corn 0.02–0.31, tablets 0.66–0.66, mango 0.62–0.68.
+
+TJ+N degraded least on corn and mango, but even this small drift invalidated all methods for the tablet assay. Drift after standardisation must therefore be detected (for example by monitoring Q) and corrected by re-standardisation. No interval method compensates for it reliably.
 
 
 ![**Fig. 7.** Robustness of interval coverage (α = 0.10): Kennard–Stone selection of standards, spectral noise added to all target spectra, a ±1-channel wavelength shift of the test spectra after standardisation, and halved source training data.](figures/fig6_robustness.png){width=16.5cm}
@@ -436,7 +444,7 @@ The results reproduced the main findings (Table 7).
 
 | Setting | TJ+N | TJ+ | Gauss-LOO | SCP-T-split-N | ASTM-PI | SCP-S | WCP-S | MC-dropout |
 |:--|--:|--:|--:|--:|--:|--:|--:|--:|
-| Corn mp5→m5, PLS, PDS | 0.931 (0/12); 1.11 | 0.932 (0/12); 1.21 | 0.905 (0/12); 1.17 | 0.971 (0/12); inf | 0.657 (12/12); 1.34 | 0.757 (12/12); 1.25 | 0.800 (11/12); 1.53 | – |
+| Corn mp5→m5, PLS, PDS | 0.931 (0/12); 1.11 | 0.932 (0/12); 1.21 | 0.905 (0/12); 1.17 | 0.971 (0/12); inf | 0.657 (12/12); 1.34 | 0.757 (12/12); 1.25 | 0.800 (12/12); 1.53 | – |
 | Corn m5→mp5, ridge, PDS | 0.943 (0/4); 1.21 | 0.953 (0/4); 1.17 | 0.904 (0/4); 1.06 | 1.000 (0/4); inf | 0.057 (4/4); 3.6 | 0.416 (4/4); 1.98 | 0.518 (4/4); inf | – |
 | Tablets assay, ridge, PDS | 0.916 (0/1); 21.8 | 0.915 (0/1); 21.9 | 0.914 (0/1); 22 | 0.918 (0/1); 26.4 | 0.905 (0/1); 20.7 | 0.874 (1/1); 20.9 | 0.888 (1/1); 21.8 | – |
 | Mango, ridge, SBC | 0.898 (0/1); 4.5 | 0.899 (0/1); 4.57 | 0.899 (0/1); 4.52 | 0.902 (0/1); 4.97 | 0.729 (1/1); 5.1 | 0.716 (1/1); 5.2 | 0.742 (1/1); inf | – |
@@ -479,7 +487,7 @@ Changing the PDS window (3, 7 or 11 channels instead of the pre-registered 5) or
 
 Misses of the conventional intervals were associated with spectra that the source model reconstructed poorly after transfer (Fig. 8). On corn, the miss rate of ASTM-PI was 0.76 in the lowest and 0.86 in the highest Q-residual quintile of the test spectra. Gauss-LOO, which uses one width for all samples, was valid on average but missed more often in the highest Q quintile: 0.12 (corn), 0.17 (tablets) and 0.13 (mango), against 0.04, 0.10 and 0.10 for TJ+N, for a nominal 0.10. The difficulty normalisation thus moves coverage to where it is needed. A large Q residual after transfer is in any case a useful warning flag for an individual prediction.
 
-Coverage is a property of the procedure, not of one realised set of standards. Across repetitions, the 5th percentile of per-repetition coverage of TJ+N at *m* = 20 was 0.70–0.81 (Fig. 9). An unlucky draw of 20 standards can therefore give a markedly lower realised coverage on a given test batch. This variability, intrinsic to marginal guarantees with small calibration sets, shrinks as *m* grows (0.82–0.84 at *m* = 50 for tablets and mango).
+Coverage is a property of the procedure, not of one realised set of standards. Across repetitions, the 5th percentile of per-repetition coverage of TJ+N at *m* = 20 was 0.70–0.81 (Fig. 9). An unlucky draw of 20 standards can therefore give a markedly lower realised coverage on a given test batch. This variability, intrinsic to marginal guarantees with small calibration sets, shrinks as *m* grows (0.82–0.84 at *m* = 50 for tablets and mango). Put differently, the share of repetitions whose realised coverage on the test set fell below 0.80 was corn m = 20: 8%; tablets m = 20: 6%; tablets m = 50: 2%; mango m = 20: 10%; mango m = 50: 2%. Users who need a guarantee for their particular set of standards (training-conditional coverage) should use more standards or a more conservative α.
 
 ![**Fig. 8.** Miss rate (1 − coverage) by Q-residual quintile of the test spectra (first 100 repetitions; corn m = 15, tablets assay and mango m = 20). Horizontal line: nominal miss rate 0.10.](figures/fig8_error_analysis.png){width=16.5cm}
 
@@ -521,7 +529,7 @@ TJ+N is complementary. It provides an empirically calibrated coverage statement 
 
 4. Report the leave-one-standard-out RMSE as well. Gaussian intervals built from it are a reasonable approximation at 90% but can under-cover at 95%.
 
-5. Flag predictions with large Q residuals after transfer.
+5. Flag predictions with large Q residuals after transfer. Re-check coverage periodically on a few fresh reference samples, because drift after standardisation invalidates any interval calibrated at standardisation time.
 
 
 # 5. Limitations
@@ -560,17 +568,21 @@ TJ+N is complementary. It provides an empirically calibrated coverage statement 
 
    - Other techniques (Raman, MIR), non-linear or deep domain-adaptation transfers, and process data streams with drift were not tested.
 
+   - Probabilistic alternatives that model the transfer jointly (for example Gaussian-process or Bayesian PLS models) were not compared; their intervals depend on model assumptions that would themselves need validation after transfer.
+
+   - Very high confidence levels are expensive: at α = 0.01, a bounded TJ+ interval requires *m* ≥ 99 standards.
+
 5. **A simple competitor.** Gaussian intervals built from leave-one-standard-out residuals (Gauss-LOO) were often as efficient as TJ+N, and in some scenarios more so (§4.3). The advantage of TJ+N is its distribution-free guarantee and its behaviour under heavy-tailed or heteroscedastic errors, not uniformly narrower intervals.
 
 6. **Difficulty normalisation.** The pre-registered σ(x), built from T² and Q, improved efficiency and conditional coverage in most scenarios, but not uniformly. On corn it over-covered difficult samples, and a T²-only variant was more balanced there. That variant was identified *post hoc* and needs confirmation on independent data.
 
-7. **Drift after standardisation.** A shift of the routine spectra after the transfer has been fitted (simulated as a one-channel wavelength shift) invalidated all intervals, including TJ+N (§4.5). The guarantee presupposes a stable target instrument between standardisation and use.
+7. **Drift after standardisation.** A wavelength shift of the routine spectra after the transfer had been fitted invalidated the intervals of all methods, including TJ+N. This happened for a one-channel shift and, for some responses, already for a quarter-channel shift (§4.5). The guarantee presupposes a stable target instrument between standardisation and use.
 
 # 6. Conclusions
 
 Prediction intervals for calibrations moved to a new instrument or season should not be calibrated on source-domain data. In our benchmark, the classical parametric interval, source split conformal prediction and covariate-shift-weighted conformal prediction all under-covered after transfer, sometimes severely.
 
-The transfer jackknife+ re-fits only the transfer step in a leave-one-standard-out loop. It thereby reuses the transfer standards that calibration transfer already requires, and gives distribution-free intervals with a finite-sample guarantee. Its intervals were valid across instruments, properties, shift types and model classes whenever its assumptions held. They were bounded with far fewer standards than the valid alternative that splits the standards. The extra cost is *m* refits of the transfer step, which took seconds or less in all cases studied.
+The transfer jackknife+ re-fits only the transfer step in a leave-one-standard-out loop. It thereby reuses the transfer standards that calibration transfer already requires, and gives distribution-free intervals with a finite-sample guarantee. Its intervals were valid across instruments, properties, shift types and model classes whenever its assumptions held. They were bounded with far fewer standards than the valid alternative that splits the standards. The extra cost is *m* refits of the transfer step, which took seconds or less in all cases studied. No interval method, TJ+N included, protects against drift that occurs after standardisation; it must be monitored.
 
 We recommend:
 

@@ -139,6 +139,6 @@
       ]
     }
   },
-  "n_paired_tests": 3203,
+  "n_paired_tests": 3307,
   "description": "Paired Wilcoxon tests in statistics/paired_tests.csv; Friedman across E1 scenarios"
 }

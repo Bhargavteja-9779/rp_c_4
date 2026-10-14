@@ -17,15 +17,17 @@
    - Coverage refers to the samples in these data sets. Test samples recur across repetitions, so the results characterise the procedure on these populations, not on all possible samples.
    - The noise, wavelength-shift and source-size perturbations are simulated.
    - Other techniques (Raman, MIR), non-linear or deep domain-adaptation transfers, and process data streams with drift were not tested.
+   - Probabilistic alternatives that model the transfer jointly (for example Gaussian-process or Bayesian PLS models) were not compared; their intervals depend on model assumptions that would themselves need validation after transfer.
+   - Very high confidence levels are expensive: at α = 0.01, a bounded TJ+ interval requires *m* ≥ 99 standards.
 5. **A simple competitor.** Gaussian intervals built from leave-one-standard-out residuals (Gauss-LOO) were often as efficient as TJ+N, and in some scenarios more so (§4.3). The advantage of TJ+N is its distribution-free guarantee and its behaviour under heavy-tailed or heteroscedastic errors, not uniformly narrower intervals.
 6. **Difficulty normalisation.** The pre-registered σ(x), built from T² and Q, improved efficiency and conditional coverage in most scenarios, but not uniformly. On corn it over-covered difficult samples, and a T²-only variant was more balanced there. That variant was identified *post hoc* and needs confirmation on independent data.
-7. **Drift after standardisation.** A shift of the routine spectra after the transfer has been fitted (simulated as a one-channel wavelength shift) invalidated all intervals, including TJ+N (§4.5). The guarantee presupposes a stable target instrument between standardisation and use.
+7. **Drift after standardisation.** A wavelength shift of the routine spectra after the transfer had been fitted invalidated the intervals of all methods, including TJ+N. This happened for a one-channel shift and, for some responses, already for a quarter-channel shift (§4.5). The guarantee presupposes a stable target instrument between standardisation and use.
 
 # 6. Conclusions
 
 Prediction intervals for calibrations moved to a new instrument or season should not be calibrated on source-domain data. In our benchmark, the classical parametric interval, source split conformal prediction and covariate-shift-weighted conformal prediction all under-covered after transfer, sometimes severely.
 
-The transfer jackknife+ re-fits only the transfer step in a leave-one-standard-out loop. It thereby reuses the transfer standards that calibration transfer already requires, and gives distribution-free intervals with a finite-sample guarantee. Its intervals were valid across instruments, properties, shift types and model classes whenever its assumptions held. They were bounded with far fewer standards than the valid alternative that splits the standards. The extra cost is *m* refits of the transfer step, which took seconds or less in all cases studied.
+The transfer jackknife+ re-fits only the transfer step in a leave-one-standard-out loop. It thereby reuses the transfer standards that calibration transfer already requires, and gives distribution-free intervals with a finite-sample guarantee. Its intervals were valid across instruments, properties, shift types and model classes whenever its assumptions held. They were bounded with far fewer standards than the valid alternative that splits the standards. The extra cost is *m* refits of the transfer step, which took seconds or less in all cases studied. No interval method, TJ+N included, protects against drift that occurs after standardisation; it must be monitored.
 
 We recommend:
 1. drawing at least a random subset of transfer standards from the target population;

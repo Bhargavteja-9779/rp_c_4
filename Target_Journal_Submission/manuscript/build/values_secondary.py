@@ -104,6 +104,26 @@ def values(S, T, RES, CFG, md_table, primary):
     for mth, k in (("TJ+N", "tjn"), ("TJ-naive-N", "naive"), ("TJ-insample-N", "insample"), ("TCV+N", "tcv"), ("Gauss-LOO", "gauss")):
         x = allc[allc.method == mth]
         V[f"allcells_{k}_under"] = f"{int(x['under_covering'].sum())} of {len(x)}"
+    # realised-coverage tail: share of repetitions with test-set coverage below 0.80 (TJ+N, primary pipelines)
+    tails = []
+    for ds, mm in (("corn", 20), ("tablets", 20), ("tablets", 50), ("mango", 20), ("mango", 50)):
+        fs = [f for f in glob.glob(os.path.join(RES, "raw", f"E1_main_{ds}*.csv.gz")) if "samples" not in f]
+        d = pd.concat([pd.read_csv(f, usecols=["method", "alpha", "kind", "m", "coverage"]) for f in fs])
+        d = d[(d.method == "TJ+N") & (d.alpha == a) & (d.kind == CFG["primary_kind"][ds]) & (d.m == mm)]
+        tails.append(f"{ds} m = {mm}: {100 * (d['coverage'] < 0.80).mean():.0f}%")
+    V["tail_cov_text"] = "; ".join(tails)
+    # E4b sub-channel drift
+    e4b = s[s["experiment"].str.startswith("E4b_")].copy()
+    if len(e4b):
+        e4b["variant"] = e4b["experiment"].str.split("__").str[1]
+        for mth, k in (("TJ+N", "tjn"), ("Gauss-LOO", "gauss"), ("ASTM-PI", "astm")):
+            parts_ = []
+            for ds in ("corn", "tablets", "mango"):
+                x = e4b[(e4b.method == mth) & (e4b.dataset == ds)]
+                parts_.append(f"{ds} {x['coverage_mean'].min():.2f}–{x['coverage_mean'].max():.2f}")
+            V[f"e4b_{k}"] = ", ".join(parts_)
+        t4 = e4b[e4b.method == "TJ+N"]; V["e4b_tjn_under"] = f"{int(t4['under_covering'].sum())}/{len(t4)}"
+        g4 = e4b[e4b.method == "Gauss-LOO"]; V["e4b_gauss_under"] = f"{int(g4['under_covering'].sum())}/{len(g4)}"
     # ------------------------------------------------------------ E9 competitor (normalised Gaussian)
     e9 = S[S["experiment"].str.startswith("E9_")]
     if len(e9):

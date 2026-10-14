@@ -542,6 +542,84 @@
       "reps_quick": 2,
       "methods": "COMPETITOR",
       "_comment": "Review round 8: normalised Gaussian competitor; specified before results"
+    },
+    "E4b_subchannel_corn": {
+      "properties": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "pairs": [
+        [
+          "m5",
+          "mp5"
+        ]
+      ],
+      "m_values": [
+        15
+      ],
+      "kinds": [
+        "pds"
+      ],
+      "dataset": "corn",
+      "reps_full": 200,
+      "reps_quick": 2,
+      "alphas": [
+        0.1
+      ],
+      "methods": "KEY",
+      "variants": [
+        "shift_0.25",
+        "shift_-0.25"
+      ],
+      "_comment": "Review round 10: sub-channel drift; specified before results"
+    },
+    "E4b_subchannel_tablets": {
+      "properties": [
+        2
+      ],
+      "m_values": [
+        20
+      ],
+      "kinds": [
+        "pds"
+      ],
+      "dataset": "tablets",
+      "reps_full": 200,
+      "reps_quick": 2,
+      "alphas": [
+        0.1
+      ],
+      "methods": "KEY",
+      "variants": [
+        "shift_0.25",
+        "shift_-0.25"
+      ],
+      "_comment": "Review round 10: sub-channel drift; specified before results"
+    },
+    "E4b_subchannel_mango": {
+      "properties": [
+        0
+      ],
+      "m_values": [
+        20
+      ],
+      "kinds": [
+        "sbc"
+      ],
+      "dataset": "mango",
+      "reps_full": 200,
+      "reps_quick": 2,
+      "alphas": [
+        0.1
+      ],
+      "methods": "KEY",
+      "variants": [
+        "shift_0.25",
+        "shift_-0.25"
+      ],
+      "_comment": "Review round 10: sub-channel drift; specified before results"
     }
   },
   "competitor_methods": [

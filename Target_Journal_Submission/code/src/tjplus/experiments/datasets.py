@@ -28,10 +28,12 @@ def _perturb(variant, X, rng, ref_sd):
     return X
 
 def _shift(X, s):
-    Y = np.roll(X, s, axis=1)
-    if s > 0: Y[:, :s] = X[:, :1]
-    elif s < 0: Y[:, s:] = X[:, -1:]
-    return Y
+    """Shift spectra by s channels (s may be fractional: linear interpolation; edges held constant)."""
+    s = float(s)
+    idx = np.arange(X.shape[1], dtype=float) - s           # value at channel j comes from position j - s
+    idx = np.clip(idx, 0, X.shape[1] - 1)
+    lo = np.floor(idx).astype(int); hi = np.minimum(lo + 1, X.shape[1] - 1); w = idx - lo
+    return X[:, lo] * (1 - w) + X[:, hi] * w
 
 def _std_test(pool, m, rng, variant, X_pool_target):
     perm = rng.permutation(len(pool))
@@ -66,7 +68,7 @@ def run_corn_rep(rep, cfg):
                 std, te = _std_test(pool, m, np.random.default_rng(BASE_SEED + 104729 * rep + m), cfg.get("variant", ""), Xt_all[pool])
                 X_test = Xt_all[te]
                 if cfg.get("variant", "").startswith("shift"):
-                    X_test = _shift(X_test, int(cfg["variant"].split("_")[1]))
+                    X_test = _shift(X_test, float(cfg["variant"].split("_")[1]))
                 for kind in cfg["kinds"]:
                     r, s = evaluate(source, sigmas, e_pool, Xs_pool, kind, Xt_all[std], y[std], Xs[std], X_test, y[te],
                                     Xt_all[pool], cfg["alphas"], seed=BASE_SEED + rep, half_window=cfg.get("half_window", 2),
@@ -121,7 +123,7 @@ def run_fixed_rep(dataset, rep, cfg):
             std, te = _std_test(pool, m, np.random.default_rng(BASE_SEED + 104729 * rep + m), cfg.get("variant", ""), Xt_all[pool])
             X_test = Xt_all[te]
             if cfg.get("variant", "").startswith("shift"):
-                X_test = _shift(X_test, int(cfg["variant"].split("_")[1]))
+                X_test = _shift(X_test, float(cfg["variant"].split("_")[1]))
             for kind in cfg["kinds"]:
                 r, s = evaluate(source, F["sigmas"], F["e_pool"], F["Xs_pool"], kind, Xt_all[std], y[std],
                                 Xs[std] if dataset == "tablets" else None, X_test, y[te], Xt_all[pool], cfg["alphas"],

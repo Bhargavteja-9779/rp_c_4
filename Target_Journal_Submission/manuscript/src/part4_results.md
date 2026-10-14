@@ -87,7 +87,12 @@ Apart from post-standardisation drift, TJ+N was not flagged as under-covering in
 - Corn: TJ+N {{rob_shift_tjn_corn}}, against {{rob_shift_tj_corn}} for unnormalised TJ+ and {{rob_shift_gauss_corn}} for Gauss-LOO.
 - Mango: TJ+N {{rob_shift_tjn_mango}}, against {{rob_shift_tj_mango}} for TJ+ and {{rob_shift_gauss_mango}} for Gauss-LOO.
 
-On corn and mango, the Q residual of the shifted spectra inflated σ(x) and recovered a large part of the coverage. On tablets, where the assay information is concentrated in a few sharp bands, it did not. Drift after standardisation must therefore be detected (for example by monitoring Q) and corrected by re-standardisation. No interval method compensates for it reliably.
+On corn and mango, the Q residual of the shifted spectra inflated σ(x) and recovered a large part of the coverage. On tablets, where the assay information is concentrated in a few sharp bands, it did not. A one-channel shift is a large drift. In an additional test with a sub-channel shift of ±0.25 channel (linear interpolation; specified during review; Supplementary Table S10), coverage was:
+- TJ+N: {{e4b_tjn}} ({{e4b_tjn_under}} scenarios under-covering);
+- Gauss-LOO: {{e4b_gauss}} ({{e4b_gauss_under}});
+- ASTM-PI: {{e4b_astm}}.
+
+TJ+N degraded least on corn and mango, but even this small drift invalidated all methods for the tablet assay. Drift after standardisation must therefore be detected (for example by monitoring Q) and corrected by re-standardisation. No interval method compensates for it reliably.
 
 
 ![**Fig. 7.** Robustness of interval coverage (α = 0.10): Kennard–Stone selection of standards, spectral noise added to all target spectra, a ±1-channel wavelength shift of the test spectra after standardisation, and halved source training data.](figures/fig6_robustness.png){width=16.5cm}
@@ -136,7 +141,7 @@ Changing the PDS window (3, 7 or 11 channels instead of the pre-registered 5) or
 
 Misses of the conventional intervals were associated with spectra that the source model reconstructed poorly after transfer (Fig. 8). On corn, the miss rate of ASTM-PI was {{astm_miss_q1}} in the lowest and {{astm_miss_q5}} in the highest Q-residual quintile of the test spectra. Gauss-LOO, which uses one width for all samples, was valid on average but missed more often in the highest Q quintile: {{miss_q5_gauss_corn}} (corn), {{miss_q5_gauss_tablets}} (tablets) and {{miss_q5_gauss_mango}} (mango), against {{miss_q5_tjn_corn}}, {{miss_q5_tjn_tablets}} and {{miss_q5_tjn_mango}} for TJ+N, for a nominal 0.10. The difficulty normalisation thus moves coverage to where it is needed. A large Q residual after transfer is in any case a useful warning flag for an individual prediction.
 
-Coverage is a property of the procedure, not of one realised set of standards. Across repetitions, the 5th percentile of per-repetition coverage of TJ+N at *m* = 20 was {{tjn_p05_m20}} (Fig. 9). An unlucky draw of 20 standards can therefore give a markedly lower realised coverage on a given test batch. This variability, intrinsic to marginal guarantees with small calibration sets, shrinks as *m* grows ({{tjn_p05_m50}} at *m* = 50 for tablets and mango).
+Coverage is a property of the procedure, not of one realised set of standards. Across repetitions, the 5th percentile of per-repetition coverage of TJ+N at *m* = 20 was {{tjn_p05_m20}} (Fig. 9). An unlucky draw of 20 standards can therefore give a markedly lower realised coverage on a given test batch. This variability, intrinsic to marginal guarantees with small calibration sets, shrinks as *m* grows ({{tjn_p05_m50}} at *m* = 50 for tablets and mango). Put differently, the share of repetitions whose realised coverage on the test set fell below 0.80 was {{tail_cov_text}}. Users who need a guarantee for their particular set of standards (training-conditional coverage) should use more standards or a more conservative α.
 
 ![**Fig. 8.** Miss rate (1 − coverage) by Q-residual quintile of the test spectra (first 100 repetitions; corn m = 15, tablets assay and mango m = 20). Horizontal line: nominal miss rate 0.10.](figures/fig8_error_analysis.png){width=16.5cm}
 
@@ -170,4 +175,4 @@ TJ+N is complementary. It provides an empirically calibrated coverage statement 
 2. Draw at least part of the transfer standards at random from the routine target population, and obtain their reference values.
 3. Use TJ+ intervals: re-fit the transfer with each standard left out. This needs *m* ≥ 9 for 90% and *m* ≥ 19 for 95% intervals.
 4. Report the leave-one-standard-out RMSE as well. Gaussian intervals built from it are a reasonable approximation at 90% but can under-cover at 95%.
-5. Flag predictions with large Q residuals after transfer.
+5. Flag predictions with large Q residuals after transfer. Re-check coverage periodically on a few fresh reference samples, because drift after standardisation invalidates any interval calibrated at standardisation time.
