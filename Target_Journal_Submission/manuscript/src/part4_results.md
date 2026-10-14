@@ -78,7 +78,7 @@ Table 5 and Fig. 5 isolate the components.
 
 ## 4.5. Robustness (RQ4)
 
-Apart from post-standardisation drift, TJ+N was not flagged as under-covering in any of the {{rob_n_nonshift}} robustness scenarios (Table 6; Fig. 7). These were Kennard–Stone selection of the standards, added noise at SNR 1000–100, and halving the source data.
+Apart from post-standardisation drift, TJ+N was not flagged as under-covering in any of the {{rob_n_nonshift}} robustness scenarios (Fig. 7; Supplementary Table S9). These were Kennard–Stone selection of the standards, added noise at SNR 1000–100, and halving the source data.
 
 **Kennard–Stone standards.** Selecting the standards by Kennard–Stone, which is outside the scope of Proposition 1, made TJ+N conservative (coverage {{rob_ks_cov}}). The selected standards span the extremes of the target population, so their leave-one-out residuals are, if anything, larger than those of typical samples. This empirical result is reassuring, but it is not a guarantee. Other non-random selection schemes, for example standards concentrated in a narrow concentration range, could bias coverage in either direction.
 
@@ -89,7 +89,6 @@ Apart from post-standardisation drift, TJ+N was not flagged as under-covering in
 
 On corn and mango, the Q residual of the shifted spectra inflated σ(x) and recovered a large part of the coverage. On tablets, where the assay information is concentrated in a few sharp bands, it did not. Drift after standardisation must therefore be detected (for example by monitoring Q) and corrected by re-standardisation. No interval method compensates for it reliably.
 
-{{table_robust}}
 
 ![**Fig. 7.** Robustness of interval coverage (α = 0.10): Kennard–Stone selection of standards, spectral noise added to all target spectra, a ±1-channel wavelength shift of the test spectra after standardisation, and halved source training data.](figures/fig6_robustness.png){width=16.5cm}
 
@@ -97,7 +96,7 @@ On corn and mango, the Q residual of the shifted spectra inflated σ(x) and reco
 
 ## 4.6. Generalisation across pipelines, directions, model classes and instruments (RQ5)
 
-The conclusions did not depend on the primary pipeline, the transfer direction or the model class (Table 7).
+The conclusions did not depend on the primary pipeline, the transfer direction or the model class (Table 6).
 - **Transfer pipelines.** With DS, SBC or no transfer instead of PDS, TJ+N and TJ+ were never flagged as under-covering (§4.3).
 - **Reverse direction.** Transferring from mp5 to m5 gave the same picture: no under-coverage for TJ+N, and under-coverage of the source-calibrated intervals.
 - **Ridge regression.** With ridge source models, TJ+N was valid on all three data sets.
@@ -114,14 +113,16 @@ Over all generalisation settings, TJ+N under-covered in {{gen_tjn_under}} of {{g
 - PDS and SBC pipelines;
 - *m* = 10–50 standards, 200 repetitions.
 
-The results reproduced the main findings (Table 8).
+The results reproduced the main findings (Table 7).
 - ASTM-PI and SCP-S under-covered in every scenario: coverage {{e8_fin_cov_pds}} after PDS ({{e8_fin_under_pds}} scenarios) and {{e8_fin_cov_sbc}} after SBC ({{e8_fin_under_sbc}}). WCP-S under-covered after PDS ({{e8_wcp_cov_pds}}). After SBC it returned unbounded intervals in {{e8_wcp_inf_sbc}} of repetitions: valid, but uninformative.
 - TJ+N was valid: mean coverage {{e8_tjn_cov_pds}} (PDS) and {{e8_tjn_cov_sbc}} (SBC). It was never flagged at any α ({{e8_tjn_under_allalpha}} under-covering scenarios), whereas Gauss-LOO was flagged in {{e8_gauss_under_allalpha}}.
 - PDS proved a poor transfer for these instruments (RMSEP {{e8_rmsep_pds}} % DM, against {{e8_rmsep_sbc}} % with SBC). TJ+N made this visible through wide intervals (median width {{e8_width_pds}} vs {{e8_width_sbc}} % DM), whereas the source-calibrated intervals remained narrow and missed most samples. Valid intervals are thus also a diagnostic of transfer quality.
 
-{{table_e8}}
+
 
 {{table_general}}
+
+{{table_e8}}
 
 ## 4.7. Label-free variant (exploratory)
 
@@ -143,7 +144,7 @@ Coverage is a property of the procedure, not of one realised set of standards. A
 
 ## 4.10. Computational cost (RQ6)
 
-TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits for the optional CV+ comparison included in our timing). On a single CPU core, one transfer fit with prediction took {{time_one_corn}} ms (corn, *m* = 20), {{time_one_tablets}} ms (tablets, *m* = 50, 410 test spectra) and {{time_one_mango}} ms (mango SBC). The complete TJ+N interval computation took {{time_tj_corn}} s, {{time_tj_tablets}} s and {{time_tj_mango}} s, respectively, with peak memory below {{time_mem_max}} MB (Fig. 10). The source model is never re-fitted. Measured over *m* = 10–50, the cost of TJ+N grew approximately linearly with the number of standards ({{scaling_text}}; Supplementary Table S7). These timings include the five CV+ refits and are thus upper bounds.
+TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits for the optional CV+ comparison included in our timing). On a single CPU core, one transfer fit with prediction took {{time_one_corn}} ms (corn, *m* = 20), {{time_one_tablets}} ms (tablets, *m* = 50, 410 test spectra) and {{time_one_mango}} ms (mango SBC). The complete TJ+N interval computation took {{time_tj_corn}} s, {{time_tj_tablets}} s and {{time_tj_mango}} s, respectively, with peak memory below {{time_mem_max}} MB (Fig. S3). The source model is never re-fitted. Measured over *m* = 10–50, the cost of TJ+N grew approximately linearly with the number of standards ({{scaling_text}}; Supplementary Table S7). These timings include the five CV+ refits and are thus upper bounds.
 
 **Deployment.**
 - The *m* leave-one-out transfers are fitted once, when the instrument is standardised.
@@ -154,7 +155,6 @@ TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits fo
 The added cost is therefore negligible for routine laboratory use.
 
 
-![**Fig. 10.** Wall-clock time per test batch (single CPU core, median of 20 runs, logarithmic scale).](figures/fig9_timing.png){width=16.5cm}
 
 ## 4.11. Relation to analytical measurement uncertainty
 

@@ -826,6 +826,161 @@ Table: **Table S7.** Wall-clock time of a single transfer fit with prediction an
 Table: **Table S8.** TJ+N versus Gaussian leave-one-out intervals without (Gauss-LOO) and with (Gauss-LOO-N) difficulty normalisation (200 repetitions; corn and tablets PDS, mango SBC, mango instruments PDS and SBC).
 
 
+# Table S9. Robustness
+
+| dataset | variant | method | coverage | coverage_min | IS_median | n_under | n_scen |
+|:--|--:|--:|--:|--:|--:|--:|--:|
+| corn | half_source | ASTM-PI | 0.335 | 0.071 | 2.841 | 4 | 4 |
+| corn | half_source | Gauss-LOO | 0.908 | 0.898 | 1.092 | 0 | 4 |
+| corn | half_source | SCP-S | 0.608 | 0.157 | 1.627 | 4 | 4 |
+| corn | half_source | SCP-T-split-N | 1.0 | 1.0 | inf | 0 | 4 |
+| corn | half_source | TJ+ | 0.947 | 0.941 | 1.183 | 0 | 4 |
+| corn | half_source | TJ+N | 0.948 | 0.932 | 1.2 | 0 | 4 |
+| corn | half_source | WCP-S | 0.7 | 0.355 | inf | 4 | 4 |
+| corn | ks | ASTM-PI | 0.232 | 0.033 | 2.929 | 4 | 4 |
+| corn | ks | Gauss-LOO | 0.913 | 0.9 | 1.048 | 0 | 4 |
+| corn | ks | SCP-S | 0.452 | 0.067 | 1.813 | 4 | 4 |
+| corn | ks | SCP-T-split-N | 1.0 | 1.0 | inf | 0 | 4 |
+| corn | ks | TJ+ | 0.955 | 0.946 | 1.191 | 0 | 4 |
+| corn | ks | TJ+N | 0.947 | 0.934 | 1.185 | 0 | 4 |
+| corn | ks | WCP-S | 0.554 | 0.221 | inf | 4 | 4 |
+| corn | noise_100 | ASTM-PI | 0.181 | 0.033 | 3.558 | 4 | 4 |
+| corn | noise_100 | Gauss-LOO | 0.908 | 0.893 | 1.167 | 0 | 4 |
+| corn | noise_100 | SCP-S | 0.327 | 0.058 | 3.197 | 4 | 4 |
+| corn | noise_100 | SCP-T-split-N | 1.0 | 1.0 | inf | 0 | 4 |
+| corn | noise_100 | TJ+ | 0.956 | 0.946 | 1.306 | 0 | 4 |
+| corn | noise_100 | TJ+N | 0.956 | 0.939 | 1.261 | 0 | 4 |
+| corn | noise_100 | WCP-S | 0.473 | 0.238 | inf | 4 | 4 |
+| corn | noise_1000 | ASTM-PI | 0.234 | 0.037 | 2.983 | 4 | 4 |
+| corn | noise_1000 | Gauss-LOO | 0.905 | 0.892 | 1.044 | 0 | 4 |
+| corn | noise_1000 | SCP-S | 0.456 | 0.066 | 1.794 | 4 | 4 |
+| corn | noise_1000 | SCP-T-split-N | 1.0 | 1.0 | inf | 0 | 4 |
+| corn | noise_1000 | TJ+ | 0.951 | 0.943 | 1.17 | 0 | 4 |
+| corn | noise_1000 | TJ+N | 0.946 | 0.934 | 1.175 | 0 | 4 |
+| corn | noise_1000 | WCP-S | 0.554 | 0.221 | inf | 4 | 4 |
+| corn | noise_300 | ASTM-PI | 0.23 | 0.036 | 3.006 | 4 | 4 |
+| corn | noise_300 | Gauss-LOO | 0.906 | 0.895 | 1.054 | 0 | 4 |
+| corn | noise_300 | SCP-S | 0.446 | 0.065 | 1.97 | 4 | 4 |
+| corn | noise_300 | SCP-T-split-N | 1.0 | 1.0 | inf | 0 | 4 |
+| corn | noise_300 | TJ+ | 0.952 | 0.944 | 1.175 | 0 | 4 |
+| corn | noise_300 | TJ+N | 0.945 | 0.931 | 1.168 | 0 | 4 |
+| corn | noise_300 | WCP-S | 0.548 | 0.22 | inf | 4 | 4 |
+| corn | shift_-1 | ASTM-PI | 0.086 | 0.0 | 18.75 | 4 | 4 |
+| corn | shift_-1 | Gauss-LOO | 0.17 | 0.025 | 13.629 | 4 | 4 |
+| corn | shift_-1 | SCP-S | 0.074 | 0.0 | 19.4 | 4 | 4 |
+| corn | shift_-1 | SCP-T-split-N | 1.0 | 1.0 | inf | 0 | 4 |
+| corn | shift_-1 | TJ+ | 0.286 | 0.058 | 9.399 | 4 | 4 |
+| corn | shift_-1 | TJ+N | 0.843 | 0.679 | 5.656 | 2 | 4 |
+| corn | shift_-1 | WCP-S | 0.416 | 0.361 | 30.404 | 4 | 4 |
+| corn | shift_1 | ASTM-PI | 0.079 | 0.0 | 19.718 | 4 | 4 |
+| corn | shift_1 | Gauss-LOO | 0.151 | 0.02 | 14.643 | 4 | 4 |
+| corn | shift_1 | SCP-S | 0.067 | 0.0 | 20.582 | 4 | 4 |
+| corn | shift_1 | SCP-T-split-N | 1.0 | 1.0 | inf | 0 | 4 |
+| corn | shift_1 | TJ+ | 0.262 | 0.05 | 10.341 | 4 | 4 |
+| corn | shift_1 | TJ+N | 0.823 | 0.605 | 5.795 | 2 | 4 |
+| corn | shift_1 | WCP-S | 0.497 | 0.416 | inf | 4 | 4 |
+| mango | half_source | ASTM-PI | 0.755 | 0.755 | 4.864 | 1 | 1 |
+| mango | half_source | Gauss-LOO | 0.899 | 0.899 | 4.46 | 0 | 1 |
+| mango | half_source | SCP-S | 0.752 | 0.752 | 4.887 | 1 | 1 |
+| mango | half_source | SCP-T-split-N | 0.905 | 0.905 | 4.857 | 0 | 1 |
+| mango | half_source | TJ+ | 0.9 | 0.9 | 4.51 | 0 | 1 |
+| mango | half_source | TJ+N | 0.899 | 0.899 | 4.479 | 0 | 1 |
+| mango | half_source | WCP-S | 0.785 | 0.785 | inf | 1 | 1 |
+| mango | ks | ASTM-PI | 0.752 | 0.752 | 4.888 | 1 | 1 |
+| mango | ks | Gauss-LOO | 0.968 | 0.968 | 4.994 | 0 | 1 |
+| mango | ks | SCP-S | 0.733 | 0.733 | 5.028 | 1 | 1 |
+| mango | ks | SCP-T-split-N | 0.956 | 0.956 | 5.337 | 0 | 1 |
+| mango | ks | TJ+ | 0.968 | 0.968 | 5.005 | 0 | 1 |
+| mango | ks | TJ+N | 0.964 | 0.964 | 4.958 | 0 | 1 |
+| mango | ks | WCP-S | 0.739 | 0.739 | inf | 1 | 1 |
+| mango | noise_100 | ASTM-PI | 0.508 | 0.508 | 13.075 | 1 | 1 |
+| mango | noise_100 | Gauss-LOO | 0.895 | 0.895 | 7.863 | 0 | 1 |
+| mango | noise_100 | SCP-S | 0.49 | 0.49 | 13.545 | 1 | 1 |
+| mango | noise_100 | SCP-T-split-N | 0.91 | 0.91 | 8.261 | 0 | 1 |
+| mango | noise_100 | TJ+ | 0.9 | 0.9 | 7.968 | 0 | 1 |
+| mango | noise_100 | TJ+N | 0.901 | 0.901 | 7.627 | 0 | 1 |
+| mango | noise_100 | WCP-S | 0.507 | 0.507 | inf | 1 | 1 |
+| mango | noise_1000 | ASTM-PI | 0.744 | 0.744 | 5.038 | 1 | 1 |
+| mango | noise_1000 | Gauss-LOO | 0.9 | 0.9 | 4.554 | 0 | 1 |
+| mango | noise_1000 | SCP-S | 0.726 | 0.726 | 5.186 | 1 | 1 |
+| mango | noise_1000 | SCP-T-split-N | 0.908 | 0.908 | 4.957 | 0 | 1 |
+| mango | noise_1000 | TJ+ | 0.902 | 0.902 | 4.63 | 0 | 1 |
+| mango | noise_1000 | TJ+N | 0.902 | 0.902 | 4.54 | 0 | 1 |
+| mango | noise_1000 | WCP-S | 0.733 | 0.733 | inf | 1 | 1 |
+| mango | noise_300 | ASTM-PI | 0.693 | 0.693 | 6.271 | 1 | 1 |
+| mango | noise_300 | Gauss-LOO | 0.9 | 0.9 | 5.235 | 0 | 1 |
+| mango | noise_300 | SCP-S | 0.675 | 0.675 | 6.478 | 1 | 1 |
+| mango | noise_300 | SCP-T-split-N | 0.91 | 0.91 | 5.722 | 0 | 1 |
+| mango | noise_300 | TJ+ | 0.907 | 0.907 | 5.328 | 0 | 1 |
+| mango | noise_300 | TJ+N | 0.908 | 0.908 | 5.149 | 0 | 1 |
+| mango | noise_300 | WCP-S | 0.685 | 0.685 | inf | 1 | 1 |
+| mango | shift_-1 | ASTM-PI | 0.023 | 0.023 | 50.584 | 1 | 1 |
+| mango | shift_-1 | Gauss-LOO | 0.07 | 0.07 | 42.187 | 1 | 1 |
+| mango | shift_-1 | SCP-S | 0.018 | 0.018 | 52.878 | 1 | 1 |
+| mango | shift_-1 | SCP-T-split-N | 0.789 | 0.789 | 13.758 | 1 | 1 |
+| mango | shift_-1 | TJ+ | 0.081 | 0.081 | 41.036 | 1 | 1 |
+| mango | shift_-1 | TJ+N | 0.732 | 0.732 | 13.493 | 1 | 1 |
+| mango | shift_-1 | WCP-S | 0.305 | 0.305 | inf | 1 | 1 |
+| mango | shift_1 | ASTM-PI | 0.109 | 0.109 | 30.41 | 1 | 1 |
+| mango | shift_1 | Gauss-LOO | 0.206 | 0.206 | 25.282 | 1 | 1 |
+| mango | shift_1 | SCP-S | 0.069 | 0.069 | 34.439 | 1 | 1 |
+| mango | shift_1 | SCP-T-split-N | 0.97 | 0.97 | 15.736 | 0 | 1 |
+| mango | shift_1 | TJ+ | 0.216 | 0.216 | 24.705 | 1 | 1 |
+| mango | shift_1 | TJ+N | 0.974 | 0.974 | 14.14 | 0 | 1 |
+| mango | shift_1 | WCP-S | 0.207 | 0.207 | inf | 1 | 1 |
+| tablets | half_source | ASTM-PI | 0.971 | 0.971 | 21.998 | 0 | 1 |
+| tablets | half_source | Gauss-LOO | 0.916 | 0.916 | 20.21 | 0 | 1 |
+| tablets | half_source | SCP-S | 0.957 | 0.957 | 20.65 | 0 | 1 |
+| tablets | half_source | SCP-T-split-N | 0.913 | 0.913 | 22.635 | 0 | 1 |
+| tablets | half_source | TJ+ | 0.908 | 0.908 | 20.01 | 0 | 1 |
+| tablets | half_source | TJ+N | 0.907 | 0.907 | 19.729 | 0 | 1 |
+| tablets | half_source | WCP-S | 0.964 | 0.964 | 21.402 | 0 | 1 |
+| tablets | ks | ASTM-PI | 0.94 | 0.94 | 21.237 | 0 | 1 |
+| tablets | ks | Gauss-LOO | 0.954 | 0.954 | 23.123 | 0 | 1 |
+| tablets | ks | SCP-S | 0.922 | 0.922 | 21.252 | 0 | 1 |
+| tablets | ks | SCP-T-split-N | 0.92 | 0.92 | 25.461 | 0 | 1 |
+| tablets | ks | TJ+ | 0.956 | 0.956 | 23.808 | 0 | 1 |
+| tablets | ks | TJ+N | 0.93 | 0.93 | 20.831 | 0 | 1 |
+| tablets | ks | WCP-S | 0.928 | 0.928 | 21.95 | 0 | 1 |
+| tablets | noise_100 | ASTM-PI | 0.927 | 0.927 | 21.563 | 0 | 1 |
+| tablets | noise_100 | Gauss-LOO | 0.91 | 0.91 | 23.167 | 0 | 1 |
+| tablets | noise_100 | SCP-S | 0.91 | 0.91 | 21.729 | 0 | 1 |
+| tablets | noise_100 | SCP-T-split-N | 0.913 | 0.913 | 28.094 | 0 | 1 |
+| tablets | noise_100 | TJ+ | 0.913 | 0.913 | 23.109 | 0 | 1 |
+| tablets | noise_100 | TJ+N | 0.914 | 0.914 | 22.03 | 0 | 1 |
+| tablets | noise_100 | WCP-S | 0.926 | 0.926 | 23.533 | 0 | 1 |
+| tablets | noise_1000 | ASTM-PI | 0.928 | 0.928 | 21.591 | 0 | 1 |
+| tablets | noise_1000 | Gauss-LOO | 0.91 | 0.91 | 23.064 | 0 | 1 |
+| tablets | noise_1000 | SCP-S | 0.91 | 0.91 | 21.695 | 0 | 1 |
+| tablets | noise_1000 | SCP-T-split-N | 0.916 | 0.916 | 27.687 | 0 | 1 |
+| tablets | noise_1000 | TJ+ | 0.913 | 0.913 | 23.01 | 0 | 1 |
+| tablets | noise_1000 | TJ+N | 0.916 | 0.916 | 22.036 | 0 | 1 |
+| tablets | noise_1000 | WCP-S | 0.927 | 0.927 | 23.478 | 0 | 1 |
+| tablets | noise_300 | ASTM-PI | 0.927 | 0.927 | 21.568 | 0 | 1 |
+| tablets | noise_300 | Gauss-LOO | 0.91 | 0.91 | 23.077 | 0 | 1 |
+| tablets | noise_300 | SCP-S | 0.91 | 0.91 | 21.718 | 0 | 1 |
+| tablets | noise_300 | SCP-T-split-N | 0.916 | 0.916 | 27.932 | 0 | 1 |
+| tablets | noise_300 | TJ+ | 0.912 | 0.912 | 23.032 | 0 | 1 |
+| tablets | noise_300 | TJ+N | 0.915 | 0.915 | 22.011 | 0 | 1 |
+| tablets | noise_300 | WCP-S | 0.926 | 0.926 | 23.397 | 0 | 1 |
+| tablets | shift_-1 | ASTM-PI | 0.02 | 0.02 | 304.33 | 1 | 1 |
+| tablets | shift_-1 | Gauss-LOO | 0.035 | 0.035 | 300.236 | 1 | 1 |
+| tablets | shift_-1 | SCP-S | 0.015 | 0.015 | 314.736 | 1 | 1 |
+| tablets | shift_-1 | SCP-T-split-N | 0.253 | 0.253 | 226.108 | 1 | 1 |
+| tablets | shift_-1 | TJ+ | 0.034 | 0.034 | 286.928 | 1 | 1 |
+| tablets | shift_-1 | TJ+N | 0.069 | 0.069 | 259.707 | 1 | 1 |
+| tablets | shift_-1 | WCP-S | 0.022 | 0.022 | 340.682 | 1 | 1 |
+| tablets | shift_1 | ASTM-PI | 0.008 | 0.008 | 350.126 | 1 | 1 |
+| tablets | shift_1 | Gauss-LOO | 0.018 | 0.018 | 347.84 | 1 | 1 |
+| tablets | shift_1 | SCP-S | 0.007 | 0.007 | 360.886 | 1 | 1 |
+| tablets | shift_1 | SCP-T-split-N | 0.22 | 0.22 | 245.495 | 1 | 1 |
+| tablets | shift_1 | TJ+ | 0.014 | 0.014 | 341.348 | 1 | 1 |
+| tablets | shift_1 | TJ+N | 0.04 | 0.04 | 299.11 | 1 | 1 |
+| tablets | shift_1 | WCP-S | 0.015 | 0.015 | 444.978 | 1 | 1 |
+
+Table: **Table S9.** Robustness experiment E4 (α = 0.10; corn m = 15, tablets assay and mango m = 20; 200 repetitions): mean and minimum coverage over scenarios, median interval score and under-covering scenarios.
+
+
 # Fig. S1. CNN training
 
 ![**Fig. S1.** Training and validation loss of the 1D-CNN (mango, seasons 1–3).](figures/figS1_cnn_training.png){width=12cm}
@@ -834,3 +989,8 @@ Table: **Table S8.** TJ+N versus Gaussian leave-one-out intervals without (Gauss
 # Fig. S2. Friedman ranks
 
 ![**Fig. S2.** Mean Friedman ranks of the scenario median interval score over the 40 primary scenarios (1 = best).](figures/figS2_friedman_ranks.png){width=12cm}
+
+
+# Fig. S3. Computational cost
+
+![**Fig. S3.** Wall-clock time per test batch (single CPU core, median of 20 runs, logarithmic scale).](figures/fig9_timing.png){width=12cm}

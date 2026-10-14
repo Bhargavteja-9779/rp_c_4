@@ -59,8 +59,12 @@ def main():
                          f"{x.IS_median.median():.3g}", f"{x.width_median.median():.3g}"])
         z = pd.DataFrame(rows, columns=["Set", "Method", "α", "Mean coverage", "Under-covering", "Median IS", "Median width"])
         parts.append("# Table S8. Normalised Gaussian competitor (E9)\n\n" + md(z, "**Table S8.** TJ+N versus Gaussian leave-one-out intervals without (Gauss-LOO) and with (Gauss-LOO-N) difficulty normalisation (200 repetitions; corn and tablets PDS, mango SBC, mango instruments PDS and SBC)."))
+    rb = pd.read_csv(os.path.join(TAB, "table4_robustness.csv")).round(3)
+    rb = rb[rb.method.isin(["TJ+N", "TJ+", "SCP-T-split-N", "Gauss-LOO", "ASTM-PI", "SCP-S", "WCP-S"])]
+    parts.append("# Table S9. Robustness\n\n" + md(rb, "**Table S9.** Robustness experiment E4 (α = 0.10; corn m = 15, tablets assay and mango m = 20; 200 repetitions): mean and minimum coverage over scenarios, median interval score and under-covering scenarios."))
     parts.append("# Fig. S1. CNN training\n\n![**Fig. S1.** Training and validation loss of the 1D-CNN (mango, seasons 1–3).](figures/figS1_cnn_training.png){width=12cm}\n\n")
     parts.append("# Fig. S2. Friedman ranks\n\n![**Fig. S2.** Mean Friedman ranks of the scenario median interval score over the 40 primary scenarios (1 = best).](figures/figS2_friedman_ranks.png){width=12cm}\n")
+    parts.append("\n# Fig. S3. Computational cost\n\n![**Fig. S3.** Wall-clock time per test batch (single CPU core, median of 20 runs, logarithmic scale).](figures/fig9_timing.png){width=12cm}\n")
     mdp = os.path.join(HERE, "supplementary_filled.md"); open(mdp, "w").write("\n".join(parts))
     out = os.path.join(ROOT, "supplementary", "Supplementary_Material.docx"); os.makedirs(os.path.dirname(out), exist_ok=True)
     subprocess.run(["pandoc", mdp, "-o", out, "--reference-doc", os.path.join(HERE, "reference.docx"), "--resource-path", ROOT], check=True, cwd=ROOT)

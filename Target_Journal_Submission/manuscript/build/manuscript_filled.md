@@ -375,7 +375,7 @@ Table: **Table 5.** Ablation of TJ+N (α = 0.10, primary pipelines). Rel. IS: me
 
 ## 4.5. Robustness (RQ4)
 
-Apart from post-standardisation drift, TJ+N was not flagged as under-covering in any of the 30 robustness scenarios (Table 6; Fig. 7). These were Kennard–Stone selection of the standards, added noise at SNR 1000–100, and halving the source data.
+Apart from post-standardisation drift, TJ+N was not flagged as under-covering in any of the 30 robustness scenarios (Fig. 7; Supplementary Table S9). These were Kennard–Stone selection of the standards, added noise at SNR 1000–100, and halving the source data.
 
 **Kennard–Stone standards.** Selecting the standards by Kennard–Stone, which is outside the scope of Proposition 1, made TJ+N conservative (coverage 0.93–0.96). The selected standards span the extremes of the target population, so their leave-one-out residuals are, if anything, larger than those of typical samples. This empirical result is reassuring, but it is not a guarantee. Other non-random selection schemes, for example standards concentrated in a narrow concentration range, could bias coverage in either direction.
 
@@ -389,32 +389,6 @@ Apart from post-standardisation drift, TJ+N was not flagged as under-covering in
 
 On corn and mango, the Q residual of the shifted spectra inflated σ(x) and recovered a large part of the coverage. On tablets, where the assay information is concentrated in a few sharp bands, it did not. Drift after standardisation must therefore be detected (for example by monitoring Q) and corrected by re-standardisation. No interval method compensates for it reliably.
 
-| Condition | Data | TJ+N | TJ+ | Gauss-LOO | SCP-T-split-N | ASTM-PI | SCP-S |
-|:--|--:|--:|--:|--:|--:|--:|--:|
-| Kennard–Stone standards | Corn | 0.95 (0/4) | 0.96 (0/4) | 0.91 (0/4) | 1.00 (0/4) | 0.23 (4/4) | 0.45 (4/4) |
-| Kennard–Stone standards | Tablets | 0.93 (0/1) | 0.96 (0/1) | 0.95 (0/1) | 0.92 (0/1) | 0.94 (0/1) | 0.92 (0/1) |
-| Kennard–Stone standards | Mango | 0.96 (0/1) | 0.97 (0/1) | 0.97 (0/1) | 0.96 (0/1) | 0.75 (1/1) | 0.73 (1/1) |
-| Noise SNR 1000 | Corn | 0.95 (0/4) | 0.95 (0/4) | 0.90 (0/4) | 1.00 (0/4) | 0.23 (4/4) | 0.46 (4/4) |
-| Noise SNR 1000 | Tablets | 0.92 (0/1) | 0.91 (0/1) | 0.91 (0/1) | 0.92 (0/1) | 0.93 (0/1) | 0.91 (0/1) |
-| Noise SNR 1000 | Mango | 0.90 (0/1) | 0.90 (0/1) | 0.90 (0/1) | 0.91 (0/1) | 0.74 (1/1) | 0.73 (1/1) |
-| Noise SNR 300 | Corn | 0.94 (0/4) | 0.95 (0/4) | 0.91 (0/4) | 1.00 (0/4) | 0.23 (4/4) | 0.45 (4/4) |
-| Noise SNR 300 | Tablets | 0.91 (0/1) | 0.91 (0/1) | 0.91 (0/1) | 0.92 (0/1) | 0.93 (0/1) | 0.91 (0/1) |
-| Noise SNR 300 | Mango | 0.91 (0/1) | 0.91 (0/1) | 0.90 (0/1) | 0.91 (0/1) | 0.69 (1/1) | 0.67 (1/1) |
-| Noise SNR 100 | Corn | 0.96 (0/4) | 0.96 (0/4) | 0.91 (0/4) | 1.00 (0/4) | 0.18 (4/4) | 0.33 (4/4) |
-| Noise SNR 100 | Tablets | 0.91 (0/1) | 0.91 (0/1) | 0.91 (0/1) | 0.91 (0/1) | 0.93 (0/1) | 0.91 (0/1) |
-| Noise SNR 100 | Mango | 0.90 (0/1) | 0.90 (0/1) | 0.89 (0/1) | 0.91 (0/1) | 0.51 (1/1) | 0.49 (1/1) |
-| λ-shift +1 channel (test) | Corn | 0.82 (2/4) | 0.26 (4/4) | 0.15 (4/4) | 1.00 (0/4) | 0.08 (4/4) | 0.07 (4/4) |
-| λ-shift +1 channel (test) | Tablets | 0.04 (1/1) | 0.01 (1/1) | 0.02 (1/1) | 0.22 (1/1) | 0.01 (1/1) | 0.01 (1/1) |
-| λ-shift +1 channel (test) | Mango | 0.97 (0/1) | 0.22 (1/1) | 0.21 (1/1) | 0.97 (0/1) | 0.11 (1/1) | 0.07 (1/1) |
-| λ-shift −1 channel (test) | Corn | 0.84 (2/4) | 0.29 (4/4) | 0.17 (4/4) | 1.00 (0/4) | 0.09 (4/4) | 0.07 (4/4) |
-| λ-shift −1 channel (test) | Tablets | 0.07 (1/1) | 0.03 (1/1) | 0.04 (1/1) | 0.25 (1/1) | 0.02 (1/1) | 0.01 (1/1) |
-| λ-shift −1 channel (test) | Mango | 0.73 (1/1) | 0.08 (1/1) | 0.07 (1/1) | 0.79 (1/1) | 0.02 (1/1) | 0.02 (1/1) |
-| Half source data | Corn | 0.95 (0/4) | 0.95 (0/4) | 0.91 (0/4) | 1.00 (0/4) | 0.33 (4/4) | 0.61 (4/4) |
-| Half source data | Tablets | 0.91 (0/1) | 0.91 (0/1) | 0.92 (0/1) | 0.91 (0/1) | 0.97 (0/1) | 0.96 (0/1) |
-| Half source data | Mango | 0.90 (0/1) | 0.90 (0/1) | 0.90 (0/1) | 0.90 (0/1) | 0.75 (1/1) | 0.75 (1/1) |
-
-Table: **Table 6.** Robustness (E4; α = 0.10; corn m = 15, tablets assay and mango m = 20; 200 repetitions). Mean coverage with under-covering scenarios / scenarios in parentheses.
-
 
 ![**Fig. 7.** Robustness of interval coverage (α = 0.10): Kennard–Stone selection of standards, spectral noise added to all target spectra, a ±1-channel wavelength shift of the test spectra after standardisation, and halved source training data.](figures/fig6_robustness.png){width=16.5cm}
 
@@ -422,7 +396,7 @@ Table: **Table 6.** Robustness (E4; α = 0.10; corn m = 15, tablets assay and ma
 
 ## 4.6. Generalisation across pipelines, directions, model classes and instruments (RQ5)
 
-The conclusions did not depend on the primary pipeline, the transfer direction or the model class (Table 7).
+The conclusions did not depend on the primary pipeline, the transfer direction or the model class (Table 6).
 
 - **Transfer pipelines.** With DS, SBC or no transfer instead of PDS, TJ+N and TJ+ were never flagged as under-covering (§4.3).
 
@@ -450,13 +424,26 @@ Over all generalisation settings, TJ+N under-covered in 0 of 22 scenarios.
 
 - *m* = 10–50 standards, 200 repetitions.
 
-The results reproduced the main findings (Table 8).
+The results reproduced the main findings (Table 7).
 
 - ASTM-PI and SCP-S under-covered in every scenario: coverage 0.20–0.51 after PDS (24/24 scenarios) and 0.73–0.81 after SBC (24/24). WCP-S under-covered after PDS (0.15–0.47). After SBC it returned unbounded intervals in 100% of repetitions: valid, but uninformative.
 
 - TJ+N was valid: mean coverage 0.931 (PDS) and 0.906 (SBC). It was never flagged at any α (0/72 under-covering scenarios), whereas Gauss-LOO was flagged in 4/72.
 
 - PDS proved a poor transfer for these instruments (RMSEP 2.03–7.40 % DM, against 1.06–1.22 % with SBC). TJ+N made this visible through wide intervals (median width 11.1 vs 4.0 % DM), whereas the source-calibrated intervals remained narrow and missed most samples. Valid intervals are thus also a diagnostic of transfer quality.
+
+
+
+| Setting | TJ+N | TJ+ | Gauss-LOO | SCP-T-split-N | ASTM-PI | SCP-S | WCP-S | MC-dropout |
+|:--|--:|--:|--:|--:|--:|--:|--:|--:|
+| Corn mp5→m5, PLS, PDS | 0.931 (0/12); 1.11 | 0.932 (0/12); 1.21 | 0.905 (0/12); 1.17 | 0.971 (0/12); inf | 0.657 (12/12); 1.34 | 0.757 (12/12); 1.25 | 0.800 (11/12); 1.53 | – |
+| Corn m5→mp5, ridge, PDS | 0.943 (0/4); 1.21 | 0.953 (0/4); 1.17 | 0.904 (0/4); 1.06 | 1.000 (0/4); inf | 0.057 (4/4); 3.6 | 0.416 (4/4); 1.98 | 0.518 (4/4); inf | – |
+| Tablets assay, ridge, PDS | 0.916 (0/1); 21.8 | 0.915 (0/1); 21.9 | 0.914 (0/1); 22 | 0.918 (0/1); 26.4 | 0.905 (0/1); 20.7 | 0.874 (1/1); 20.9 | 0.888 (1/1); 21.8 | – |
+| Mango, ridge, SBC | 0.898 (0/1); 4.5 | 0.899 (0/1); 4.57 | 0.899 (0/1); 4.52 | 0.902 (0/1); 4.97 | 0.729 (1/1); 5.1 | 0.716 (1/1); 5.2 | 0.742 (1/1); inf | – |
+| Mango, 1D-CNN, SBC | 0.910 (0/4); 5.24 | 0.909 (0/4); 5.51 | 0.894 (2/4); 5.42 | 0.945 (0/4); 5.59 | 0.714 (4/4); 6.48 | 0.693 (4/4); 6.71 | 0.780 (4/4); inf | 0.807 (4/4); 5.66 |
+
+Table: **Table 6.** Generalisation (E5; α = 0.10). Each cell: mean coverage (under-covering / scenarios); median interval score (lower is better).
+
 
 | Pipeline | Method | Coverage (range) | Under | Unbounded (% reps) | Median width (% DM) | RMSEP (% DM) |
 |:--|--:|--:|--:|--:|--:|--:|
@@ -480,17 +467,6 @@ The results reproduced the main findings (Table 8).
 Table: **Table 7.** Independent instrument shift (E8): mango dry matter, source instrument 15006, three target instruments × four values of m (12 scenarios per pipeline; α = 0.10; 200 repetitions).
 
 
-| Setting | TJ+N | TJ+ | Gauss-LOO | SCP-T-split-N | ASTM-PI | SCP-S | WCP-S | MC-dropout |
-|:--|--:|--:|--:|--:|--:|--:|--:|--:|
-| Corn mp5→m5, PLS, PDS | 0.931 (0/12); 1.11 | 0.932 (0/12); 1.21 | 0.905 (0/12); 1.17 | 0.971 (0/12); inf | 0.657 (12/12); 1.34 | 0.757 (12/12); 1.25 | 0.800 (11/12); 1.53 | – |
-| Corn m5→mp5, ridge, PDS | 0.943 (0/4); 1.21 | 0.953 (0/4); 1.17 | 0.904 (0/4); 1.06 | 1.000 (0/4); inf | 0.057 (4/4); 3.6 | 0.416 (4/4); 1.98 | 0.518 (4/4); inf | – |
-| Tablets assay, ridge, PDS | 0.916 (0/1); 21.8 | 0.915 (0/1); 21.9 | 0.914 (0/1); 22 | 0.918 (0/1); 26.4 | 0.905 (0/1); 20.7 | 0.874 (1/1); 20.9 | 0.888 (1/1); 21.8 | – |
-| Mango, ridge, SBC | 0.898 (0/1); 4.5 | 0.899 (0/1); 4.57 | 0.899 (0/1); 4.52 | 0.902 (0/1); 4.97 | 0.729 (1/1); 5.1 | 0.716 (1/1); 5.2 | 0.742 (1/1); inf | – |
-| Mango, 1D-CNN, SBC | 0.910 (0/4); 5.24 | 0.909 (0/4); 5.51 | 0.894 (2/4); 5.42 | 0.945 (0/4); 5.59 | 0.714 (4/4); 6.48 | 0.693 (4/4); 6.71 | 0.780 (4/4); inf | 0.807 (4/4); 5.66 |
-
-Table: **Table 8.** Generalisation (E5; α = 0.10). Each cell: mean coverage (under-covering / scenarios); median interval score (lower is better).
-
-
 ## 4.7. Label-free variant (exploratory)
 
 The label-free LF-conv interval uses only paired, unlabelled standards. It was not reliable: it under-covered in 20 of 36 paired scenarios at α = 0.10. Its independence assumption between source error and transfer discrepancy is evidently too strong. Reference values for at least a random subset of standards remain necessary for valid intervals.
@@ -511,7 +487,7 @@ Coverage is a property of the procedure, not of one realised set of standards. A
 
 ## 4.10. Computational cost (RQ6)
 
-TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits for the optional CV+ comparison included in our timing). On a single CPU core, one transfer fit with prediction took 4.6 ms (corn, *m* = 20), 24.3 ms (tablets, *m* = 50, 410 test spectra) and 0.4 ms (mango SBC). The complete TJ+N interval computation took 0.15 s, 2.79 s and 0.06 s, respectively, with peak memory below 15 MB (Fig. 10). The source model is never re-fitted. Measured over *m* = 10–50, the cost of TJ+N grew approximately linearly with the number of standards (corn: 0.10 s at m = 10 to 0.15 s at m = 20; tablets: 0.80 s at m = 10 to 2.56 s at m = 50; mango: 0.02 s at m = 10 to 0.06 s at m = 50; Supplementary Table S7). These timings include the five CV+ refits and are thus upper bounds.
+TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits for the optional CV+ comparison included in our timing). On a single CPU core, one transfer fit with prediction took 4.6 ms (corn, *m* = 20), 24.3 ms (tablets, *m* = 50, 410 test spectra) and 0.4 ms (mango SBC). The complete TJ+N interval computation took 0.15 s, 2.79 s and 0.06 s, respectively, with peak memory below 15 MB (Fig. S3). The source model is never re-fitted. Measured over *m* = 10–50, the cost of TJ+N grew approximately linearly with the number of standards (corn: 0.10 s at m = 10 to 0.15 s at m = 20; tablets: 0.80 s at m = 10 to 2.56 s at m = 50; mango: 0.02 s at m = 10 to 0.06 s at m = 50; Supplementary Table S7). These timings include the five CV+ refits and are thus upper bounds.
 
 **Deployment.**
 
@@ -526,7 +502,6 @@ TJ+N requires *m* leave-one-out refits of the transfer step (plus five refits fo
 The added cost is therefore negligible for routine laboratory use.
 
 
-![**Fig. 10.** Wall-clock time per test batch (single CPU core, median of 20 runs, logarithmic scale).](figures/fig9_timing.png){width=16.5cm}
 
 ## 4.11. Relation to analytical measurement uncertainty
 
