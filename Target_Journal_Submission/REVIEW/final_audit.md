@@ -40,7 +40,7 @@ Claims that were weakened or rewritten during the reviews:
 - Missing competitors identified during review and added: JAWS (Prinster et al. 2022), Zhivkov & Fidanova (2026), Papadopoulos et al. (2011).
 
 ## 3. Consistency audit (Phase 34)
-- **Numbers.** Every result number in the manuscript, cover letter and review records is a `[[placeholder]]` filled from `values.json`, which is computed from `results/` (`manuscript/build/compute_values.py`, `values_secondary.py`). A scan of the sources found no remaining hand-typed result numbers; the last two ("40", "3%") were converted. Remaining literal numbers are design constants (α levels, splits, hyperparameters) or mathematical consequences (m ≥ 9 / 19 / 99).
+- **Numbers.** Every result number in the manuscript, cover letter and review records is a double-brace placeholder filled from `values.json`, which is computed from `results/` (`manuscript/build/compute_values.py`, `values_secondary.py`). A scan of the sources found no remaining hand-typed result numbers; the last two ("40", "3%") were converted. Remaining literal numbers are design constants (α levels, splits, hyperparameters) or mathematical consequences (m ≥ 9 / 19 / 99).
 - **Tables.** All are generated from CSV results; numbered 1–7 in order of first citation. Supplementary S1–S10 are generated from results.
 - **Figures.** All are generated from result files by `visualization/figures.py` (Fig. 1 and the graphical abstract are schematic). Numbered 1–9 in order; S1–S3 in the supplement.
 - **Equations ↔ code.** Eq. (1) ↔ `transfer.Deployed`; Eq. (2) ↔ `DifficultyModel`; Eq. (3)–(4) ↔ `TransferFits`/`tj_plus`/`jackknife_plus` (ranks unit-tested).
