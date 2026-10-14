@@ -15,10 +15,10 @@ Stance: I work on uncertainty for transferred NIR models and want to show that t
 ## Attack 2 — "A heteroscedastic Gaussian interval with the same σ(x) is as good, without any conformal machinery."
 - **Test:** this was not in the original design, so a new experiment (E9) was specified before results. Gauss-LOO-N = μ ± t(m−1)·RMS(Rᵢ)·σ(x), compared with TJ+N and Gauss-LOO on all primary pipelines and on E8, at α = 0.05, 0.10 and 0.20, with 200 repetitions.
 - **Outcome (data):**
-  - Under-covering scenarios: TJ+N {{e9_tjn_under}}, Gauss-LOO {{e9_gauss_under}}, Gauss-LOO-N {{e9_gaussn_under}} (all α).
-  - At α = 0.05: TJ+N {{e9_tjn_under_005}}, Gauss-LOO {{e9_gauss_under_005}}, Gauss-LOO-N {{e9_gaussn_under_005}}.
-  - At α = 0.10: {{e9_tjn_under_01}}, {{e9_gauss_under_01}}, {{e9_gaussn_under_01}}.
-  - Efficiency at α = 0.10: Gauss-LOO-N had a lower median interval score than TJ+N in {{e9_gaussn_better}} of {{e9_n_scen}} scenarios (median ratio {{e9_gaussn_rel_is}}).
+  - Under-covering scenarios: TJ+N 0/192, Gauss-LOO 19/192, Gauss-LOO-N 14/192 (all α).
+  - At α = 0.05: TJ+N 0/64, Gauss-LOO 17/64, Gauss-LOO-N 8/64.
+  - At α = 0.10: 0/64, 0/64, 1/64.
+  - Efficiency at α = 0.10: Gauss-LOO-N had a lower median interval score than TJ+N in 59 of 64 scenarios (median ratio 0.970).
 - **Verdict:** reported in §4.3 and Supplementary Table S8. The advantage of TJ+N is validity without distributional assumptions, not uniformly narrower intervals.
 
 ## Attack 3 — "The gain is caused by the transfer standards, not the method."

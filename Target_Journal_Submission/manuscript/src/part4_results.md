@@ -47,6 +47,8 @@ Its validity, however, depends on approximately Gaussian errors. At α = 0.05 it
 - Under-covering scenarios over all α levels: TJ+N {{e9_tjn_under}}, Gauss-LOO {{e9_gauss_under}}, Gauss-LOO-N {{e9_gaussn_under}}.
 - At α = 0.05: {{e9_tjn_under_005}}, {{e9_gauss_under_005}} and {{e9_gaussn_under_005}}, respectively.
 - At α = 0.10, Gauss-LOO-N had a lower median interval score than TJ+N in {{e9_gaussn_better}} of {{e9_n_scen}} scenarios (median score ratio {{e9_gaussn_rel_is}}).
+
+The normalised Gaussian interval was therefore slightly more efficient, by about 3% in interval score, but it under-covered in several scenarios, mostly at 95%. TJ+N trades this small loss of efficiency for validity without distributional assumptions. Where a few percent of interval width matter more than a coverage guarantee, Gauss-LOO-N is a defensible pragmatic choice, provided its coverage is checked.
  Over all four transfer pipelines (PDS, DS, SBC and no transfer) and the three data sets, TJ+N under-covered in {{allpipe_tjn_under}} pipeline × scenario combinations at α = 0.10. The corresponding numbers were {{allpipe_gauss_under}} for Gauss-LOO, {{allpipe_astm_under}} for ASTM-PI and {{allpipe_scps_under}} for SCP-S (Table S2).
 
 {{table_alpha}}

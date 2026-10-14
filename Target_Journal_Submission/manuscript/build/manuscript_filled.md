@@ -300,7 +300,18 @@ Interval widths relative to the RMSEP of the deployed predictor are shown in Fig
 
 - Per scenario (Holm-adjusted *p* < 0.05), Gauss-LOO had the lower interval score in 14 of 24 corn scenarios. On tablets and mango, TJ+N was better in 9 and Gauss-LOO in 5 of 16 scenarios.
 
-Its validity, however, depends on approximately Gaussian errors. At α = 0.05 it under-covered in 14 of 40 scenarios, and at α = 0.20 in 2, whereas TJ+N and TJ+ never did. The price of distribution-free validity at α = 0.05 is that TJ+N needs *m* ≥ 19 standards. With fewer standards it returns unbounded intervals rather than over-confident ones. Over all four transfer pipelines (PDS, DS, SBC and no transfer) and the three data sets, TJ+N under-covered in 0 of 152 pipeline × scenario combinations at α = 0.10. The corresponding numbers were 12 of 152 for Gauss-LOO, 120 of 152 for ASTM-PI and 129 of 152 for SCP-S (Table S2).
+Its validity, however, depends on approximately Gaussian errors. At α = 0.05 it under-covered in 14 of 40 scenarios, and at α = 0.20 in 2, whereas TJ+N and TJ+ never did. The price of distribution-free validity at α = 0.05 is that TJ+N needs *m* ≥ 19 standards. With fewer standards it returns unbounded intervals rather than over-confident ones.
+
+**Normalised Gaussian competitor (E9).** One might expect a heteroscedastic Gaussian interval using the same difficulty function to combine the efficiency of Gauss-LOO with the adaptivity of TJ+N: μ(x) ± t₁₋α/₂,ₘ₋₁ · RMS(Rᵢ) · σ(x), with Rᵢ from Eq. (3) (Gauss-LOO-N). We tested this in an additional experiment specified during review (200 repetitions; all primary pipelines and the instrument shift of E8; three α levels; Table S8).
+
+- Under-covering scenarios over all α levels: TJ+N 0/192, Gauss-LOO 19/192, Gauss-LOO-N 14/192.
+
+- At α = 0.05: 0/64, 17/64 and 8/64, respectively.
+
+- At α = 0.10, Gauss-LOO-N had a lower median interval score than TJ+N in 59 of 64 scenarios (median score ratio 0.970).
+
+The normalised Gaussian interval was therefore slightly more efficient, by about 3% in interval score, but it under-covered in several scenarios, mostly at 95%. TJ+N trades this small loss of efficiency for validity without distributional assumptions. Where a few percent of interval width matter more than a coverage guarantee, Gauss-LOO-N is a defensible pragmatic choice, provided its coverage is checked.
+ Over all four transfer pipelines (PDS, DS, SBC and no transfer) and the three data sets, TJ+N under-covered in 0 of 152 pipeline × scenario combinations at α = 0.10. The corresponding numbers were 12 of 152 for Gauss-LOO, 120 of 152 for ASTM-PI and 129 of 152 for SCP-S (Table S2).
 
 | Method | α = 0.05 (nominal 0.95) | α = 0.1 (nominal 0.90) | α = 0.2 (nominal 0.80) |
 |:--|--:|--:|--:|
@@ -324,7 +335,15 @@ Table 5 and Fig. 5 isolate the components.
 
 - **K-fold CV+.** Five-fold CV+ (TCV+N) needs only five refits but was more conservative, with a higher interval score than TJ+N in 32 of 40 scenarios.
 
-- **The "+" construction.** Centring the interval on the full-fit prediction (TJ-naive-N) gave equal or slightly lower coverage than TJ+N. It was not flagged as under-covering here, but it carries no finite-sample guarantee.
+- **The "+" construction.** Centring the interval on the full-fit prediction (TJ-naive-N) gave equal or slightly lower coverage than TJ+N. It is a reasonable practical alternative, but it carries no finite-sample guarantee.
+
+- **Over all pipelines and α levels (E1 and E8 together):**
+
+  - TJ-naive-N under-covered in 3 of 528 scenario cells, against 0 of 528 for TJ+N and 0 of 528 for TCV+N.
+
+  - Residuals without leave-one-out re-fitting (TJ-insample-N) under-covered in 199 of 528.
+
+  - Gauss-LOO under-covered in 77 of 528.
 
 - **Difficulty normalisation.** Normalisation improved efficiency in most scenarios.
 

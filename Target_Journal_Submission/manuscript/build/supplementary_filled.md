@@ -782,6 +782,50 @@ Table: **Table S6.** Mango instrument transfer (source instrument 15006; α = 0.
 Table: **Table S7.** Wall-clock time of a single transfer fit with prediction and of TJ+N (including five CV+ refits) versus the number of standards m (single CPU core, median of 10 runs).
 
 
+# Table S8. Normalised Gaussian competitor (E9)
+
+| Set | Method | α | Mean coverage | Under-covering | Median IS | Median width |
+|:--|--:|--:|--:|--:|--:|--:|
+| corn | Gauss-LOO | 0.05 | 0.945 | 7/24 | 1.27 | 1.05 |
+| corn | Gauss-LOO | 0.1 | 0.903 | 0/24 | 1.07 | 0.863 |
+| corn | Gauss-LOO | 0.2 | 0.818 | 0/24 | 0.878 | 0.658 |
+| corn | Gauss-LOO-N | 0.05 | 0.951 | 0/24 | 1.26 | 1.09 |
+| corn | Gauss-LOO-N | 0.1 | 0.905 | 0/24 | 1.07 | 0.897 |
+| corn | Gauss-LOO-N | 0.2 | 0.811 | 0/24 | 0.884 | 0.683 |
+| corn | TJ+N | 0.05 | 0.986 | 0/24 | inf | 1.07 |
+| corn | TJ+N | 0.1 | 0.932 | 0/24 | 1.15 | 0.996 |
+| corn | TJ+N | 0.2 | 0.835 | 0/24 | 0.907 | 0.732 |
+| mango | Gauss-LOO | 0.05 | 0.955 | 0/4 | 5.13 | 4.33 |
+| mango | Gauss-LOO | 0.1 | 0.902 | 0/4 | 4.45 | 3.59 |
+| mango | Gauss-LOO | 0.2 | 0.792 | 1/4 | 3.76 | 2.76 |
+| mango | Gauss-LOO-N | 0.05 | 0.956 | 0/4 | 5.05 | 4.29 |
+| mango | Gauss-LOO-N | 0.1 | 0.902 | 0/4 | 4.38 | 3.55 |
+| mango | Gauss-LOO-N | 0.2 | 0.790 | 2/4 | 3.72 | 2.74 |
+| mango | TJ+N | 0.05 | 0.968 | 0/4 | 5.16 | 4.41 |
+| mango | TJ+N | 0.1 | 0.902 | 0/4 | 4.4 | 3.6 |
+| mango | TJ+N | 0.2 | 0.803 | 0/4 | 3.75 | 2.83 |
+| mango_inst | Gauss-LOO | 0.05 | 0.950 | 4/24 | 7.48 | 6.35 |
+| mango_inst | Gauss-LOO | 0.1 | 0.908 | 0/24 | 6.46 | 5.23 |
+| mango_inst | Gauss-LOO | 0.2 | 0.820 | 0/24 | 5.39 | 4.01 |
+| mango_inst | Gauss-LOO-N | 0.05 | 0.958 | 6/24 | 7.88 | 6.67 |
+| mango_inst | Gauss-LOO-N | 0.1 | 0.915 | 0/24 | 6.64 | 5.5 |
+| mango_inst | Gauss-LOO-N | 0.2 | 0.810 | 3/24 | 5.44 | 4.22 |
+| mango_inst | TJ+N | 0.05 | 0.974 | 0/24 | 11.9 | 7.73 |
+| mango_inst | TJ+N | 0.1 | 0.919 | 0/24 | 6.97 | 5.74 |
+| mango_inst | TJ+N | 0.2 | 0.827 | 0/24 | 5.48 | 4.22 |
+| tablets | Gauss-LOO | 0.05 | 0.949 | 6/12 | 20.1 | 16.5 |
+| tablets | Gauss-LOO | 0.1 | 0.910 | 0/12 | 17.5 | 13.7 |
+| tablets | Gauss-LOO | 0.2 | 0.825 | 1/12 | 14.9 | 10.6 |
+| tablets | Gauss-LOO-N | 0.05 | 0.948 | 2/12 | 21.4 | 16 |
+| tablets | Gauss-LOO-N | 0.1 | 0.907 | 1/12 | 18.1 | 13.3 |
+| tablets | Gauss-LOO-N | 0.2 | 0.819 | 0/12 | 14.8 | 10.3 |
+| tablets | TJ+N | 0.05 | 0.971 | 0/12 | 24.7 | 18.4 |
+| tablets | TJ+N | 0.1 | 0.912 | 0/12 | 18.2 | 13 |
+| tablets | TJ+N | 0.2 | 0.820 | 0/12 | 14.8 | 10 |
+
+Table: **Table S8.** TJ+N versus Gaussian leave-one-out intervals without (Gauss-LOO) and with (Gauss-LOO-N) difficulty normalisation (200 repetitions; corn and tablets PDS, mango SBC, mango instruments PDS and SBC).
+
+
 # Fig. S1. CNN training
 
 ![**Fig. S1.** Training and validation loss of the 1D-CNN (mango, seasons 1–3).](figures/figS1_cnn_training.png){width=12cm}
