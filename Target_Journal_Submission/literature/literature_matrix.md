@@ -46,7 +46,11 @@ All bibliographic data were verified through Crossref, DataCite or official proc
 | Guan | 2023 | Biometrika | Localised CP |
 | Fontana, Zeni & Vantini | 2023 | Bernoulli | Review |
 | Angelopoulos & Bates | 2023 | Found. Trends ML | Tutorial |
+| Prinster, Liu & Saria (JAWS) | 2022 | NeurIPS 35 | Weighted jackknife+ under covariate shift (needs labelled source data and the covariate-shift assumption, which instrument changes violate) |
+| Papadopoulos, Vovk & Gammerman (normalised scores) | 2011 | JAIR | Normalised nonconformity; basis of TJ+N's σ(x) scaling (not claimed as new) |
 | Doula (preprint, ICML 2026) | 2026 | arXiv 2609.10737 | **Transported conformal calibration** with unlabelled paired data; classification, image benchmarks (baseline "Transport", regression analogue) |
+
+**Uncertainty after calibration transfer outside spectroscopy:** Zhivkov & Fidanova (2026, *Atmosphere*) characterise uncertainty growth with distance for transferred calibrations of low-cost air-quality sensors (empirical, no finite-sample guarantee).
 
 ## Gap analysis
 

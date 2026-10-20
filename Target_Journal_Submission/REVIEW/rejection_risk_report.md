@@ -1,0 +1,23 @@
+# Final rejection-risk report (Phase 41)
+
+Target: *Analytica Chimica Acta* (Elsevier). Acceptance cannot be guaranteed; no risk is zero.
+
+| # | Risk | Evidence | Severity | Mitigation | Fixed? |
+|---|---|---|---|---|---|
+| 1 | **Novelty**: judged incremental ("jackknife+ applied to a new algorithm") | The method is the jackknife+ of Barber et al. (2021) instantiated for the transfer step; JAWS and TCC are close in spirit | **High** | Explicit "What is and is not new" paragraph; contribution framed as validated chemometric methodology with practical rules; prior art (JAWS, TCC, Jovic, Duma, Zhivkov) cited and distinguished | Partly (irreducible) |
+| 2 | **Methodology** | Proof re-derived (Appendix A); 11 unit tests incl. coverage simulation; one implementation error (LV sensitivity) found and fixed (deviation 9) | Low | Pre-registration, deviation log, code audit (review 4) | Yes |
+| 3 | **Dataset**: public benchmarks only; corn small (n = 80); no industrial case | Four shift settings incl. an independent instrument test (E8) | Moderate | Limitations; E8 added; conditional-inference statement | Partly |
+| 4 | **Statistics**: dependence between scenarios; per-scenario flags without multiplicity control | Friedman p is nominal; scenarios share samples | Low–moderate | Ranks interpreted descriptively; inference from within-scenario paired tests; CI precision reported (corn ±0.008, tablets ±0.005, mango ±0.007) | Yes |
+| 5 | **Reproducibility** | Fresh-clone audit: tests pass; quick mode end-to-end; 175/175 manuscript values regenerated from committed raw results | Low | Checksummed downloads (atomic, retried), chunked execution, all numbers generated | Yes |
+| 6 | **Baselines**: reviewers may want other UQ methods (GP, Bayesian PLS, CQR, full TCC) | 17 interval methods and ablation variants compared (15 in the main grid, plus MC-dropout and the normalised Gaussian), incl. classical, conformal, shift-weighted, transport, Gaussian, normalised Gaussian, MC-dropout | Moderate | Limitations list the omitted families; Transport scope stated | Partly |
+| 7 | **Generalisation**: drift after standardisation defeats all methods, even at ¼ channel | E4: ±1 channel; E4b: ±0.25 channel (TJ+N 4/12 under-covering; Gauss-LOO 12/12) | Moderate (practical) | Reported in abstract, results, limitations, conclusions; recommendation to monitor Q and re-check on fresh samples | Disclosed (inherent) |
+| 8 | **Efficiency**: no width advantage over simple Gaussian intervals at 90% | Friedman ranks Gauss-LOO 2.17 vs TJ+N 2.52 (n.s.); Gauss-LOO-N ≈3% narrower but invalid in 14/192 | Moderate | Value claimed is validity; failures of Gaussian intervals at 95% quantified (14/40) | Disclosed |
+| 9 | **Writing / length** | ≈8,500 words, 7 tables, 9 figures; supplement 10 tables, 3 figures | Low–moderate | One table and one figure moved to supplement; RQs defined; claims audited | Yes |
+| 10 | **Formatting (ACA)** | Structured abstract 238 words; highlights 5 × ≤85 chars; graphical abstract; Elsevier numeric references; declarations; line/page numbers | Low | Built from a reference DOCX; PDF rendering checked page by page | Yes (author fields pending) |
+| 11 | **Citations** | All references verified (Crossref/DataCite/proceedings/arXiv); one HTML entity fixed | Low | `literature/references_verified.json`, final audit §2 | Yes |
+| 12 | **Journal scope** | ACA encourages chemometric methodology with new principles or important applications, and discourages narrow application papers | Low–moderate | Framing around measurement uncertainty of transferred methods (§4.11); ACA calibration-transfer papers cited | Yes |
+| 13 | **Journal-specific reviewer risk**: a chemometrician may say "ASTM/PLS uncertainty theory already handles this" or "use more standards" | §4.2 shows parametric and source-conformal intervals under-cover (ASTM-PI 120/152 pipeline × scenario cells); the split baseline needs m ≥ 18 | Moderate | Direct evidence in Table 3/4; relation to IUPAC uncertainty discussed | Yes |
+| 14 | **Publication integrity / compliance**: AI assistance; post-hoc analyses | E8, E9, E4b and the E7 re-run were added during internal review | Low–moderate | Generative-AI declaration; every post-hoc analysis specified before its results and logged (deviations 7, 9–11); pre-registered core unchanged | Yes |
+| 15 | **72-day acceptance target** | ACA median submission→acceptance 58 days; 70% of accepted papers within 72 days (PubMed, n = 300) | Moderate | Fast-track not controllable; a major revision would likely exceed 72 days | Not controllable |
+
+**Overall:** no identifiable fatal flaw. The dominant residual risks are perceived novelty (1) and the acceptance timeline (15).

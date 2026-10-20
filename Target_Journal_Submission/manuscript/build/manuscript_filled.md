@@ -82,7 +82,7 @@ For a new target sample $(\mathbf{x}^T_{m+1},y_{m+1})$ we seek an interval $\hat
 
 ## 2.2. Difficulty function
 
-A heteroscedastic, sample-specific scale is obtained from PLS diagnostics. For a (transferred) spectrum, let $T^2(\mathbf{x})=\sum_{a=1}^{A} t_a^2/s_{t_a}^2$ (Hotelling T² in the $A$-dimensional score space) and $Q(\mathbf{x})=\lVert \mathbf{x}_c-\mathbf{t}\mathbf{P}^{\mathsf T}\rVert^2$ (the squared spectral residual), both computed in the preprocessed, mean-centred spectral space of the source model. We set
+A heteroscedastic, sample-specific scale is obtained from PLS diagnostics. For a (transferred) spectrum, let $T^2(\mathbf{x})=\sum_{a=1}^{A} t_a^2/s_{t_a}^2$ (Hotelling T² in the $A$-dimensional score space) and $Q(\mathbf{x})=\|\mathbf{x}_c-\mathbf{t}\mathbf{P}^{\mathsf T}\|^2$ (the squared spectral residual), both computed in the preprocessed, mean-centred spectral space of the source model. We set
 
 $$\sigma(\mathbf{x}) = \max\left\{\varepsilon,\; c_0 + c_1\sqrt{T^2(\mathbf{x})} + c_2\sqrt{Q(\mathbf{x})}\right\}, \qquad (2)$$
 
@@ -90,9 +90,9 @@ with $c_j\ge 0$ fitted by non-negative least squares to the absolute out-of-fold
 
 ## 2.3. Transfer jackknife+ (TJ+)
 
-For each $i$, the transfer is re-fitted without standard $i$, giving $\mu_{-i}=\mu_{\mathcal{D}\setminus\{i\}}$ and $\sigma_{-i}=\sigma_{\mathcal{D}\setminus\{i\}}$. The leave-one-standard-out normalised residuals are
+For each $i$, the transfer is re-fitted without standard $i$, giving $\mu_{-i}=\mu_{\mathcal{D}\backslash \{i\}}$ and $\sigma_{-i}=\sigma_{\mathcal{D}\backslash \{i\}}$. The leave-one-standard-out normalised residuals are
 
-$$R_i = \frac{\lvert y_i - \mu_{-i}(\mathbf{x}^T_i)\rvert}{\sigma_{-i}(\mathbf{x}^T_i)}, \qquad i=1,\dots,m. \qquad (3)$$
+$$R_i = \frac{|y_i - \mu_{-i}(\mathbf{x}^T_i)|}{\sigma_{-i}(\mathbf{x}^T_i)}, \qquad i=1,\dots,m. \qquad (3)$$
 
 The TJ+N interval for a new target spectrum $\mathbf{x}$ is
 
@@ -102,7 +102,7 @@ where $\hat q^{+}_{\alpha}\{v_i\}$ is the $\lceil(1-\alpha)(m+1)\rceil$-th small
 
 **Proposition 1.** *Suppose that $Z_1,\dots,Z_{m+1}$ are exchangeable. This holds, for example, when the standards and the future sample are drawn at random from the same target population. Suppose also that $\mathcal{T}$ treats its input standards symmetrically, and that $f$ and $\sigma$ do not depend on the target data. Then $\Pr\{y_{m+1}\in\hat C(\mathbf{x}^T_{m+1})\}\ge 1-2\alpha$.*
 
-*Proof sketch.* Fix the source model and $\sigma$, and view $\mathcal{A}:\mathcal{D}\mapsto(\mu_{\mathcal{D}},\sigma_{\mathcal{D}})$ as a symmetric regression algorithm acting on the augmented standards. Define, for $i\neq j$, the score of point $i$ under the fit without $\{i,j\}$, $R_{ij}=\lvert y_i-\mu_{-ij}(\mathbf{x}_i)\rvert/\sigma_{-ij}(\mathbf{x}_i)$. If $y_{m+1}\notin\hat C$, then $R_{m+1,i}>R_{i,m+1}$ for at least $(1-\alpha)(m+1)$ indices $i$. Because the matrix $(R_{ij})$ is exchangeable under permutations of the $m+1$ points, the counting argument of Barber et al. [@barber2021, Thm. 1] bounds the probability of this event by $2\alpha$. A step-by-step proof, including the role of $\varepsilon>0$ and of the paired master spectrum, is given in Appendix A. $\square$
+*Proof sketch.* Fix the source model and $\sigma$, and view $\mathcal{A}:\mathcal{D}\mapsto(\mu_{\mathcal{D}},\sigma_{\mathcal{D}})$ as a symmetric regression algorithm acting on the augmented standards. Define, for $i\neq j$, the score of point $i$ under the fit without $\{i,j\}$, $R_{ij}=|y_i-\mu_{-ij}(\mathbf{x}_i)|/\sigma_{-ij}(\mathbf{x}_i)$. If $y_{m+1}\notin\hat C$, then $R_{m+1,i}>R_{i,m+1}$ for at least $(1-\alpha)(m+1)$ indices $i$. Because the matrix $(R_{ij})$ is exchangeable under permutations of the $m+1$ points, the counting argument of Barber et al. [@barber2021, Thm. 1] bounds the probability of this event by $2\alpha$. A step-by-step proof, including the role of $\varepsilon>0$ and of the paired master spectrum, is given in Appendix A. $\square$
 
 Three remarks clarify the scope of the guarantee.
 
@@ -611,9 +611,9 @@ We recommend:
 
 **Setting.** Let $Z_1,\dots,Z_m$ be the transfer standards and $Z_{m+1}=(\mathbf{x}^T_{m+1},\mathbf{x}^S_{m+1},y_{m+1})$ the future sample. Its master spectrum $\mathbf{x}^S_{m+1}$ is never used by the procedure; it enters only the argument, as the spectrum the sample *would* give on the master instrument. For any index set $S\subseteq\{1,\dots,m+1\}$, let $\mu_S$ and $\sigma_S$ be the deployed predictor (Eq. (1)) and the difficulty function obtained by applying the transfer algorithm $\mathcal{T}$ to $\{Z_k:k\in S\}$. The source model $f$ and the function $\sigma$ of Eq. (2) are fixed beforehand from source data. $\mathcal{T}$ is *symmetric*, i.e. invariant to the order of its inputs; this holds for PDS, DS and SBC, which are least-squares fits on the set of standards. Because $\sigma\ge\varepsilon>0$, all normalised scores are well defined.
 
-**Step 1 (scores).** For $i\neq j$, write $-ij$ for the set $\{1,\dots,m+1\}\setminus\{i,j\}$ and define
-$$R_{ij}=\frac{\lvert y_i-\mu_{-ij}(\mathbf{x}^T_i)\rvert}{\sigma_{-ij}(\mathbf{x}^T_i)}.$$
-The fit that excludes $i$ and $m+1$ is exactly the leave-one-out fit $\mu_{-i}$ of Eq. (3), computed from the $m$ standards without standard $i$. Hence $R_i=R_{i,m+1}$, and for the future sample $\lvert y_{m+1}-\mu_{-i}(\mathbf{x}^T_{m+1})\rvert/\sigma_{-i}(\mathbf{x}^T_{m+1})=R_{m+1,i}$.
+**Step 1 (scores).** For $i\neq j$, write $-ij$ for the set $\{1,\dots,m+1\}\backslash \{i,j\}$ and define
+$$R_{ij}=\frac{|y_i-\mu_{-ij}(\mathbf{x}^T_i)|}{\sigma_{-ij}(\mathbf{x}^T_i)}.$$
+The fit that excludes $i$ and $m+1$ is exactly the leave-one-out fit $\mu_{-i}$ of Eq. (3), computed from the $m$ standards without standard $i$. Hence $R_i=R_{i,m+1}$, and for the future sample $|y_{m+1}-\mu_{-i}(\mathbf{x}^T_{m+1})|/\sigma_{-i}(\mathbf{x}^T_{m+1})=R_{m+1,i}$.
 
 **Step 2 (miscoverage implies many lost comparisons).** Let $U_i=\mu_{-i}(\mathbf{x})+\sigma_{-i}(\mathbf{x})R_i$ and $L_i=\mu_{-i}(\mathbf{x})-\sigma_{-i}(\mathbf{x})R_i$ with $\mathbf{x}=\mathbf{x}^T_{m+1}$.
 
@@ -621,7 +621,7 @@ The fit that excludes $i$ and $m+1$ is exactly the leave-one-out fit $\mu_{-i}$ 
 
 - *Lower tail.* If $y_{m+1}$ is below the lower bound, the $k$-th smallest $L_i$ with $k=\lfloor\alpha(m+1)\rfloor$, then $y_{m+1}<L_i$ for at least $m-k+1\ge(1-\alpha)(m+1)$ indices.
 
-In both cases $\lvert y_{m+1}-\mu_{-i}(\mathbf{x})\rvert/\sigma_{-i}(\mathbf{x})>R_i$, i.e. $R_{m+1,i}>R_{i,m+1}$, for at least $(1-\alpha)(m+1)$ indices. Therefore
+In both cases $|y_{m+1}-\mu_{-i}(\mathbf{x})|/\sigma_{-i}(\mathbf{x})>R_i$, i.e. $R_{m+1,i}>R_{i,m+1}$, for at least $(1-\alpha)(m+1)$ indices. Therefore
 $$\{y_{m+1}\notin\hat C(\mathbf{x}^T_{m+1})\}\subseteq\Big\{\textstyle\sum_{i\le m}\mathbf{1}[R_{m+1,i}>R_{i,m+1}]\ge(1-\alpha)(m+1)\Big\}.$$
 
 **Step 3 (tournament bound).** Call a point $j\in\{1,\dots,m+1\}$ *strange* if $\sum_{i\neq j}\mathbf{1}[R_{ji}>R_{ij}]\ge(1-\alpha)(m+1)$. By the counting lemma in the proof of Theorem 1 of Barber et al. [@barber2021], at most $2\alpha(m+1)$ points can be strange, for any realisation of the scores.
@@ -630,7 +630,7 @@ $$\{y_{m+1}\notin\hat C(\mathbf{x}^T_{m+1})\}\subseteq\Big\{\textstyle\sum_{i\le
 
 **Remarks.**
 
-- The normalisation enters only through the definition of the scores. Steps 2–4 hold for any score of the form $\lvert y_i-\mu_{-ij}(\mathbf{x}_i)\rvert/\sigma_{-ij}(\mathbf{x}_i)$ with $\sigma>0$, provided the pair $(\mu,\sigma)$ is produced by a symmetric algorithm.
+- The normalisation enters only through the definition of the scores. Steps 2–4 hold for any score of the form $|y_i-\mu_{-ij}(\mathbf{x}_i)|/\sigma_{-ij}(\mathbf{x}_i)$ with $\sigma>0$, provided the pair $(\mu,\sigma)$ is produced by a symmetric algorithm.
 
 - Fitting the transfer on all $m$ standards and reusing it to compute residuals (TJ-insample) breaks Step 1: the residual of standard $i$ is then computed with a fit that has seen $i$, and the exchangeability with the future sample's residual is lost. The resulting under-coverage is observed in §4.4.
 

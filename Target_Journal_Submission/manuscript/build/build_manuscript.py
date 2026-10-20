@@ -49,6 +49,12 @@ def main():
     # cover letter (same placeholder mechanism)
     cl = open(os.path.join(HERE, "..", "src_cover", "cover_letter.md"), encoding="utf-8").read()
     cl = re.sub(r"\{\{(\w+)\}\}", lambda m: str(vals.get(m.group(1), f"[[{m.group(1)}]]")), cl)
+    cl_lines, cl_out = cl.split("\n"), []
+    for ln in cl_lines:
+        if re.match(r"^(\s*)(- |\d+\. )", ln) and cl_out and cl_out[-1].strip() != "":
+            cl_out.append("")
+        cl_out.append(ln)
+    cl = "\n".join(cl_out)
     clmd = os.path.join(HERE, "cover_letter_filled.md"); open(clmd, "w", encoding="utf-8").write(cl)
     cl_docx = os.path.join(ROOT, "manuscript", "cover_letter.docx")
     subprocess.run(["pandoc", clmd, "-o", cl_docx, "--reference-doc", os.path.join(HERE, "reference_letter.docx")], check=True)
@@ -62,6 +68,22 @@ def main():
                 t = re.sub(r"\{\{(\w+)\}\}", lambda m: str(vals.get(m.group(1), f"[[{m.group(1)}]]")), t)
                 open(os.path.join(rdir, f), "w", encoding="utf-8").write(t)
     print("built cover letter and filled review records")
+    # figure files renamed by their manuscript number (for upload)
+    import shutil
+    SUBMISSION_FIGS = {"Fig1": "fig1_workflow", "Fig2": "fig2_datasets", "Fig3": "fig3_coverage_vs_m", "Fig4": "fig4_width_vs_m",
+                       "Fig5": "fig5_ablation", "Fig6": "fig7_conditional_coverage", "Fig7": "fig6_robustness",
+                       "Fig8": "fig8_error_analysis", "Fig9": "fig10_coverage_distribution", "FigS1": "figS1_cnn_training",
+                       "FigS2": "figS2_friedman_ranks", "FigS3": "fig9_timing", "GraphicalAbstract": "graphical_abstract"}
+    sub = os.path.join(ROOT, "figures", "submission"); os.makedirs(sub, exist_ok=True)
+    for new, old in SUBMISSION_FIGS.items():
+        for ext in (".png", ".pdf"):
+            shutil.copyfile(os.path.join(ROOT, "figures", old + ext), os.path.join(sub, new + ext))
+    # check the mapping against the manuscript itself
+    for new, old in SUBMISSION_FIGS.items():
+        if new.startswith("Fig") and not new.startswith("FigS"):
+            n = new[3:]
+            assert re.search(r"\*\*Fig\. " + n + r"\.\*\*[^\n]*\]\(figures/" + old + r"\.png\)", text), (new, old)
+    print("submission figure set written and verified")
 
 if __name__ == "__main__":
     main()

@@ -1,12 +1,12 @@
-[Corresponding author name]
-[Department, Institution]
-[Address, Country]
+[Corresponding author name]\
+[Department, Institution]\
+[Address, Country]\
 [E-mail]
 
 [Date]
 
-The Editors
-*Analytica Chimica Acta*
+The Editors\
+*Analytica Chimica Acta*\
 Elsevier B.V.
 
 **Submission of an original research article: "Valid prediction intervals for transferred NIR calibrations: reusing the transfer standards with a leave-one-standard-out jackknife+"**

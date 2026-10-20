@@ -69,7 +69,7 @@ For a new target sample $(\mathbf{x}^T_{m+1},y_{m+1})$ we seek an interval $\hat
 
 ## 2.2. Difficulty function
 
-A heteroscedastic, sample-specific scale is obtained from PLS diagnostics. For a (transferred) spectrum, let $T^2(\mathbf{x})=\sum_{a=1}^{A} t_a^2/s_{t_a}^2$ (Hotelling T² in the $A$-dimensional score space) and $Q(\mathbf{x})=\lVert \mathbf{x}_c-\mathbf{t}\mathbf{P}^{\mathsf T}\rVert^2$ (the squared spectral residual), both computed in the preprocessed, mean-centred spectral space of the source model. We set
+A heteroscedastic, sample-specific scale is obtained from PLS diagnostics. For a (transferred) spectrum, let $T^2(\mathbf{x})=\sum_{a=1}^{A} t_a^2/s_{t_a}^2$ (Hotelling T² in the $A$-dimensional score space) and $Q(\mathbf{x})=\|\mathbf{x}_c-\mathbf{t}\mathbf{P}^{\mathsf T}\|^2$ (the squared spectral residual), both computed in the preprocessed, mean-centred spectral space of the source model. We set
 
 $$\sigma(\mathbf{x}) = \max\left\{\varepsilon,\; c_0 + c_1\sqrt{T^2(\mathbf{x})} + c_2\sqrt{Q(\mathbf{x})}\right\}, \qquad (2)$$
 
@@ -77,9 +77,9 @@ with $c_j\ge 0$ fitted by non-negative least squares to the absolute out-of-fold
 
 ## 2.3. Transfer jackknife+ (TJ+)
 
-For each $i$, the transfer is re-fitted without standard $i$, giving $\mu_{-i}=\mu_{\mathcal{D}\setminus\{i\}}$ and $\sigma_{-i}=\sigma_{\mathcal{D}\setminus\{i\}}$. The leave-one-standard-out normalised residuals are
+For each $i$, the transfer is re-fitted without standard $i$, giving $\mu_{-i}=\mu_{\mathcal{D}\backslash \{i\}}$ and $\sigma_{-i}=\sigma_{\mathcal{D}\backslash \{i\}}$. The leave-one-standard-out normalised residuals are
 
-$$R_i = \frac{\lvert y_i - \mu_{-i}(\mathbf{x}^T_i)\rvert}{\sigma_{-i}(\mathbf{x}^T_i)}, \qquad i=1,\dots,m. \qquad (3)$$
+$$R_i = \frac{|y_i - \mu_{-i}(\mathbf{x}^T_i)|}{\sigma_{-i}(\mathbf{x}^T_i)}, \qquad i=1,\dots,m. \qquad (3)$$
 
 The TJ+N interval for a new target spectrum $\mathbf{x}$ is
 
@@ -89,7 +89,7 @@ where $\hat q^{+}_{\alpha}\{v_i\}$ is the $\lceil(1-\alpha)(m+1)\rceil$-th small
 
 **Proposition 1.** *Suppose that $Z_1,\dots,Z_{m+1}$ are exchangeable. This holds, for example, when the standards and the future sample are drawn at random from the same target population. Suppose also that $\mathcal{T}$ treats its input standards symmetrically, and that $f$ and $\sigma$ do not depend on the target data. Then $\Pr\{y_{m+1}\in\hat C(\mathbf{x}^T_{m+1})\}\ge 1-2\alpha$.*
 
-*Proof sketch.* Fix the source model and $\sigma$, and view $\mathcal{A}:\mathcal{D}\mapsto(\mu_{\mathcal{D}},\sigma_{\mathcal{D}})$ as a symmetric regression algorithm acting on the augmented standards. Define, for $i\neq j$, the score of point $i$ under the fit without $\{i,j\}$, $R_{ij}=\lvert y_i-\mu_{-ij}(\mathbf{x}_i)\rvert/\sigma_{-ij}(\mathbf{x}_i)$. If $y_{m+1}\notin\hat C$, then $R_{m+1,i}>R_{i,m+1}$ for at least $(1-\alpha)(m+1)$ indices $i$. Because the matrix $(R_{ij})$ is exchangeable under permutations of the $m+1$ points, the counting argument of Barber et al. [@barber2021, Thm. 1] bounds the probability of this event by $2\alpha$. A step-by-step proof, including the role of $\varepsilon>0$ and of the paired master spectrum, is given in Appendix A. $\square$
+*Proof sketch.* Fix the source model and $\sigma$, and view $\mathcal{A}:\mathcal{D}\mapsto(\mu_{\mathcal{D}},\sigma_{\mathcal{D}})$ as a symmetric regression algorithm acting on the augmented standards. Define, for $i\neq j$, the score of point $i$ under the fit without $\{i,j\}$, $R_{ij}=|y_i-\mu_{-ij}(\mathbf{x}_i)|/\sigma_{-ij}(\mathbf{x}_i)$. If $y_{m+1}\notin\hat C$, then $R_{m+1,i}>R_{i,m+1}$ for at least $(1-\alpha)(m+1)$ indices $i$. Because the matrix $(R_{ij})$ is exchangeable under permutations of the $m+1$ points, the counting argument of Barber et al. [@barber2021, Thm. 1] bounds the probability of this event by $2\alpha$. A step-by-step proof, including the role of $\varepsilon>0$ and of the paired master spectrum, is given in Appendix A. $\square$
 
 Three remarks clarify the scope of the guarantee.
 - **No transfer step.** When there is no transfer ($\mu_{-i}=f$), TJ+ reduces to split conformal prediction that uses *all* $m$ standards for calibration, with exact $1-\alpha$ coverage.
