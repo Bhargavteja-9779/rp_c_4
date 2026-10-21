@@ -75,3 +75,56 @@ def gauss_lgo(g, alpha):
     rmse = np.sqrt(np.mean(g.r ** 2))
     t = stats.t.ppf(1 - alpha / 2, max(g.K - 1, 1))
     return g.tf.mu_full_test - t * rmse, g.tf.mu_full_test + t * rmse
+
+# ----------------------------------------------------------------------------- added after the prior-art search
+def _weighted_upper(V, w, alpha, K):
+    """Smallest v with cumulative weight >= 1-alpha, where the K+1-th unit (test batch) is a point mass
+    1/(K+1) at +inf (Lee, Barber & Willett, hierarchical jackknife+). V: (m, n_test); w: (m,) summing to K/(K+1)."""
+    order = np.argsort(V, axis=0)
+    Vs = np.take_along_axis(V, order, 0)
+    cw = np.cumsum(w[order], axis=0)
+    hit = cw >= (1 - alpha) - 1e-12
+    out = np.full(V.shape[1], np.inf)
+    ok = hit.any(0)
+    idx = np.argmax(hit, axis=0)
+    out[ok] = Vs[idx[ok], np.nonzero(ok)[0]]
+    return out
+
+def tj_plus_hier(g, alpha, sigma=None):
+    """TJ+H / TJ+H-N: hierarchical jackknife+ of Lee, Barber & Willett (2026, Thm. 5 of arXiv:2306.06342v4)
+    instantiated for the transfer step: leave-one-batch-out refits, member scores weighted 1/((K+1) N_k),
+    point mass 1/(K+1) at +/-inf. Coverage >= 1-2a for a sample from a new batch."""
+    s_i, s_t = g._scales(sigma)
+    R = (g.r / s_i)[:, None]
+    mu = g.mu_test[g.g_index]; st = s_t[g.g_index]
+    n_k = np.bincount(g.g_index, minlength=g.K)[g.g_index]
+    w = 1.0 / ((g.K + 1) * n_k)
+    upper = _weighted_upper(mu + st * R, w, alpha, g.K)
+    lower = -_weighted_upper(-(mu - st * R), w, alpha, g.K)
+    return lower, upper
+
+def anova_pi(g, alpha):
+    """Classical random-effects (one-way ANOVA) prediction interval for a sample from a new batch
+    (beta-expectation tolerance interval in the sense of Mee 1984), from the signed leave-one-standard-out
+    residuals of the standards grouped by batch; Satterthwaite degrees of freedom. The centre is corrected by the
+    mean leave-one-out residual (bias), whose estimation variance is included in V."""
+    tf = g.tf
+    e = tf.y_std - tf.mu_loo_i
+    K = g.K; labs = g.g_index
+    n = np.bincount(labs, minlength=K); nbar = float(np.mean(n))
+    means = np.array([e[labs == k].mean() for k in range(K)])
+    if nbar <= 1 or K < 2:
+        V = np.var(e, ddof=1) * (1 + 1 / len(e)); df = max(len(e) - 1, 1)
+    else:
+        msb = (n * (means - e.mean()) ** 2).sum() / (K - 1)
+        msw = sum(((e[labs == k] - means[k]) ** 2).sum() for k in range(K)) / max(len(e) - K, 1)
+        if msb <= msw:
+            V = ((e - e.mean()) ** 2).sum() / (len(e) - 1) * (1 + 1 / len(e)); df = len(e) - 1
+        else:
+            a, c = (1 + 1 / K) / nbar, 1 - 1 / nbar
+            V = a * msb + c * msw
+            df = V ** 2 / ((a * msb) ** 2 / (K - 1) + (c * msw) ** 2 / max(len(e) - K, 1))
+    t = stats.t.ppf(1 - alpha / 2, max(df, 1))
+    half = t * np.sqrt(V)
+    centre = tf.mu_full_test + e.mean()
+    return centre - half, centre + half

@@ -1,38 +1,196 @@
 {
-  "_comment": "Reinforcement experiments (second research cycle). Specified in research_design/revised_experimental_protocol.md and committed before any result was computed. Seeds depend only on the repetition index; E11 repetitions r share splits with E1/E9 repetitions r (same seeds).",
-  "experiments": {
-    "E10_batch": {
-      "dataset": "mango_batch",
-      "reps_full": 300,
-      "reps_quick": 2,
-      "settings": ["season", "inst_15016", "inst_15014", "inst_15029"],
-      "kinds": {"season": ["sbc", "none"], "inst": ["pds", "sbc"]},
-      "designs": [["random", 2, 10], ["random", 5, 4], ["random", 10, 2], ["random", 15, 1], ["chrono", 5, 4]],
-      "designs_inst_extra": [["random", 20, 1]],
-      "alphas": [0.05, 0.1, 0.2],
-      "methods": ["TJ+N", "TJ+", "Gauss-LOO", "SCP-T-split-N", "ASTM-PI", "SCP-S", "TJ+G-N", "TJ+G", "LGO-CV+N", "Gauss-LGO"]
-    },
-    "E11_classical_corn": {
-      "dataset": "corn", "reps_full": 200, "reps_quick": 2,
-      "properties": [0, 1, 2, 3], "pairs": [["m5", "mp5"], ["m5", "mp6"]], "m_values": [10, 15, 20],
-      "kinds": ["pds", "sbc"], "error_stats": true, "boot_B": 200
-    },
-    "E11_classical_tablets": {
-      "dataset": "tablets", "reps_full": 200, "reps_quick": 2,
-      "properties": [0, 1, 2], "m_values": [10, 20, 30, 50],
-      "kinds": ["pds", "sbc"], "error_stats": true, "boot_B": 200
-    },
-    "E11_classical_mango": {
-      "dataset": "mango", "reps_full": 200, "reps_quick": 2,
-      "properties": [0], "m_values": [10, 20, 30, 50],
-      "kinds": ["sbc"], "error_stats": true, "boot_B": 200
-    },
-    "E11_classical_mango_inst": {
-      "dataset": "mango_inst", "reps_full": 200, "reps_quick": 2,
-      "properties": [0, 1, 2], "targets": [15016, 15014, 15029], "m_values": [10, 20, 30, 50],
-      "kinds": ["pds", "sbc"], "error_stats": true, "boot_B": 200
-    }
+ "_comment": "Reinforcement experiments (second research cycle). Specified in research_design/revised_experimental_protocol.md and committed before any result was computed. Seeds depend only on the repetition index; E11 repetitions r share splits with E1/E9 repetitions r (same seeds).",
+ "experiments": {
+  "E10_batch": {
+   "dataset": "mango_batch",
+   "reps_full": 300,
+   "reps_quick": 2,
+   "settings": [
+    "season",
+    "inst_15016",
+    "inst_15014",
+    "inst_15029"
+   ],
+   "kinds": {
+    "season": [
+     "sbc",
+     "none"
+    ],
+    "inst": [
+     "pds",
+     "sbc"
+    ]
+   },
+   "designs": [
+    [
+     "random",
+     2,
+     10
+    ],
+    [
+     "random",
+     5,
+     4
+    ],
+    [
+     "random",
+     10,
+     2
+    ],
+    [
+     "random",
+     15,
+     1
+    ],
+    [
+     "chrono",
+     5,
+     4
+    ]
+   ],
+   "designs_inst_extra": [
+    [
+     "random",
+     20,
+     1
+    ]
+   ],
+   "alphas": [
+    0.05,
+    0.1,
+    0.2
+   ],
+   "methods": [
+    "TJ+N",
+    "TJ+",
+    "Gauss-LOO",
+    "SCP-T-split-N",
+    "ASTM-PI",
+    "SCP-S",
+    "TJ+G-N",
+    "TJ+G",
+    "LGO-CV+N",
+    "Gauss-LGO",
+    "TJ+H-N",
+    "TJ+H",
+    "ANOVA-PI"
+   ],
+   "_deviation": "TJ+H, TJ+H-N (Lee, Barber & Willett 2026 hierarchical jackknife+) and ANOVA-PI (Mee 1984-type) added after the prior-art search and before any full-scale E10 result existed (deviation R1)."
   },
-  "classical_methods": ["TJ+N", "TJ+", "Gauss-LOO", "Gauss-LOO-N", "ASTM-T", "OLS-PI", "Boot-T", "SCP-T-split-N"],
-  "alphas": [0.05, 0.1, 0.2]
+  "E11_classical_corn": {
+   "dataset": "corn",
+   "reps_full": 200,
+   "reps_quick": 2,
+   "properties": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "pairs": [
+    [
+     "m5",
+     "mp5"
+    ],
+    [
+     "m5",
+     "mp6"
+    ]
+   ],
+   "m_values": [
+    10,
+    15,
+    20
+   ],
+   "kinds": [
+    "pds",
+    "sbc"
+   ],
+   "error_stats": true,
+   "boot_B": 200
+  },
+  "E11_classical_tablets": {
+   "dataset": "tablets",
+   "reps_full": 200,
+   "reps_quick": 2,
+   "properties": [
+    0,
+    1,
+    2
+   ],
+   "m_values": [
+    10,
+    20,
+    30,
+    50
+   ],
+   "kinds": [
+    "pds",
+    "sbc"
+   ],
+   "error_stats": true,
+   "boot_B": 200
+  },
+  "E11_classical_mango": {
+   "dataset": "mango",
+   "reps_full": 200,
+   "reps_quick": 2,
+   "properties": [
+    0
+   ],
+   "m_values": [
+    10,
+    20,
+    30,
+    50
+   ],
+   "kinds": [
+    "sbc"
+   ],
+   "error_stats": true,
+   "boot_B": 200
+  },
+  "E11_classical_mango_inst": {
+   "dataset": "mango_inst",
+   "reps_full": 200,
+   "reps_quick": 2,
+   "properties": [
+    0,
+    1,
+    2
+   ],
+   "targets": [
+    15016,
+    15014,
+    15029
+   ],
+   "m_values": [
+    10,
+    20,
+    30,
+    50
+   ],
+   "kinds": [
+    "pds",
+    "sbc"
+   ],
+   "error_stats": true,
+   "boot_B": 200
+  }
+ },
+ "classical_methods": [
+  "TJ+N",
+  "TJ+",
+  "Gauss-LOO",
+  "Gauss-LOO-N",
+  "ASTM-T",
+  "OLS-PI",
+  "Boot-T",
+  "SCP-T-split-N"
+ ],
+ "alphas": [
+  0.05,
+  0.1,
+  0.2
+ ]
 }

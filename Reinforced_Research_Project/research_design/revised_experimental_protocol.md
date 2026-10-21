@@ -131,3 +131,16 @@ The following unit tests are in `code/tests/test_reinforcement.py`:
 - in a Monte Carlo simulation with batch effects, sample-level TJ+ fails while TJ+G holds.
 
 The source models, σ and the source residual pools are unchanged from E1/E8. They use no target data (`source_model.py`; checked in the integrity audit).
+
+---
+
+## Deviation log (reinforcement cycle)
+
+**R1 (2026-10-21; before any full-scale E10 result existed).** The prior-art search finished after this protocol was committed. It identified a published batch-level ("hierarchical") jackknife+: Lee, Barber & Willett, *ACM J. Data Sci.* 2026, doi:10.1145/3786352; arXiv:2306.06342v4, Appendix C.2.2, Thm. 5. It uses leave-one-group-out refits, member scores weighted 1/((K+1)N_k) and a point mass 1/(K+1) at ±∞, with coverage ≥ 1−2α for a sample from a new group. It also identified the classical random-effects β-expectation interval for multi-batch populations (Mee 1984).
+
+The first full E10 run was stopped after about 30 of 50 repetitions of its first chunk. No result file had been written and no output was inspected. Three methods were then added to E10:
+
+- **TJ+H and TJ+H-N:** the hierarchical jackknife+ instantiated for the transfer step.
+- **ANOVA-PI:** a one-way random-effects prediction interval for a new batch, computed from the signed leave-one-out residuals of the standards, with bias-corrected centre and Satterthwaite degrees of freedom.
+
+TJ+G (max-member score; validity proof in the manuscript appendix) is retained as pre-registered. **H10b now covers TJ+G, TJ+G-N, TJ+H and TJ+H-N.** **Consequence for novelty:** the batch-level jackknife+ is not claimed as new methodology. The contribution is its instantiation for transfer standards and the empirical finding about the unit of exchangeability.

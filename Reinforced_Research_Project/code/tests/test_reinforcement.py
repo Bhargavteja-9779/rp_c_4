@@ -30,7 +30,7 @@ def test_batch_effects_break_sample_level_tj_but_not_group_tj():
     strongly; with K=12 batches (1 standard each) ordinary TJ+ is valid, and TJ+G is valid for K=12 x 2."""
     rng = np.random.default_rng(5)
     beta = rng.normal(size=4); src = _LinSource(beta); alpha = 0.1
-    cov_few, cov_one, cov_g = [], [], []
+    cov_few, cov_one, cov_g, cov_h, cov_a = [], [], [], [], []
     for r in range(400):
         X, y, g = _batches(rng, beta, 40, 10)
         # (a) 2 batches x 10 standards
@@ -46,9 +46,13 @@ def test_batch_effects_break_sample_level_tj_but_not_group_tj():
         tf = TransferFits("sbc", src, X[std], y[std], None, X[te])
         gt = G.GroupTransferFits(tf, g[std], X[std], X[te])
         cov_g.append(_cover(*G.tj_plus_group(gt, alpha), y[te]))
+        cov_h.append(_cover(*G.tj_plus_hier(gt, alpha), y[te]))
+        cov_a.append(_cover(*G.anova_pi(gt, alpha), y[te]))
     assert np.mean(cov_few) < 0.75                 # failure of sample-level exchangeability
     assert np.mean(cov_one) >= 1 - 2 * alpha and np.mean(cov_one) > 0.86
     assert np.mean(cov_g) >= 1 - 2 * alpha and np.mean(cov_g) > 0.86
+    assert np.mean(cov_h) >= 1 - 2 * alpha and np.mean(cov_h) > 0.86
+    assert abs(np.mean(cov_a) - 0.9) < 0.04          # Gaussian random-effects model is correct here
 
 def test_group_jackknife_reduces_to_tj_plus_with_singleton_batches():
     rng = np.random.default_rng(1)
@@ -56,8 +60,9 @@ def test_group_jackknife_reduces_to_tj_plus_with_singleton_batches():
     X = rng.normal(size=(40, 3)); y = X @ beta + rng.normal(0, 1, 40)
     tf = TransferFits("sbc", src, X[:15], y[:15], None, X[15:])
     gt = G.GroupTransferFits(tf, np.arange(15), X[:15], X[15:])
-    a = tj_plus(tf, 0.1); b = G.tj_plus_group(gt, 0.1)
+    a = tj_plus(tf, 0.1); b = G.tj_plus_group(gt, 0.1); h = G.tj_plus_hier(gt, 0.1)
     assert np.allclose(a[0], b[0]) and np.allclose(a[1], b[1])
+    assert np.allclose(a[0], h[0]) and np.allclose(a[1], h[1])
 
 def test_group_bounds_infinite_with_few_batches():
     rng = np.random.default_rng(2)
