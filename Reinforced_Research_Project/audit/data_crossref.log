@@ -1,0 +1,6 @@
+{'journal': 'J Chemometrics (Wiley)', 'records_scanned': 118, 'n_with_dates': 101, 'median_days': 124, 'q1': 68.5, 'q3': 198.5, 'pct_le72': 30.7, 'pct_le72_ci': '21.8-39.6'}
+{'journal': 'Analyst (RSC)', 'records_scanned': 626, 'n_with_dates': 0}
+{'journal': 'Analytical Methods (RSC)', 'records_scanned': 1040, 'n_with_dates': 0}
+{'journal': 'Applied Spectroscopy (SAGE)', 'records_scanned': 149, 'n_with_dates': 0}
+{'journal': 'J Near Infrared Spectrosc (SAGE)', 'records_scanned': 29, 'n_with_dates': 0}
+{'journal': 'Journal of Raman Spectroscopy (Wiley)', 'records_scanned': 174, 'n_with_dates': 155, 'median_days': 112, 'q1': 78.0, 'q3': 152.0, 'pct_le72': 21.9, 'pct_le72_ci': '15.5-28.4'}
