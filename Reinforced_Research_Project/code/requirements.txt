@@ -1,0 +1,11 @@
+# Tested with Python 3.13 on Linux (CPU only). Exact versions used for the reported results:
+numpy==2.5.3
+scipy==1.18.1
+scikit-learn==1.9.1
+pandas==3.0.5
+matplotlib==3.11.2
+tabulate==0.10.0
+threadpoolctl==3.7.0
+torch==2.14.1        # CPU build is sufficient (pip install torch --index-url https://download.pytorch.org/whl/cpu)
+python-docx==1.2.0   # manuscript generation only
+pytest==9.1.1        # tests only

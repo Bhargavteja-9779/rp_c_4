@@ -4,3 +4,5 @@ __pycache__/
 .pytest_cache/
 **/data/raw/
 Target_Journal_Submission/results_quick/
+Reinforced_Research_Project/code/data/raw
+Reinforced_Research_Project/results_quick/
