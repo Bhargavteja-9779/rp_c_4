@@ -2528,5 +2528,28 @@
   "DOI": "10.1017/cbo9780511802843",
   "publisher": "Cambridge University Press",
   "id": "davison1997"
+ },
+ {
+  "id": "ainsworth2016",
+  "type": "report",
+  "author": [
+   {
+    "family": "Ainsworth",
+    "given": "Noel"
+   }
+  ],
+  "title": "Quality standards, refinement and testing",
+  "genre": "Final report, project MG15002",
+  "publisher": "Horticulture Innovation Australia Limited",
+  "publisher-place": "Sydney",
+  "issued": {
+   "date-parts": [
+    [
+     2016
+    ]
+   ]
+  },
+  "ISBN": "978-0-7341-3968-9",
+  "URL": "https://era.dpi.qld.gov.au/id/eprint/6544/"
  }
 ]

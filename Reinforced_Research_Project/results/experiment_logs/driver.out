@@ -141,3 +141,17 @@
 2026-10-28 15:26:41,993 INFO experiments finished in 5s (analysis skipped)
 2026-10-28 15:26:48,545 INFO [E11_classical_mango@r0150-0200] exists, skipped
 2026-10-28 15:26:48,545 INFO experiments finished in 5s (analysis skipped)
+2026-10-28 15:28:26,948 INFO [E11_classical_mango_inst] 5/50 reps (91s)
+2026-10-28 15:29:11,712 INFO [E11_classical_mango_inst] 10/50 reps (136s)
+2026-10-28 15:29:51,752 INFO [E11_classical_mango_inst] 15/50 reps (176s)
+2026-10-28 15:30:30,924 INFO [E11_classical_mango_inst] 20/50 reps (215s)
+2026-10-28 15:31:42,831 INFO [E11_classical_mango_inst] 25/50 reps (287s)
+2026-10-28 15:32:21,704 INFO [E11_classical_mango_inst] 30/50 reps (326s)
+2026-10-28 15:33:03,178 INFO [E11_classical_mango_inst] 35/50 reps (367s)
+2026-10-28 15:33:47,631 INFO [E11_classical_mango_inst] 40/50 reps (412s)
+2026-10-28 15:34:53,320 INFO [E11_classical_mango_inst] 45/50 reps (477s)
+2026-10-28 15:35:33,027 INFO [E11_classical_mango_inst] 50/50 reps (517s)
+2026-10-28 15:35:34,298 INFO [E11_classical_mango_inst] done: 27000 rows in 518s -> /home/user/rp_c_4/Reinforced_Research_Project/results/raw/E11_classical_mango_inst@r0000-0050.csv.gz
+2026-10-28 15:35:34,315 INFO experiments finished in 524s (analysis skipped)
+2026-10-28 15:36:59,035 INFO [E11_classical_mango_inst] 5/50 reps (79s)
+2026-10-28 15:37:38,042 INFO [E11_classical_mango_inst] 10/50 reps (118s)

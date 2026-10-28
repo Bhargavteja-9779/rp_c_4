@@ -9,34 +9,21 @@ The Editors\
 *Analytica Chimica Acta*\
 Elsevier B.V.
 
-**Submission of an original research article: "Valid prediction intervals for transferred NIR calibrations: reusing the transfer standards with a leave-one-standard-out jackknife+"**
-
 Dear Editors,
 
-We submit the above manuscript for consideration as a Research Paper in *Analytica Chimica Acta*.
+Please consider our manuscript "Trustworthy prediction intervals after moving an NIR calibration to a new instrument or season: how many reference samples, and from how many batches?" for publication as a Research Paper in *Analytica Chimica Acta*.
 
-**What the work addresses.** Multivariate NIR calibrations are routinely transferred to new instruments or harvest seasons using a few transfer standards, and analytical results must be reported with a statement of uncertainty. We show that prediction intervals calibrated in the source domain can lose most of their coverage after transfer. Across {{n_scen_main}} pre-registered scenarios on three public NIR data sets, coverage fell to as low as {{min_cov_source}} for nominal 90% intervals. We propose a transfer jackknife+, which re-fits only the transfer step in a leave-one-standard-out loop. It thereby reuses the same standards that the transfer requires to obtain distribution-free intervals with a finite-sample coverage guarantee.
+Many laboratories move NIR calibrations: to a new handheld unit, to a second production spectrometer, or to a new harvest season. The move is usually checked by the prediction error on a few reference samples, but the results are reported, and products accepted or rejected, with an uncertainty range. We asked whether that range can still be trusted after the move, and what the reference samples have to look like for it to be trusted.
 
-**Main findings.**
-- The proposed intervals were never flagged as under-covering across instruments, seasons, transfer pipelines (PDS, DS, slope/bias correction) and model classes (PLS, ridge, 1D-CNN). This includes an independent instrument-transfer test between handheld spectrometers that was added during internal review.
-- They are bounded with far fewer standards than the valid alternative of splitting the standards.
-- We report candidly where a simpler Gaussian approach is equally efficient: at 90%, though it under-covers at 95%.
-- All methods fail under spectral drift after standardisation.
+On three public data sets the answer to the first question was no. Uncertainty ranges taken over from the original calibration covered as few as {{min_cov_source}} of the reference values instead of 90%. The good news is that the reference samples needed for the transfer are enough to restore a valid range: the transfer is simply re-fitted with each sample left out in turn, and no extra measurements are needed.
 
-**Fit to the journal.** The journal's scope explicitly includes chemometric methodology that demonstrates new principles or important applications, and the journal regularly publishes work on calibration transfer and on prediction uncertainty in multivariate calibration. Our contribution links these two lines: it addresses the measurement-uncertainty statement of a transferred analytical method, and it gives practical guidance (minimum number of standards, how to select them, monitoring of Q residuals).
+The finding we consider most useful for practice concerns where the reference samples come from. With mango data that record the consignment of every fruit, 20 reference fruit from two consignments gave intervals that were too narrow for fruit from other consignments in {{r_k2_tjn_under}} instrument and season settings. The usual alternatives, including Gaussian and random-effects intervals, failed in the same way. The same 20 fruit spread over many consignments did not. {{r_cover_app}} The rule that follows, take transfer standards from many batches, costs nothing and can be applied immediately.
 
-**Originality and transparency.** The inference engine (jackknife+) is established. Our contribution is its correct instantiation for calibration transfer, a proof adapted to this setting, and a pre-registered, fully reproducible benchmark that includes negative results. To our knowledge, interval validity after calibration transfer has not been studied systematically before. All data are public, and all code, raw results and the scripts that regenerate every number, table and figure will be made publicly available.
+The work fits the journal's interest in chemometric methods with important applications. It addresses measurement uncertainty of transferred analytical methods, it is phrased in method-validation terms, and it ends with a concrete procedure. We do not claim new statistical theory: the interval construction is an application of the jackknife+ and of its batch-level version, which we cite. The contribution is the evidence on when such intervals hold after calibration transfer, the comparison with the methods laboratories actually use, and the resulting sampling rule.
 
-**Declarations.**
-- This manuscript is original, has not been published previously, and is not under consideration for publication elsewhere.
-- All authors have approved the manuscript and agree with its submission.
-- The authors declare no competing interests.
-- The study used only publicly available data; no human or animal subjects were involved, and no ethics approval was required.
-- An AI assistant was used for literature search support, code development, data analysis and drafting, as declared in the manuscript. The authors take full responsibility for the content.
+All data are public. All code and raw results, and the scripts that regenerate every number, table and figure, will be made publicly available. The manuscript has not been published and is not under consideration elsewhere, and all authors have approved it. The authors declare no competing interests. An AI assistant was used for literature search support, code development, data analysis and drafting, as declared in the manuscript; the authors take full responsibility for the content.
 
-**Suggested reviewers** (optional): [to be provided by the authors]
-
-Thank you for considering our manuscript.
+Suggested reviewers: [to be provided by the authors]
 
 Yours sincerely,
 

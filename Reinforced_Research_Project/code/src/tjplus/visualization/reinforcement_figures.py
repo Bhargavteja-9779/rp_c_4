@@ -91,3 +91,84 @@ def make_reinforcement_figures(out, figdir):
     fig_batch_coverage(out, figdir)
     fig_batch_mechanism(out, figdir)
     fig_training_conditional(out, figdir)
+    fig_application(out, figdir)
+
+# ------------------------------------------------------------------ schematic figures (not data)
+def fig_overview(figdir, name="fig1_overview", size=(7.2, 2.15)):
+    """Fig. 1: the practical workflow, in plain words."""
+    from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+    _style()
+    fig, ax = plt.subplots(figsize=size); ax.set_axis_off(); ax.set_xlim(-1.5, 105.5); ax.set_ylim(-3, 27)
+    def box(x, y, w, h, title, body, ec, fc):
+        ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.5,rounding_size=1.2", fc=fc, ec=ec, lw=0.9))
+        ax.text(x + w / 2, y + h - 2.6, title, ha="center", va="top", fontsize=6.9, color=INK, weight="bold")
+        ax.text(x + w / 2, y + h - 7.6, body, ha="center", va="top", fontsize=6.2, color=INK, linespacing=1.35)
+    def arrow(x1, y1, x2, y2):
+        ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle="-|>", mutation_scale=8, lw=0.8, color=INK2))
+    box(0.5, 5, 22, 20, "1. Collect standards", "m reference samples,\nmeasured on the new\ninstrument or season,\nfrom many batches", INK2, "#f4f4f2")
+    box(27.5, 5, 22, 20, "2. Transfer as usual", "fit PDS, DS or slope/\nbias correction on all\nm standards; the old\nmodel stays unchanged", INK2, "#f4f4f2")
+    box(54.5, 5, 22, 20, "3. Leave one out", "re-fit the transfer m\ntimes, each time without\none standard (or batch);\nkeep the left-out error", SLOT[0], "#eef4fc")
+    box(81.5, 5, 22, 20, "4. Report an interval", "combine the m left-out\npredictions and errors\ninto a 90% interval for\neach new sample (Eq. 3)", SLOT[1], "#fdf0ea")
+    for x in (23, 50, 77):
+        arrow(x, 15, x + 4.5, 15)
+    ax.text(52, -2, "No extra reference analyses are needed: the same standards fit the transfer and set the interval.",
+            ha="center", fontsize=6.8, color=INK2, style="italic")
+    _save(fig, figdir, name)
+
+def graphical_abstract(out, figdir):
+    """Graphical abstract: the batch finding in one panel, plus the recipe."""
+    s = pd.read_csv(os.path.join(out, "summary", "E10_summary.csv"))
+    s = s[(s["alpha"] == 0.1) & (s["design"] == "random")]
+    _style()
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(7.0, 2.8), gridspec_kw={"width_ratios": [1.15, 1]})
+    order = _design_order(s); xs = np.arange(len(order))
+    for meth, lab in (("TJ+N", "leave one standard out"), ("TJ+H-N", "leave one batch out"), ("Gauss-LOO", "Gaussian ± t·RMSE")):
+        col, mk = STYLE[meth]
+        ys, hol = [], []
+        for K, ng in order:
+            g = s[(s["K"] == K) & (s["n_g"] == ng) & (s["method"] == meth)]
+            ys.append(g["coverage_mean"].mean()); hol.append(g["new_frac_inf"].mean() > 0.5)
+        a1.plot(xs, ys, "-", color=col, lw=1.0, alpha=0.7)
+        for x, y, h in zip(xs, ys, hol):
+            a1.plot(x, y, mk, color=col, mfc="white" if h else col, ms=5)
+        a1.plot([], [], mk + "-", color=col, label=lab)
+    a1.axhline(0.9, color=INK, ls="--", lw=0.8)
+    a1.set_xticks(xs, [f"{K}×{ng}" for K, ng in order]); a1.set_xlabel("20 standards: batches × samples per batch")
+    a1.set_ylabel("Coverage, new batches"); a1.set_title("Mango fruit, new consignments", loc="left")
+    a1.legend(frameon=False, fontsize=6.3, loc="lower right", title="hollow = no finite interval", title_fontsize=6)
+    a2.set_axis_off()
+    a2.text(0.0, 0.95, "After moving an NIR calibration:", fontsize=8, weight="bold", va="top", color=INK)
+    tips = ["1  Do not reuse the old uncertainty formula", "2  Take standards from many batches",
+            "3  Re-fit the transfer leaving one out", "4  Report the resulting 90% interval",
+            "5  Watch for drift (Q residual)"]
+    for i, t in enumerate(tips):
+        a2.text(0.0, 0.78 - i * 0.15, t, fontsize=7.3, va="top", color=INK)
+    _save(fig, figdir, "graphical_abstract_revised")
+
+def fig_application(out, figdir):
+    p = os.path.join(out, "summary", "E14_summary.csv")
+    if not os.path.exists(p):
+        return
+    s = pd.read_csv(p)
+    meths = [("Point", "point rule"), ("ASTM-PI", "ASTM-PI"), ("Gauss-LOO", "Gauss-LOO"), ("TJ+N", "TJ+N"), ("TJ+H-N", "TJ+B")]
+    designs = sorted({(int(k), int(n)) for k, n in zip(s["K"], s["n_g"])})
+    cols = {2: SLOT[3], 10: SLOT[0], 20: SLOT[2]}
+    _style()
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.9))
+    w = 0.8 / len(designs); xs = np.arange(len(meths))
+    for j, (K, ng) in enumerate(designs):
+        g = s[(s["K"] == K) & (s["n_g"] == ng)]
+        for ax, col in zip(axes, ["immature_passed", "referred"]):
+            vals = [100 * g[g["method"] == m][col].mean() for m, _ in meths]
+            lo = [100 * g[g["method"] == m][col].min() for m, _ in meths]
+            hi = [100 * g[g["method"] == m][col].max() for m, _ in meths]
+            pos = xs + (j - (len(designs) - 1) / 2) * w
+            ax.bar(pos, vals, width=w * 0.92, color=cols.get(K, INK2), label=f"{K}×{ng}")
+            ax.vlines(pos, lo, hi, color=INK, lw=0.7)
+    axes[0].set_ylabel("Immature fruit passed as mature (%)")
+    axes[1].set_ylabel("Fruit referred for re-measurement (%)")
+    for ax in axes:
+        ax.set_xticks(xs, [lab for _, lab in meths], rotation=0)
+        ax.grid(axis="x", visible=False)
+    axes[0].legend(title="consignments × fruit", frameon=False, fontsize=6.5, title_fontsize=6.5)
+    _save(fig, figdir, "fig_application")

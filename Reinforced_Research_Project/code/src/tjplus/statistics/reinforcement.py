@@ -294,5 +294,46 @@ def analyse_reinforcement(out, orig_dir, cfg, log=None):
     res["E11_E12"] = analyse_e11(raw, out, log)
     if os.path.isdir(os.path.join(orig_dir, "raw")):
         res["E13"] = analyse_e13(orig_dir, out, log)
+    res["E14"] = analyse_e14(raw, out, log)
     json.dump(_clean(res), open(os.path.join(out, "statistics_reinforcement.json"), "w"), indent=1)
     return res
+
+# ----------------------------------------------------------------------------- E14 application case study
+APP_METHODS = ["Point", "ASTM-PI", "Gauss-LOO", "TJ+N", "TJ+H-N"]
+
+def analyse_e14(raw_dir, out, log=None):
+    d = _load(raw_dir, "E14_application*.csv.gz")
+    if d.empty:
+        return {}
+    keys = ["setting", "kind", "design", "K", "n_g", "method"]
+    if d.duplicated(keys + ["rep"]).sum():
+        raise RuntimeError("E14: duplicated rows")
+    rng = np.random.default_rng(20261028)
+    rows = []
+    for key, g in d.groupby(keys, sort=False):
+        # pooled rates over repetitions, CI by resampling repetitions
+        num, den = g["immature_passed"].to_numpy(float), g["n_immature"].to_numpy(float)
+        idx = rng.integers(0, len(g), (2000, len(g)))
+        boot = num[idx].sum(1) / np.maximum(den[idx].sum(1), 1)
+        rows.append(dict(zip(keys, key), n_reps=len(g), immature_frac=den.sum() / g["n"].sum(),
+                         immature_passed=num.sum() / max(den.sum(), 1),
+                         ci_lo=float(np.quantile(boot, .025)), ci_hi=float(np.quantile(boot, .975)),
+                         passed=g["n_passed"].sum() / g["n"].sum(), referred=g["n_referred"].sum() / g["n"].sum(),
+                         mature_failed=g["mature_failed"].sum() / max((g["n"] - g["n_immature"]).sum(), 1)))
+    s = pd.DataFrame(rows)
+    s.to_csv(os.path.join(out, "summary", "E14_summary.csv"), index=False, float_format="%.6g")
+    # detail table (supplement)
+    t = s.copy()
+    t["design"] = t.apply(lambda r: f"{int(r.K)}×{int(r.n_g)}", axis=1)
+    t["method"] = t["method"].replace({"TJ+H-N": "TJ+B"})
+    t["Immature passed, % [95% CI]"] = t.apply(lambda r: f"{100 * r.immature_passed:.1f} [{100 * r.ci_lo:.1f}, {100 * r.ci_hi:.1f}]", axis=1)
+    t["Passed, %"] = (100 * t["passed"]).round(1); t["Referred, %"] = (100 * t["referred"]).round(1)
+    t["Mature failed, %"] = (100 * t["mature_failed"]).round(1); t["Immature, %"] = (100 * t["immature_frac"]).round(1)
+    t = t[["setting", "kind", "design", "method", "Immature, %", "Immature passed, % [95% CI]", "Passed, %", "Referred, %", "Mature failed, %"]]
+    t.columns = ["Setting", "Pipeline", "Design", "Rule"] + list(t.columns[4:])
+    lines = ["| " + " | ".join(t.columns) + " |", "|" + "|".join([":--"] * 4 + ["--:"] * 5) + "|"]
+    lines += ["| " + " | ".join(str(v) for v in r) + " |" for r in t.itertuples(index=False)]
+    lines.append("\nTable: **Table S14.** Harvest-maturity screening at 14% dry matter with 90% intervals, for fruit from consignments without standards (200 repetitions). Immature passed: share of truly immature fruit (DM < 14%) declared mature; Referred: share of fruit whose interval contains 14%.\n")
+    open(os.path.join(out, "tables", "E14_application_detail.md"), "w").write("\n".join(lines) + "\n")
+    if log: log.info("E14 analysed")
+    return {"n_rows": len(d)}
