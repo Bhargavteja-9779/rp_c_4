@@ -176,6 +176,48 @@
    ],
    "error_stats": true,
    "boot_B": 200
+  },
+  "E14_application": {
+   "dataset": "mango_application",
+   "reps_full": 200,
+   "reps_quick": 2,
+   "settings": [
+    "season",
+    "inst_15016",
+    "inst_15014",
+    "inst_15029"
+   ],
+   "kinds": {
+    "season": [
+     "sbc"
+    ],
+    "inst": [
+     "sbc",
+     "pds"
+    ]
+   },
+   "designs": [
+    [
+     "random",
+     2,
+     10
+    ],
+    [
+     "random",
+     10,
+     2
+    ]
+   ],
+   "designs_inst_extra": [
+    [
+     "random",
+     20,
+     1
+    ]
+   ],
+   "threshold": 14.0,
+   "alpha": 0.1,
+   "_comment": "Application case study (harvest-maturity screening at 14 % DM; Ainsworth 2016, Hort Innovation MG15002). Specified before running; added on 2026-10-28 after E10 was analysed (deviation R2)."
   }
  },
  "classical_methods": [

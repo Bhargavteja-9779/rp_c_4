@@ -144,3 +144,33 @@ The first full E10 run was stopped after about 30 of 50 repetitions of its first
 - **ANOVA-PI:** a one-way random-effects prediction interval for a new batch, computed from the signed leave-one-out residuals of the standards, with bias-corrected centre and Satterthwaite degrees of freedom.
 
 TJ+G (max-member score; validity proof in the manuscript appendix) is retained as pre-registered. **H10b now covers TJ+G, TJ+G-N, TJ+H and TJ+H-N.** **Consequence for novelty:** the batch-level jackknife+ is not claimed as new methodology. The contribution is its instantiation for transfer standards and the empirical finding about the unit of exchangeability.
+
+**R2 (2026-10-28).** An application case study, E14, was added after E10 had been analysed and before E11 had finished. It was specified before running, and a one-repetition smoke test was used only to check the code. It responds to an editorial goal: to show the consequence of interval validity for a real decision. E10's methods and designs are reused, so its outcome is not a fresh hypothesis test of E10. It is a translation of E10 into decision terms. It is reported as such.
+
+## E14 — Application case study: harvest-maturity screening of mango at 14% dry matter
+
+**Context.** A long-standing industry recommendation for mango is a minimum dry matter of 14% at harvest (Ainsworth 2016, Hort Innovation final report MG15002, ISBN 978 0 7341 3968 9). Handheld NIR instruments are used on farm and in markets to check this threshold. When a calibration is moved to a new handheld instrument or a new season, the reported value needs an uncertainty range that can be trusted.
+
+**Decision rule.** Each fruit gets a 90% two-sided interval.
+
+- *Pass* (declared mature) if the lower limit is ≥ 14% DM.
+- *Fail* if the upper limit is < 14%.
+- *Refer* (re-measure or check destructively) otherwise.
+- *Point* rule, for comparison: pass if ŷ ≥ 14%.
+
+**Settings and designs.**
+
+- Settings: the season shift (SBC) and the three instrument shifts (SBC and PDS).
+- Designs: standards from 2 consignments × 10 fruit, or 10 consignments × 2 fruit, plus 20 × 1 for the instrument settings.
+- Test fruit: all fruit from consignments not used for standards.
+- Methods: Point, TJ+N (sample level), TJ+H-N (batch level), Gauss-LOO, ASTM-PI.
+- 200 repetitions.
+
+**Outcomes.**
+
+- Rate of immature fruit (true DM < 14%) that are passed, relative to all immature fruit. This is the consumer-risk error.
+- Share of fruit passed.
+- Share of fruit referred.
+- Rate of mature fruit failed.
+
+No inferential test is planned. The outcomes are reported with bootstrap CIs over repetitions.

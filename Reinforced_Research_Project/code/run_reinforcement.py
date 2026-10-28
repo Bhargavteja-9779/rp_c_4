@@ -52,6 +52,8 @@ def main():
         log.info(f"experiments finished in {time.time() - t0:.0f}s (analysis skipped)"); return
     from tjplus.statistics.reinforcement import analyse_reinforcement
     analyse_reinforcement(out, os.path.join(HERE, "..", "..", "Target_Journal_Submission", "results"), cfg, log)
+    from tjplus.visualization.reinforcement_figures import make_reinforcement_figures
+    make_reinforcement_figures(out, os.path.join(HERE, "..", "figures") if a.mode == "full" else os.path.join(out, "figures"))
     log.info(f"finished in {time.time() - t0:.0f}s; outputs in {out}")
 
 if __name__ == "__main__":

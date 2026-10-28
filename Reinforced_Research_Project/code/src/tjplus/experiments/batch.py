@@ -152,3 +152,40 @@ def run_batch_rep(rep, cfg):
                         r.update(_cov_metrics(lo[~is_new], hi[~is_new], y[same], pop[same], alpha, "same_"))
                         rows.append(r)
     return rows, []
+
+# ----------------------------------------------------------------------------- E14: application case study
+def run_application_rep(rep, cfg):
+    """Mango harvest-maturity screening at a dry-matter threshold (default 14 % DM) after a season or instrument
+    change. Decision per fruit from a two-sided (1-alpha) interval: PASS if lower >= threshold, FAIL if upper <
+    threshold, otherwise REFER (re-measure / destructive check). 'Point' passes a fruit if yhat >= threshold."""
+    thr, alpha = cfg["threshold"], cfg["alpha"]
+    rows = []
+    for setting in cfg["settings"]:
+        S = _setting(setting, cfg["raw_dir"])
+        y, Xt, pool, pop, date = S["y"], S["Xt"], S["pool"], S["pop"], S["date"]
+        designs = list(cfg["designs"]) + (list(cfg.get("designs_inst_extra", [])) if setting.startswith("inst") else [])
+        for di, design in enumerate(designs):
+            design = tuple(design)
+            rng = np.random.default_rng(BASE_SEED + 2000003 * rep + 7919 * di + 29)
+            std, grp, new, same = draw_design(pool, pop, date, design, rng)
+            yt = y[new]
+            for kind in cfg["kinds"][setting.split("_")[0]]:
+                Xs_std = None if S["Xs"] is None else S["Xs"][std]
+                tf = M.TransferFits(kind, S["source"], Xt[std], y[std], Xs_std, Xt[new], seed=BASE_SEED + rep)
+                g = G.GroupTransferFits(tf, grp, Xt[std], Xt[new])
+                s_tq = S["sigmas"]["tq"]
+                cand = {"Point": None, "TJ+N": M.tj_plus(tf, alpha, s_tq), "TJ+H-N": G.tj_plus_hier(g, alpha, s_tq),
+                        "Gauss-LOO": M.gauss_loo(tf, alpha), "ASTM-PI": M.astm_pi(tf, S["source"], alpha)}
+                for name, iv in cand.items():
+                    if iv is None:
+                        passed = tf.mu_full_test >= thr; failed = ~passed
+                    else:
+                        lo = np.broadcast_to(iv[0], yt.shape); hi = np.broadcast_to(iv[1], yt.shape)
+                        passed = lo >= thr; failed = hi < thr
+                    imm = yt < thr
+                    rows.append(dict(setting=setting, rep=rep, design=design[0], K=design[1], n_g=design[2], m=len(std),
+                                     kind=kind, method=name, n=len(yt), n_immature=int(imm.sum()),
+                                     immature_passed=int((passed & imm).sum()), mature_failed=int((failed & ~imm).sum()),
+                                     n_passed=int(passed.sum()), n_failed=int(failed.sum()),
+                                     n_referred=int((~passed & ~failed).sum())))
+    return rows, []

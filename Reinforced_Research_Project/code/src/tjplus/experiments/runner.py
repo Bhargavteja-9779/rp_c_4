@@ -19,6 +19,9 @@ def _work(args):
         return run_corn_rep(rep, cfg)
     if dataset == "mango_inst":
         return run_mango_inst_rep(rep, cfg)
+    if dataset == "mango_application":
+        from .batch import run_application_rep
+        return run_application_rep(rep, cfg)
     if dataset == "mango_batch":
         from .batch import run_batch_rep
         return run_batch_rep(rep, cfg)
