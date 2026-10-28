@@ -6,3 +6,6 @@ __pycache__/
 Target_Journal_Submission/results_quick/
 Reinforced_Research_Project/code/data/raw
 Reinforced_Research_Project/results_quick/
+# temporary: live outputs of running experiments (removed when the runs finish)
+Reinforced_Research_Project/results/experiment_logs/
+Reinforced_Research_Project/results/raw/
