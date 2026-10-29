@@ -47,6 +47,8 @@ def e10_values(V):
     V["r_tjb_width_10"] = f"{np.median(r10):.2f}"
     r2 = (p["Gauss-LGO"] / p["TJ+N"]).xs(("random", 2), level=("design", "K"))
     V["r_gausslgo_width_2"] = f"{np.median(r2):.1f}"
+    rr = rnd[(rnd["method"] == "TJ+N") & (rnd["K"] == 10)]["rmsep_new"]
+    V["r_app_rmsep"] = rng(rr, 1)
     ch = a[a["design"] == "chrono"]
     V["r_chrono_n"] = int((ch["method"] == "TJ+N").sum())
     for meth, key in (("TJ+N", "tjn"), ("Gauss-LOO", "gauss"), ("ANOVA-PI", "anova"), ("ASTM-PI", "astm")):
@@ -96,6 +98,7 @@ def main():
         ns = {}
         exec(open(extra).read(), ns)
         ns["fill"](V, RES)
+        ns["fill_text"](V)
     json.dump(V, open(os.path.join(HERE, "values.json"), "w"), indent=1, ensure_ascii=False)
     print(f"{len(V)} values written")
 

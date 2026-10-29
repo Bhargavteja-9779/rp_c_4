@@ -17,9 +17,9 @@ $$R_i = \frac{|y_i - \mu_{-i}(\mathbf{x}^T_i)|}{\sigma_{-i}(\mathbf{x}^T_i)}, \q
 
 The interval for a new spectrum $\mathbf{x}$ collects the $m$ left-out predictions, each widened by its own scaled error:
 
-$$\hat C(\mathbf{x}) = \left[\, \hat q^{-}_{\alpha}\{\mu_{-i}(\mathbf{x}) - \sigma_{-i}(\mathbf{x})R_i\},\;\; \hat q^{+}_{\alpha}\{\mu_{-i}(\mathbf{x}) + \sigma_{-i}(\mathbf{x})R_i\}\,\right]. \qquad (3)$$
+$$\hat C(\mathbf{x}) = \lbrack \hat q^{-}_{\alpha}\{\mu_{-i}(\mathbf{x}) - \sigma_{-i}(\mathbf{x})R_i\},\;\; \hat q^{\text{+}}_{\alpha}\{\mu_{-i}(\mathbf{x}) + \sigma_{-i}(\mathbf{x})R_i\}\rbrack. \qquad (3)$$
 
-Here $\hat q^{+}_{\alpha}$ is the $\lceil(1-\alpha)(m+1)\rceil$-th smallest value ($+\infty$ if this rank exceeds $m$), and $\hat q^{-}_{\alpha}$ is the $\lfloor\alpha(m+1)\rfloor$-th smallest ($-\infty$ if the rank is below 1). The original calibration $f$ is never re-fitted; often it could not be, because its data belong to another instrument or season. We write TJ+N for the scaled version used throughout, and TJ+ when $\sigma\equiv1$. For PDS each re-fit takes milliseconds, and the whole interval takes seconds at most. Fig. 1 summarises the procedure.
+Here $\hat q^{\text{+}}_{\alpha}$ is the $\lceil(1-\alpha)(m+1)\rceil$-th smallest value ($+\infty$ if this rank exceeds $m$), and $\hat q^{-}_{\alpha}$ is the $\lfloor\alpha(m+1)\rfloor$-th smallest ($-\infty$ if the rank is below 1). The original calibration $f$ is never re-fitted; often it could not be, because its data belong to another instrument or season. We write TJ+N for the scaled version used throughout, and TJ+ when $\sigma\equiv1$. For PDS each re-fit takes milliseconds, and the whole interval takes seconds at most. Fig. 1 summarises the procedure.
 
 ![**Fig. 1.** The procedure in four steps. Only the transfer step is re-fitted; the original calibration and the difficulty scaling are fixed beforehand from source data.](figures/fig1_overview.png){width=16.5cm}
 

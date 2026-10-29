@@ -8,7 +8,7 @@ The transfer algorithm $\mathcal{T}$ is symmetric in its input samples. For inde
 **Proposition 2 (TJ+G).** Define the batch scores
 $$S_{kl}=\max_{j\le n_g}\frac{|y_{kj}-\mu_{-kl}(\mathbf{x}^T_{kj})|}{\sigma_{-kl}(\mathbf{x}^T_{kj})},\qquad S_k=S_{k,K+1},$$
 and the interval
-$$\hat C_G(\mathbf{x})=\big[\hat q^-_\alpha\{\mu_{-k}(\mathbf{x})-\sigma_{-k}(\mathbf{x})S_k\},\ \hat q^+_\alpha\{\mu_{-k}(\mathbf{x})+\sigma_{-k}(\mathbf{x})S_k\}\big],$$
+$$\hat C_G(\mathbf{x})=\lbrack \hat q^-_\alpha\{\mu_{-k}(\mathbf{x})-\sigma_{-k}(\mathbf{x})S_k\},\ \hat q^{\text{+}}_\alpha\{\mu_{-k}(\mathbf{x})+\sigma_{-k}(\mathbf{x})S_k\}\rbrack ,$$
 where the quantiles are taken over the $K$ batches with the ranks of Eq. (3) ($m$ replaced by $K$). Then $\Pr\{y_{K+1,1}\in\hat C_G(\mathbf{x}^T_{K+1,1})\}\ge1-2\alpha$.
 
 *Proof.* Let $\mathbf{x}=\mathbf{x}^T_{K+1,1}$.

@@ -42,13 +42,19 @@ def main():
     tm = pd.read_csv(os.path.join(ORIG, "results", "raw", "E6_timing.csv")).round(4)
     P.append("# Table S10. Computing time\n\n" + md(tm, "**Table S10.** Wall-clock time and peak memory (one CPU core, median of 20 runs)."))
     e10 = pd.read_csv(os.path.join(RES, "summary", "E10_summary.csv"))
-    e10 = e10[(e10.alpha == 0.1) & e10.method.isin(["TJ+N", "TJ+H-N", "Gauss-LOO", "SCP-T-split-N", "ANOVA-PI", "Gauss-LGO", "LGO-CV+N", "ASTM-PI"])]
-    e10 = e10.assign(method=e10.method.replace({"TJ+H-N": "TJ+B", "SCP-T-split-N": "Split"}),
-                     cov=e10.apply(lambda r: "unbounded" if r.new_frac_inf > 0.5 else f"{r.coverage_mean:.3f} [{r.ci_lo:.3f}, {r.ci_hi:.3f}]", axis=1),
-                     same=e10.same_coverage.round(3), icc=e10.icc_new.round(2))
-    e10 = e10[["setting", "kind", "design", "K", "n_g", "method", "cov", "under", "same", "icc"]]
-    e10.columns = ["Setting", "Pipeline", "Design", "K", "n_g", "Method", "Coverage, new batches [95% CI]", "Too narrow", "Coverage, same batches", "ICC"]
-    P.append("# Table S11. Batch designs, every combination\n\n" + md(e10, "**Table S11.** Standards from K consignments × n_g fruit (α = 0.10; 300 repetitions). Coverage for fruit from consignments without standards (consignment-weighted) and for the remaining fruit of the sampled consignments; ICC: intra-consignment correlation of the errors of the transferred predictor."))
+    e10 = e10[(e10.alpha == 0.1)]
+    ms = [("TJ+N", "TJ+N"), ("TJ+H-N", "TJ+B"), ("Gauss-LOO", "Gauss-LOO"), ("SCP-T-split-N", "Split"),
+          ("ANOVA-PI", "ANOVA-PI"), ("Gauss-LGO", "Gauss-LGO"), ("ASTM-PI", "ASTM-PI")]
+    rows = []
+    for (st, kd, de, K, ng), g in e10.groupby(["setting", "kind", "design", "K", "n_g"], sort=True):
+        r = [st, kd.upper(), ("chrono " if de == "chrono" else "") + f"{K}×{ng}"]
+        for m, _ in ms:
+            x = g[g.method == m].iloc[0]
+            r.append("unb." if x.new_frac_inf > 0.5 else f"{x.coverage_mean:.3f}" + ("*" if x.under else ""))
+        r += [f"{g[g.method == 'TJ+N'].same_coverage.iloc[0]:.3f}", f"{g[g.method == 'TJ+N'].icc_new.iloc[0]:.2f}"]
+        rows.append(r)
+    t = pd.DataFrame(rows, columns=["Setting", "Pipeline", "Design"] + [l for _, l in ms] + ["TJ+N, same batches", "ICC"])
+    P.append("# Table S11. Batch designs, every combination\n\n" + md(t, "**Table S11.** Standards from K consignments × n_g fruit (α = 0.10; 300 repetitions). Coverage for fruit from consignments without standards (consignment-weighted); * flagged as too narrow (upper 95% bootstrap limit < 0.90); unb.: unbounded in more than half of the repetitions. Last two columns: TJ+N coverage for the remaining fruit of the sampled consignments, and the intra-consignment correlation (ICC) of the errors of the transferred predictor. Confidence intervals for every cell are in results/summary/E10_summary.csv."))
     p11 = os.path.join(RES, "statistics", "E11_validity_by_dataset.csv")
     if os.path.exists(p11):
         t = pd.read_csv(p11).round(3)
@@ -57,9 +63,17 @@ def main():
     p13 = os.path.join(RES, "tables", "E13_noninferiority.md")
     P.append("# Table S13. Closeness to nominal and per-set reliability\n\n" + open(p13).read().strip() +
              "\n\nTable: **Table S13.** Main scenarios with random standards (corn, tablets, mango season shift and mango instruments; 64 scenario-pipeline combinations). Non-inferior: lower limit of the 95% CI of coverage ≥ nominal − 0.02. Last column: share of standard sets (repetitions) with realised coverage ≥ 0.85 on the test samples, median (minimum) over scenarios. Unbounded intervals count as covering.\n\n")
-    p14 = os.path.join(RES, "tables", "E14_application_detail.md")
-    if os.path.exists(p14):
-        P.append("# Table S14. Harvest-maturity case study, all settings\n\n" + open(p14).read())
+    e14 = pd.read_csv(os.path.join(RES, "summary", "E14_summary.csv"))
+    rules = [("Point", "Point"), ("ASTM-PI", "ASTM-PI"), ("Gauss-LOO", "Gauss-LOO"), ("TJ+N", "TJ+N"), ("TJ+H-N", "TJ+B")]
+    rows = []
+    for (st, kd, K, ng), g in e14.groupby(["setting", "kind", "K", "n_g"], sort=True):
+        r = [st, kd.upper(), f"{K}×{ng}", f"{100 * g.immature_frac.iloc[0]:.0f}"]
+        for m, _ in rules:
+            x = g[g.method == m].iloc[0]
+            r.append(f"{100 * x.immature_passed:.1f} / {100 * x.referred:.0f}")
+        rows.append(r)
+    t = pd.DataFrame(rows, columns=["Setting", "Pipeline", "Design", "Immature %"] + [l for _, l in rules])
+    P.append("# Table S14. Harvest-maturity case study, all settings\n\n" + md(t, "**Table S14.** Screening at 14% dry matter with 90% intervals, fruit from consignments without standards (200 repetitions). Each cell: percentage of immature fruit passed as mature / percentage of all fruit referred for re-measurement. Bootstrap CIs: results/summary/E14_summary.csv."))
     figs = [("fig5_ablation", "Ablation of TJ+N: mean coverage (left) and median interval score relative to TJ+N (right)."),
             ("fig7_conditional_coverage", "Coverage within thirds of the difficulty σ(x) of the test spectra (main pipelines, α = 0.10)."),
             ("fig8_error_analysis", "Miss rate by Q-residual quintile of the test spectra (first 100 repetitions)."),

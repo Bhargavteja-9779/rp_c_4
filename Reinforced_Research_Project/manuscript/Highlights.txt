@@ -1,0 +1,5 @@
+- Uncertainty ranges of a calibration do not survive a move to a new NIR instrument
+- Re-fitting the transfer with one standard left out restores valid intervals
+- No extra reference samples are needed beyond those used for the transfer
+- Standards from few batches give intervals that are too narrow for new batches
+- Taking standards from many batches fixes this at no extra cost

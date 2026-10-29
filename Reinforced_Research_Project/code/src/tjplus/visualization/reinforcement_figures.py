@@ -150,7 +150,7 @@ def fig_application(out, figdir):
     if not os.path.exists(p):
         return
     s = pd.read_csv(p)
-    meths = [("Point", "point rule"), ("ASTM-PI", "ASTM-PI"), ("Gauss-LOO", "Gauss-LOO"), ("TJ+N", "TJ+N"), ("TJ+H-N", "TJ+B")]
+    meths = [("Point", "point\nrule"), ("ASTM-PI", "ASTM-\nPI"), ("Gauss-LOO", "Gauss-\nLOO"), ("TJ+N", "TJ+N"), ("TJ+H-N", "TJ+B")]
     designs = sorted({(int(k), int(n)) for k, n in zip(s["K"], s["n_g"])})
     cols = {2: SLOT[3], 10: SLOT[0], 20: SLOT[2]}
     _style()
@@ -163,10 +163,12 @@ def fig_application(out, figdir):
             lo = [100 * g[g["method"] == m][col].min() for m, _ in meths]
             hi = [100 * g[g["method"] == m][col].max() for m, _ in meths]
             pos = xs + (j - (len(designs) - 1) / 2) * w
-            ax.bar(pos, vals, width=w * 0.92, color=cols.get(K, INK2), label=f"{K}×{ng}")
+            ax.bar(pos, vals, width=w * 0.92, color=cols.get(K, INK2),
+                   label=f"{K}×{ng}" + (" (instruments only)" if K == 20 else ""))
             ax.vlines(pos, lo, hi, color=INK, lw=0.7)
     axes[0].set_ylabel("Immature fruit passed as mature (%)")
     axes[1].set_ylabel("Fruit referred for re-measurement (%)")
+    axes[0].set_title("(a) Consumer risk", loc="left"); axes[1].set_title("(b) Price: fruit to re-check", loc="left")
     for ax in axes:
         ax.set_xticks(xs, [lab for _, lab in meths], rotation=0)
         ax.grid(axis="x", visible=False)
