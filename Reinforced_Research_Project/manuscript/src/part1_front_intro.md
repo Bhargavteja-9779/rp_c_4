@@ -10,7 +10,7 @@ title: "Trustworthy prediction intervals after moving an NIR calibration to a ne
 
 # Abstract {.unnumbered}
 
-**Background:** When a near-infrared (NIR) calibration is moved to a new instrument or harvest season, a few reference samples are measured to adapt it. Results are then reported, and products accepted or rejected, with an uncertainty range. Whether that range still holds after the move, and how the reference samples must be chosen for it to hold, is rarely checked.
+**Background:** When a near-infrared (NIR) calibration is moved to a new instrument or harvest season, a few reference samples are measured to adapt it. Results are then reported, and products accepted or rejected, with an uncertainty range. Whether that range still holds after the move, and how the reference samples should be chosen, is rarely checked.
 
 **Results:** On three public data sets (corn, tablets, mango), 90% ranges taken from the original calibration contained as few as {{min_cov_source}} of the reference values after transfer. Re-fitting the transfer with each reference sample left out in turn (a jackknife+) gave intervals that reached their nominal coverage in all {{n_scen_main}} planned scenarios with randomly chosen samples, without extra reference analyses; simple Gaussian and regression intervals did almost as well at 90% but fell slightly short at 95%. How the samples were collected mattered more. With 20 reference fruit from two consignments, intervals were too narrow for fruit from other consignments in {{r_k2_tjn_under}} instrument and season combinations (coverage {{r_k2_tjn_cov}}). Taking one fruit from each of 15–20 consignments, or leaving out whole consignments when re-fitting, restored coverage. {{r_abstract_app}}
 

@@ -5,7 +5,7 @@ For someone who transfers an NIR calibration and must report results with an unc
 
 1. Do not reuse the uncertainty formula of the original calibration after a change of instrument or season. Re-establish it on the new instrument.
 2. Collect the reference samples for the transfer from as many different batches as practical, ideally one or two per batch, and from at least nine batches if a 90% statement is to cover future batches. In our data, twenty samples from twenty consignments served far better than twenty from two, at the same cost in reference analyses.
-3. Fit the transfer as usual. Then re-fit it with each standard left out, or each batch left out if several standards share a batch, and build the interval of Eq. (3) from the left-out errors. A *t*-interval from the leave-one-batch-out errors is a simpler alternative that worked as well in our data, although without a formal guarantee.
+3. Fit the transfer as usual. Then re-fit it with each standard left out, or each batch left out if several standards share a batch, and build the interval of Eq. (3) from the left-out errors. A *t*-interval or a random-effects interval from the leave-one-batch-out errors are simpler alternatives that worked as well in our data, although without a distribution-free guarantee.
 4. For 90% statements with standards from many batches, a Gaussian interval from the leave-one-out RMSE (or, for slope/bias correction, the regression prediction interval) is a reasonable shortcut. For 95% statements these formulas fell one or two points short in some scenarios, and TJ+N needs at least 19 standards.
 5. Monitor the instrument after set-up, as described in Section 4.5.
 

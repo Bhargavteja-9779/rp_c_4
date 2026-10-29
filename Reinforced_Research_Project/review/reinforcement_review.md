@@ -6,7 +6,7 @@ All numbers below come from `results/statistics_reinforcement.json`, `results/su
 
 | Hypothesis (protocol) | Result | Verdict |
 |---|---|---|
-| H10a: with standards from 2 consignments, sample-level TJ+N under-covers new-batch samples in most cells (α = 0.10) | Too narrow in 6 of 8 cells, coverage 0.67–0.91. Gauss-LOO 8/8, split 8/8, ANOVA-PI 8/8, ASTM-PI 8/8, SCP-S 8/8. Damage largest for SBC (0.67–0.77). | **Supported** |
+| H10a: with standards from 2 consignments, sample-level TJ+N under-covers new-batch samples in most cells (α = 0.10) | Too narrow in 6 of 8 cells, coverage 0.67–0.91. Gauss-LOO 8/8, split 8/8, ASTM-PI 8/8, SCP-S 8/8, LGO-CV+N 4/8. After the correction of deviation R3, ANOVA-PI was too narrow in 2/8 at K = 2 and in none from K = 5; the first version, built on leave-one-standard-out residuals, gave 8/8 and is superseded. Damage largest for SBC (0.67–0.77). | **Supported** |
 | H10b: TJ+G, TJ+G-N, TJ+H, TJ+H-N never too narrow where bounded (random designs) | TJ+H-N 0 of 58 bounded cells; TJ+G, TJ+G-N and TJ+H each 0 of 58 (statistics JSON). Coverage 0.90–0.98 at 90%. | **Supported** |
 | H10c: one standard per consignment makes sample-level TJ+N valid | 0 of 42 cells over three α levels (15 × 1, 20 × 1) | **Supported** |
 | H10d: deficit increases with the ICC of target errors | Spearman 0.52, p = 0.18 (n = 8 cells). ICC was high everywhere (0.46–0.63 in random designs), so it did not discriminate between cells. Coverage was governed by K. | **Not supported** (inconclusive; reported as such, figure moved to the supplement) |

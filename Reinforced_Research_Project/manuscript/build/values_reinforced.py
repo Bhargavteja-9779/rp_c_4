@@ -62,6 +62,8 @@ def e10_values(V):
     for K in (5, 10):
         r = (p["Gauss-LGO"] / p["TJ+N"]).xs(("random", K), level=("design", "K"))
         V[f"r_gausslgo_ratio_{K}"] = f"{r.min():.2f}–{r.max():.2f}"
+        r = (p["ANOVA-PI"] / p["TJ+N"]).xs(("random", K), level=("design", "K"))
+        V[f"r_anova_ratio_{K}"] = f"{r.min():.2f}–{r.max():.2f}"
     ch = a[a["design"] == "chrono"]
     V["r_chrono_n"] = int((ch["method"] == "TJ+N").sum())
     for meth, key in (("TJ+N", "tjn"), ("Gauss-LOO", "gauss"), ("ANOVA-PI", "anova"), ("ASTM-PI", "astm"), ("Gauss-LGO", "gausslgo")):

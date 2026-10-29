@@ -1,0 +1,18 @@
+{
+ "rows_new": 538200,
+ "rows_old": 538200,
+ "rows_matched": 538200,
+ "ANOVA-PI": 1592.3982,
+ "ASTM-PI": 0.0,
+ "Gauss-LGO": 0.0,
+ "Gauss-LOO": 0.0,
+ "LGO-CV+N": 0.0,
+ "SCP-S": 0.0,
+ "SCP-T-split-N": 0.0,
+ "TJ+": 0.0,
+ "TJ+G": 0.0,
+ "TJ+G-N": 0.0,
+ "TJ+H": 0.0,
+ "TJ+H-N": 0.0,
+ "TJ+N": 0.0
+}
