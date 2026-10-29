@@ -1,9 +1,35 @@
-# tjplus: distribution-free prediction intervals for transferred multivariate calibrations
+# tjplus: prediction intervals for transferred NIR calibrations
 
 Code, data instructions and complete reproduction pipeline for the manuscript
-*"Valid prediction intervals for transferred NIR calibrations: reusing the transfer standards through a leave-one-standard-out jackknife+"*.
+*"Trustworthy prediction intervals after moving an NIR calibration to a new instrument or season: how many reference samples, and from how many batches?"*
 
-Every number, table and figure in the manuscript is produced by `run_all.py` from the public data sets below. No result is typed by hand.
+Two entry points produce every number, table and figure. No result is typed by hand.
+
+* `run_all.py` reproduces the original study (experiments E1–E9: random standards, robustness, model types, handheld instruments, competitors).
+* `run_reinforcement.py` reproduces the second research cycle:
+  * E10: standards from batches;
+  * E11: simpler interval formulas (Gaussian, ASTM re-estimated, OLS prediction interval for slope/bias correction, bootstrap);
+  * E12: error shape;
+  * E13: non-inferiority and per-set reliability;
+  * E14: mango harvest-maturity case study.
+
+```bash
+python run_reinforcement.py --mode quick          # pipeline check, a few minutes
+python run_reinforcement.py --mode full           # ≈3–4 h on 4 cores; resumable with --rep-start/--rep-end
+python run_reinforcement.py --skip-experiments    # re-analyse the committed raw results (≈1 min)
+cd ../manuscript/build && python values_reinforced.py && python build_revised.py && python build_supplementary_revised.py
+```
+
+Configuration: `config/reinforcement.json`. Protocol and deviation log: `../research_design/revised_experimental_protocol.md`. New modules:
+
+* `src/tjplus/intervals/group.py`: leave-one-batch-out (hierarchical) jackknife+, max-score variant, Gaussian and random-effects batch intervals;
+* `src/tjplus/intervals/classical.py`: the simpler interval formulas of E11;
+* `src/tjplus/experiments/batch.py`: E10 and E14;
+* `src/tjplus/data/meta.py`: mango consignment and harvest-date metadata;
+* `src/tjplus/statistics/reinforcement.py`: analyses of E10–E14;
+* `src/tjplus/visualization/reinforcement_figures.py`: their figures.
+
+Tests: `python -m pytest tests -q`. There are 18 tests, including Monte Carlo checks of the batch-level guarantee and of the exactness of the OLS interval, and leakage checks of the batch designs.
 
 ## 1. Installation
 ```bash

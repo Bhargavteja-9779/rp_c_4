@@ -3,7 +3,7 @@
 
 The results so far assume that the standards are a random sample of everything the instrument will measure later. In a packhouse this is rarely true. The fruit used to adapt a new handheld unit are typically picked from one or two consignments on the day of installation, and the unit is then used on consignments that arrive weeks later. We reproduced this on the mango data, where each fruit's consignment is recorded. The errors of the transferred predictors were clearly shared within consignments: the intra-consignment correlation of the errors was {{r_icc_range}} across the eight setting-pipeline combinations.
 
-Table 4 and Fig. 4 show what happens to fruit from consignments that supplied no standards. With 20 standards taken from only two consignments, TJ+N was too narrow in {{r_k2_tjn_under}} combinations, with coverage of {{r_k2_tjn_cov}} for a nominal 0.90. The simple alternatives were worse:
+Table 4, Fig. 4 and Supplementary Table S11 show what happens to fruit from consignments that supplied no standards. With 20 standards taken from only two consignments, TJ+N was too narrow in {{r_k2_tjn_under}} combinations, with coverage of {{r_k2_tjn_cov}} for a nominal 0.90. The simple alternatives were worse:
 
 - Gaussian intervals from the same left-out errors were too narrow in {{r_k2_gauss_under}};
 - the split-standards interval was too narrow in {{r_k2_split_under}};

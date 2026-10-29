@@ -33,7 +33,7 @@ PLS calibrations come with two standard warning signals: Hotelling $T^2$, for sa
 
 $$\sigma(\mathbf{x}) = \max\left\{\varepsilon,\; c_0 + c_1\sqrt{T^2(\mathbf{x})} + c_2\sqrt{Q(\mathbf{x})}\right\}, \qquad (4)$$
 
-with $c_j\ge0$ fitted on the source cross-validation residuals only. Inside TJ+N it is evaluated on the spectrum after each fold's transfer, so a spectrum that the transfer maps poorly gets a large $Q$ and a wider interval. This scaling is a refinement, not the core of the method. Its effect on efficiency was modest (Section 4.2), and the guarantee holds without it.
+with $c_j\ge0$ fitted on the source cross-validation residuals only. Such normalised scores are standard in conformal regression [@papadopoulos2011; @jovic2025]. Inside TJ+N it is evaluated on the spectrum after each fold's transfer, so a spectrum that the transfer maps poorly gets a large $Q$ and a wider interval. This scaling is a refinement, not the core of the method. Its effect on efficiency was modest (Section 4.2), and the guarantee holds without it.
 
 ## 2.4. When the standards come in batches
 
@@ -64,7 +64,7 @@ All methods use the same transferred predictor and differ only in the interval. 
 - Gauss-LOO-N: the same, scaled by $\sigma(\mathbf{x})$;
 - ASTM-T: the ASTM formula with the standard error re-estimated from the left-out errors;
 - OLS-PI: for SBC only, the textbook prediction interval of the regression of $y$ on $f$;
-- Boot-T: a bootstrap prediction interval with 200 resamples of the standards [@davison1997].
+- Boot-T: a bootstrap prediction interval with 200 resamples of the standards [@davison1997], in the resampling tradition of chemometric uncertainty estimation [@chiappini2025].
 
 *Valid alternatives that cost standards:*
 
@@ -87,7 +87,7 @@ Three public NIR data sets with documented shifts were used (Table 1, Fig. 2).
 
 **Pharmaceutical tablets** (IDRC Shootout 2002) [@eigenvector_data]. 655 tablets on two spectrometers (600–1898 nm), with weight, hardness and assay. The organisers' calibrate, validate and test sets were kept.
 
-**Mango dry matter** [@anderson2020; @mango_data]. Spectra of intact fruit (684–990 nm) from four seasons. Replicate scans were averaged per fruit, giving {{n_fruit}} fruit. Seasons 1–3 were the source and season 4 the target. Season 4 contains 18 consignments of 33–54 fruit each; the data providers call them populations, and each is one cultivar from one orchard, at one maturity stage and harvest date. For an instrument shift, the providers' extended data set [@mango_data_v6] was used: fruit measured on handheld unit 15006 and on one of three other units (15016, 15014, 15029). These pairs share 49, 38 and 29 consignments, respectively.
+**Mango dry matter** [@anderson2020; @mango_data]. Spectra of intact fruit (684–990 nm) from four seasons. Replicate scans were averaged per fruit, giving {{n_fruit}} fruit. Seasons 1–3 were the source and season 4 the target. Season 4 contains {{r_n_pops_s4}} consignments of {{r_pop_size_s4}} fruit each; the data providers call them populations, and each is one cultivar from one orchard, at one maturity stage and harvest date. For an instrument shift, the providers' extended data set [@mango_data_v6] was used: fruit measured on handheld unit 15006 and on one of three other units (15016, 15014, 15029). These pairs share {{r_n_pops_inst}} consignments, respectively.
 
 {{table1}}
 
@@ -106,7 +106,7 @@ All settings, seeds and criteria were fixed before target results were computed 
 - corn: $m$ = 10, 15, 20;
 - tablets and mango: $m$ = 10, 20, 30, 50.
 
-This gives 40 main scenarios, with 500 repetitions for corn and tablets and 300 for mango. A further 200 repetitions per scenario compared the simpler interval formulas (Gauss-LOO-N, ASTM-T, OLS-PI, Boot-T) on identical standards.
+This gives {{n_scen_main}} main scenarios, with 500 repetitions for corn and tablets and 300 for mango. A further 200 repetitions per scenario compared the simpler interval formulas (Gauss-LOO-N, ASTM-T, OLS-PI, Boot-T) on identical standards.
 
 **Standards from batches.** For the four mango settings (season shift with SBC; three instrument shifts with PDS and SBC), $K$ consignments were drawn at random and $n_g$ fruit taken from each, always with 20 standards or fewer:
 

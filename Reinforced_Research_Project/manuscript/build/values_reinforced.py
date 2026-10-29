@@ -89,8 +89,23 @@ def e13_values(V):
     V["r_tc_tjn_min"] = f"{x[x['method'] == 'TJ+N']['tc_share'].min():.2f}"
     V["r_tc_gauss_median"] = f"{x[x['method'] == 'Gauss-LOO']['tc_share'].median():.2f}"
 
+def data_values(V):
+    """Batch structure of the mango data (computed from the data files)."""
+    import sys
+    sys.path.insert(0, os.path.join(ROOT, "code", "src"))
+    from tjplus.data.loaders import load_mango, load_mango_instruments
+    from tjplus.data.meta import load_mango_meta, load_mango_inst_meta
+    raw = os.path.join(ROOT, "code", "data", "raw")
+    d = load_mango(raw); m = load_mango_meta(raw)
+    c = pd.Series(m["pop"][d.season == 4]).value_counts()
+    V["r_n_pops_s4"] = int(len(c)); V["r_pop_size_s4"] = f"{c.min()}–{c.max()}"
+    di = load_mango_instruments(raw); mi = load_mango_inst_meta(raw)
+    n = [int(pd.Series(mi["pop"][di.present[15006] & di.present[t]]).nunique()) for t in (15016, 15014, 15029)]
+    V["r_n_pops_inst"] = f"{n[0]}, {n[1]} and {n[2]}"
+
 def main():
     V = json.load(open(ORIG))
+    data_values(V)
     e10_values(V)
     e13_values(V)
     extra = os.path.join(HERE, "values_reinforced_e11_e14.py")

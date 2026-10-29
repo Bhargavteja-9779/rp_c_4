@@ -9,7 +9,7 @@
 At 90%, most of them did reasonably well. Gauss-LOO was too narrow in {{r_gauss_under_010}} combinations, ASTM-T in {{r_astmt_under_010}} and OLS-PI in {{r_ols_under_010}} of the slope/bias cases. They were often also narrower than TJ+N:
 
 - the textbook OLS-PI had the lower interval score in {{r_ols_better}} SBC scenarios where both were valid, TJ+N in {{r_ols_worse}};
-- Gauss-LOO-N had the lower score in {{r_gaussn_better}}.
+- Gauss-LOO-N had the lower score in {{r_gaussn_better}} (see also Supplementary Table S7).
 
 For routine 90% statements with randomly chosen standards, these formulas are a defensible shortcut, and for slope/bias correction the textbook regression interval is hard to beat.
 
