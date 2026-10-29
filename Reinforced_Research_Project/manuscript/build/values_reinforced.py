@@ -57,6 +57,8 @@ def e10_values(V):
     p = a.pivot_table(index=["setting", "kind", "design", "K"], columns="method", values="new_median_width")
     r10 = (p["TJ+H-N"] / p["TJ+N"]).xs(("random", 10), level=("design", "K"))
     V["r_tjb_width_10"] = f"{np.median(r10):.2f}"
+    s2 = s[(s["design"] == "random") & (s["alpha"] == 0.2)].pivot_table(index=["setting", "kind", "K"], columns="method", values="coverage_mean")
+    V["r_tjg_tjb_diff_02"] = f"{(s2['TJ+G-N'] - s2['TJ+H-N']).max():.2f}"
     r2 = (p["Gauss-LGO"] / p["TJ+N"]).xs(("random", 2), level=("design", "K"))
     V["r_gausslgo_width_2"] = f"{np.median(r2):.1f}"
     for K in (5, 10):

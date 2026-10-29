@@ -22,6 +22,10 @@ def fill(V, RES):
         x = a05[(a05["method"] == meth)]
         V[f"r_{key}_under_005_m20"] = _frac(x[x["m"] >= 20]["under"])
         V[f"r_ni_{key}_005"] = _frac(x["noninferior"])
+    m20 = a05[(a05["m"] >= 20)]
+    V["r_flag_min_cov_m20"] = f"{m20[m20['under'] & m20['method'].isin(['Gauss-LOO', 'ASTM-T', 'OLS-PI', 'Gauss-LOO-N'])]['coverage_mean'].min():.2f}"
+    for meth, key in (("Gauss-LOO", "gauss"), ("ASTM-T", "astmt"), ("OLS-PI", "ols")):
+        V[f"r_ni_{key}_005_m20"] = _frac(m20[m20["method"] == meth]["noninferior"])
     g = a05[(a05["method"] == "Gauss-LOO") & a05["under"]]["coverage_mean"]
     V["r_gauss_flag_cov_005"] = f"{g.min():.2f}–{g.max():.2f} (median {g.median():.2f})"
     S = pd.read_csv(os.path.join(RES, "..", "..", "Target_Journal_Submission", "results", "summary", "summary_all.csv"))
@@ -73,14 +77,15 @@ def fill(V, RES):
                 x = g[g["method"] == mth]
                 if x.empty:
                     cells.append("–"); continue
-                a, b = x["under_0.05"].iloc[0], x["under_0.1"].iloc[0]
-                cells.append(f"{a.split('/')[0]} / {b.split('/')[0]}")
+                e95 = s[(s["dataset"] == ds) & (s["kind"] == kind) & (s["method"] == mth) & (s["alpha"] == 0.05) & (s["m"] >= 20)]
+                b = x["under_0.1"].iloc[0]
+                cells.append(f"{int(e95['under'].sum())}/{len(e95)} · {b}")
             n = g[g["method"] == "TJ+N"]["under_0.1"].iloc[0].split("/")[1]
             lines.append(f"| {labs[ds]} | {kind.upper()} ({n}) | " + " | ".join(cells) + " |")
     V["table_classical"] = "\n".join(lines) + (
         "\n\nTable: Simpler interval formulas on identical, randomly chosen standards (200 repetitions per scenario). "
-        "Each cell gives the number of scenarios in which the method was too narrow at 95% / at 90% (number of "
-        "scenarios in parentheses after the pipeline). OLS-PI applies to slope/bias correction only; Split: half of "
+        "Each cell: scenarios too narrow at 95%, counted only for m ≥ 20 where TJ+N gives bounded 95% intervals · "
+        "scenarios too narrow at 90%, all m (number of scenarios in parentheses after the pipeline). OLS-PI applies to slope/bias correction only; Split: half of "
         "the standards fit the transfer, half calibrate the interval. Results at 80% and interval scores: "
         "Supplementary Table S12.\n")
     # ----------------------------------------------------------------- E14 (application)
@@ -106,6 +111,7 @@ def fill(V, RES):
             V[f"r_app_{key}_ref_K{K}"] = pct(agg(meth, K, "referred")[0])
             V[f"r_app_{key}_pass_K{K}"] = pct(agg(meth, K, "passed")[0])
         V[f"r_app_pds_{key}_imm_K10"] = pct(agg(meth, 10, "immature_passed", a_all[a_all["kind"] == "pds"])[0])
+    V["r_app_point_imm_designs"] = f"{min(agg('Point', K, 'immature_passed')[0] for K in (2, 10)):.0f}–{max(agg('Point', K, 'immature_passed')[0] for K in (2, 10)):.0f}%"
     V["r_app_ratio_tjn"] = f"{agg('TJ+N', 2, 'immature_passed')[0] / agg('TJ+N', 10, 'immature_passed')[0]:.1f}"
     V["r_app_immature_share"] = f"{100 * a[a['method'] == 'Point']['immature_frac'].mean():.0f}%"
     V["r_app_ncomb"] = int(a[(a["method"] == "Point") & (a["K"] == 2)].shape[0])
@@ -133,11 +139,11 @@ def fill_text(V):
     if "r_app_point_imm_K10" not in V:
         return
     V["r_abstract_app"] = (f"In a mango harvest-maturity check at 14% dry matter, passing fruit on the predicted value alone "
-                           f"accepted {V['r_app_point_imm_K10']} of immature fruit; 90% intervals cut this to "
+                           f"accepted {V['r_app_point_imm_designs']} of immature fruit; 90% intervals cut this to "
                            f"{V['r_app_tjn_imm_K10']} with reference fruit from ten consignments and {V['r_app_tjn_imm_K2']} "
                            f"with fruit from two.")
     V["r_cover_app"] = (f"In a harvest-maturity check of mango at the recommended minimum of 14% dry matter, deciding on the "
-                        f"predicted value alone passed {V['r_app_point_imm_K10']} of immature fruit; intervals from well-spread "
+                        f"predicted value alone passed {V['r_app_point_imm_designs']} of immature fruit; intervals from well-spread "
                         f"reference fruit reduced this to {V['r_app_tjn_imm_K10']}, against {V['r_app_tjn_imm_K2']} with "
                         f"fruit from two consignments, and flagged the fruit that needed a second measurement.")
     V["r_conclusion_app"] = (f"In a harvest-maturity check of mango, intervals from well-spread reference fruit reduced the share of "

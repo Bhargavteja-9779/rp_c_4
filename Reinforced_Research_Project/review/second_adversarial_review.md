@@ -58,3 +58,20 @@ The review is preserved verbatim in the session record. The issues and what was 
 - **Equation rendering.** Visual inspection of the PDF showed that LibreOffice rendered Eq. (3) and two appendix formulas as "¿". The same defect existed in the original submission PDF. The math was rewritten (`\lbrack`/`\rbrack`, superscript `\text{+}`), and the PDF text was re-checked: 0 broken glyphs.
 - **Unverified venue.** "Accepted at ICML 2026" for Doula 2026 was checked against the arXiv author comment and confirmed.
 - **Re-run identity.** All E10 methods other than ANOVA-PI must reproduce the superseded run exactly; see `audit/data/e10_rerun_check.json`.
+
+## Verification pass on the final version
+
+A second independent reviewer agent re-read the corrected manuscript. It checked every issue ID and 30 numbers against the result files; all 30 numbers matched. Its verdict: **minor revision; no CRITICAL or MAJOR issue remains.**
+
+It raised eight remaining items, all fixed and re-validated by rebuilding the documents and running the consistency checks:
+
+1. **TJ+G vs TJ+B.** "Identical intervals" was true at 90% and 95% but not at 80% (difference up to 0.04). The text is corrected in §2.4 and §4.3, and the leftover name "TJ+H" in Appendix B is replaced by TJ+B.
+2. **Table 3, 95% column.** It is now counted only for m ≥ 20, where TJ+N is bounded, and the caption says so.
+3. **"Reached nominal coverage" (abstract).** Now "never detectably below nominal".
+4. **Application baselines.** The point-rule baseline is now given as the range over designs (36–41%).
+5. **Procedure step 2.** The nine-batch requirement is now attributed to TJ+B only; the Gaussian and random-effects batch formulas worked from five batches.
+6. **§3.2 "all settings fixed in advance".** Now restricted to the main experiments, with the later additions and the R3 correction named.
+7. **Cover letter.** "Candidly" removed; it now states that the classical batch-aware formulas performed well once whole consignments were left out.
+8. **ANOVA-PI description.** Now complete: signed leave-one-batch-out errors, moment estimators with truncation, Satterthwaite degrees of freedom and the centre shift.
+
+The 95% shortfalls of the simpler formulas are now quantified for m ≥ 20: flagged intervals covered at least 0.92. Non-inferiority counts are Gauss-LOO 48/55, ASTM-T 52/55 and OLS-PI 24/29.

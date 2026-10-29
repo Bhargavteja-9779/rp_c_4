@@ -45,7 +45,7 @@ First, a bounded interval needs at least nine *batches* at $\alpha=0.10$, howeve
 
 Second, if every standard comes from a different, randomly chosen batch, the ordinary TJ+ already is the batch-level method, so nothing else is needed.
 
-We use this construction with the σ(x) scaling and call it TJ+B. Appendix B also gives a variant that keeps only the largest error per batch (TJ+G), with a short self-contained proof. In the designs studied here both gave identical intervals.
+We use this construction with the σ(x) scaling and call it TJ+B. Appendix B also gives a variant that keeps only the largest error per batch (TJ+G), with a short self-contained proof. At 90% and 95% both gave identical intervals in the designs studied here, because both then reduce to the largest left-out error; at 80% TJ+B was slightly less conservative. The guarantee of TJ+B rests on the theorem of Lee et al. [@lee2026], that of TJ+G on Appendix B.
 
 ## 2.5. Methods compared
 
@@ -73,7 +73,7 @@ All methods use the same transferred predictor and differ only in the interval. 
 *Batch-aware alternatives:*
 
 - Gauss-LGO: a Gaussian interval from leave-one-batch-out errors, with $K-1$ degrees of freedom;
-- ANOVA-PI: the random-effects (one-way ANOVA) prediction interval for a new batch [@mee1984], computed from the same leave-one-batch-out errors;
+- ANOVA-PI: the random-effects (one-way ANOVA) prediction interval for a new batch [@mee1984], computed from the same signed leave-one-batch-out errors, with moment estimates of the between- and within-batch variances (the former truncated at zero), Satterthwaite degrees of freedom, and a centre shifted by the mean left-out error;
 - LGO-CV+N: CV+ with batches as folds but with every sample counted as a separate unit, a natural shortcut without a guarantee for new batches.
 
 An exploratory label-free variant and the ablations of TJ+N (no leave-one-out, no "+", five-fold CV+, single-diagnostic scaling) are reported in the Supplementary Material.
@@ -96,7 +96,7 @@ Three public NIR data sets with documented shifts were used (Table 1, Fig. 2).
 
 ## 3.2. How the study was run
 
-All settings, seeds and criteria were fixed before target results were computed and are listed, together with a log of deviations, in the repository.
+For the main experiments with random standards, all settings, seeds and criteria were fixed before target results were computed. The batch study and the harvest case study were specified later, before their own results were computed, and one baseline was corrected after an internal review; all changes are recorded in a dated deviation log in the repository.
 
 **Original calibrations.** Preprocessing (none, SNV, first or second Savitzky–Golay derivative) and the number of PLS components were chosen by 10-fold cross-validation on source data only [@barnes1989; @savitzky1964; @wold2001]. Ridge regression and a small 1D-CNN were used as alternative model types.
 

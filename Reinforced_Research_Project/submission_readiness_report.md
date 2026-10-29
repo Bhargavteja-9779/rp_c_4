@@ -112,4 +112,18 @@ JIF and quartile could not be verified against JCR from this environment. See `a
 
 ## 8. Final decision (Part XIII)
 
-*(completed after the verification pass; see below)*
+### A. SCIENTIFICALLY REINFORCED — READY FOR SUBMISSION
+
+This decision is conditional on the author actions in Section 7. They require information only the authors hold and are not scientific work.
+
+Why this decision applies:
+
+- **Defensible contribution.** The central contribution is stated precisely and without overclaiming novelty. It is a benchmark and design study. Its headline finding (batch sampling decides validity for new batches) is new for chemometrics, shown on real lot structure, and supported by theory.
+- **Experiments complete.** All experiments needed to answer the critical and major objections were executed as specified; deviations R1–R3 are documented. The one correction (ANOVA-PI) was re-run with unchanged seeds, and every other method reproduced exactly.
+- **Claims match evidence.** Every number is generated from result files: 0 hand-typed results, 0 unfilled placeholders. An independent verification pass found 30/30 spot-checked numbers correct and no remaining critical or major issue. Its eight moderate and minor items were fixed.
+- **Reproducibility checks pass.** These cover tests, hashes, value regeneration and the PDF render (`review/final_consistency_audit.md`).
+
+What this decision does **not** mean:
+
+- It does not mean acceptance is likely. The realistic estimate remains a substantial rejection risk, mainly from limited methodological novelty and from batch evidence drawn from a single product.
+- It does not mean the 72-day target can be guaranteed. About two in three recently accepted ACA papers met it, and any second review round would probably exceed it.

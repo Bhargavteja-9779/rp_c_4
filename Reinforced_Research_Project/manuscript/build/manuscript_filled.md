@@ -12,7 +12,7 @@ title: "Trustworthy prediction intervals after moving an NIR calibration to a ne
 
 **Background:** When a near-infrared (NIR) calibration is moved to a new instrument or harvest season, a few reference samples are measured to adapt it. Results are then reported, and products accepted or rejected, with an uncertainty range. Whether that range still holds after the move, and how the reference samples should be chosen, is rarely checked.
 
-**Results:** On three public data sets (corn, tablets, mango), 90% ranges taken from the original calibration contained as few as 0.03 of the reference values after transfer. Re-fitting the transfer with each reference sample left out in turn (a jackknife+) gave intervals that reached their nominal coverage in all 40 planned scenarios with randomly chosen samples, without extra reference analyses; simple Gaussian and regression intervals did almost as well at 90% but fell slightly short at 95%. How the samples were collected mattered more. With 20 reference fruit from two consignments, intervals were too narrow for fruit from other consignments in 6 of 8 instrument and season combinations (coverage 0.67–0.91). Taking one fruit from each of 15–20 consignments, or leaving out whole consignments when re-fitting, restored coverage. In a mango harvest-maturity check at 14% dry matter, passing fruit on the predicted value alone accepted 36% of immature fruit; 90% intervals cut this to 3.2% with reference fruit from ten consignments and 9.8% with fruit from two.
+**Results:** On three public data sets (corn, tablets, mango), 90% ranges taken from the original calibration contained as few as 0.03 of the reference values after transfer. Re-fitting the transfer with each reference sample left out in turn (a jackknife+) gave intervals that were never detectably below their nominal coverage in 40 planned scenarios with randomly chosen samples, without extra reference analyses; simple Gaussian and regression intervals did almost as well at 90% but fell slightly short at 95%. How the samples were collected mattered more. With 20 reference fruit from two consignments, intervals were too narrow for fruit from other consignments in 6 of 8 instrument and season combinations (coverage 0.67–0.91). Taking one fruit from each of 15–20 consignments, or leaving out whole consignments when re-fitting, restored coverage. In a mango harvest-maturity check at 14% dry matter, passing fruit on the predicted value alone accepted 36–41% of immature fruit; 90% intervals cut this to 3.2% with reference fruit from ten consignments and 9.8% with fruit from two.
 
 **Significance:** Reliable uncertainty for a transferred NIR method can be obtained from the reference samples the transfer already needs, provided they come from many batches.
 
@@ -90,7 +90,7 @@ First, a bounded interval needs at least nine *batches* at $\alpha=0.10$, howeve
 
 Second, if every standard comes from a different, randomly chosen batch, the ordinary TJ+ already is the batch-level method, so nothing else is needed.
 
-We use this construction with the σ(x) scaling and call it TJ+B. Appendix B also gives a variant that keeps only the largest error per batch (TJ+G), with a short self-contained proof. In the designs studied here both gave identical intervals.
+We use this construction with the σ(x) scaling and call it TJ+B. Appendix B also gives a variant that keeps only the largest error per batch (TJ+G), with a short self-contained proof. At 90% and 95% both gave identical intervals in the designs studied here, because both then reduce to the largest left-out error; at 80% TJ+B was slightly less conservative. The guarantee of TJ+B rests on the theorem of Lee et al. [@lee2026], that of TJ+G on Appendix B.
 
 ## 2.5. Methods compared
 
@@ -126,7 +126,7 @@ All methods use the same transferred predictor and differ only in the interval. 
 
 - Gauss-LGO: a Gaussian interval from leave-one-batch-out errors, with $K-1$ degrees of freedom;
 
-- ANOVA-PI: the random-effects (one-way ANOVA) prediction interval for a new batch [@mee1984], computed from the same leave-one-batch-out errors;
+- ANOVA-PI: the random-effects (one-way ANOVA) prediction interval for a new batch [@mee1984], computed from the same signed leave-one-batch-out errors, with moment estimates of the between- and within-batch variances (the former truncated at zero), Satterthwaite degrees of freedom, and a centre shifted by the mean left-out error;
 
 - LGO-CV+N: CV+ with batches as folds but with every sample counted as a separate unit, a natural shortcut without a guarantee for new batches.
 
@@ -157,7 +157,7 @@ Table: **Table 1.** Data sets and splitting protocol.
 
 ## 3.2. How the study was run
 
-All settings, seeds and criteria were fixed before target results were computed and are listed, together with a log of deviations, in the repository.
+For the main experiments with random standards, all settings, seeds and criteria were fixed before target results were computed. The batch study and the harvest case study were specified later, before their own results were computed, and one baseline was corrected after an internal review; all changes are recorded in a dated deviation log in the repository.
 
 **Original calibrations.** Preprocessing (none, SNV, first or second Savitzky–Golay derivative) and the number of PLS components were chosen by 10-fold cross-validation on source data only [@barnes1989; @savitzky1964; @wold2001]. Ridge regression and a small 1D-CNN were used as alternative model types.
 
@@ -257,7 +257,7 @@ A laboratory that already has the left-out errors of its standards will naturall
 
 At 90% most of them did well. Gauss-LOO was too narrow in 2 of 100 combinations, ASTM-T in 1 of 100, and OLS-PI in 2 of 52 slope/bias cases. They were also often narrower. Where both were valid, OLS-PI had the lower interval score in 33 of 50 slope/bias scenarios and TJ+N in 7. The scaled Gaussian interval had the lower score in 81 of 97 (see also Supplementary Table S7). For 90% statements with randomly chosen standards, a Gaussian interval from the left-out errors is therefore a reasonable shortcut, and for slope/bias correction the textbook regression interval is usually the better choice.
 
-At 95% the comparison needs care. TJ+N cannot give a bounded 95% interval with fewer than 19 standards; it was unbounded in 45 of 100 combinations here (and in 20 of 40 of the main scenarios), so "never too narrow" is partly automatic. Restricted to $m\ge20$, where TJ+N was bounded, it was too narrow in 0 of 55 combinations, against 16 of 55 for Gauss-LOO, 12 of 55 for ASTM-T and 11 of 29 for OLS-PI. The shortfalls of the formulas were small, though: flagged Gauss-LOO intervals still covered 0.91–0.94 (median 0.94) of the samples. Using the same 0.02 margin as for TJ+N, Gauss-LOO was within 0.02 of nominal in 77 of 100 combinations and OLS-PI in 40 of 52. The practical difference at 95% is therefore one or two percentage points of coverage, not a failure of the simpler methods.
+At 95% the comparison needs care. TJ+N cannot give a bounded 95% interval with fewer than 19 standards; it was unbounded in 45 of 100 combinations here (and in 20 of 40 of the main scenarios), so "never too narrow" is partly automatic. Restricted to $m\ge20$, where TJ+N was bounded, it was too narrow in 0 of 55 combinations, against 16 of 55 for Gauss-LOO, 12 of 55 for ASTM-T and 11 of 29 for OLS-PI. The shortfalls of the formulas were small, though: with $m\ge20$, flagged intervals still covered at least 0.92 of the samples (nominal 0.95). Using the same 0.02 margin as for TJ+N, and again $m\ge20$, Gauss-LOO was within 0.02 of nominal in 48 of 55 combinations, ASTM-T in 52 of 55 and OLS-PI in 24 of 29. The practical difference at 95% is therefore a few percentage points of coverage at most, not a failure of the simpler methods.
 
 The bootstrap behaved differently. As implemented here (pairs resampling of the standards plus resampled in-sample residuals), it was too narrow in 52 of 100 combinations at 90%, including 19 of 29 scenarios with ten standards. With 10–20 standards, the in-sample residuals understate the error of a new sample. A bootstrap based on leverage-corrected or out-of-sample residuals may do better; we did not test one.
 
@@ -265,15 +265,15 @@ The coverage shortfall of the Gaussian formulas was associated with the shape of
 
 | Data set | Pipeline | TJ+N | Gauss-LOO | Gauss-LOO-N | ASTM-T | OLS-PI | Boot-T | Split |
 |:--|:--|--:|--:|--:|--:|--:|--:|--:|
-| Corn | PDS (24) | 0 / 0 | 6 / 0 | 0 / 0 | 0 / 0 | – | 7 / 3 | 0 / 0 |
-| Corn | SBC (24) | 0 / 0 | 8 / 1 | 7 / 1 | 0 / 0 | 5 / 1 | 24 / 19 | 0 / 0 |
-| Tablets | PDS (12) | 0 / 0 | 5 / 0 | 2 / 1 | 4 / 0 | – | 8 / 7 | 0 / 0 |
-| Tablets | SBC (12) | 0 / 0 | 8 / 1 | 8 / 1 | 8 / 1 | 8 / 1 | 10 / 8 | 0 / 0 |
-| Mango, season | SBC (4) | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 4 / 4 | 0 / 0 |
-| Mango, instruments | PDS (12) | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | – | 0 / 0 | 0 / 0 |
-| Mango, instruments | SBC (12) | 0 / 0 | 4 / 0 | 6 / 0 | 4 / 0 | 3 / 0 | 12 / 11 | 0 / 0 |
+| Corn | PDS (24) | 0/8 · 0/24 | 1/8 · 0/24 | 0/8 · 0/24 | 0/8 · 0/24 | – | 2/8 · 3/24 | 0/8 · 0/24 |
+| Corn | SBC (24) | 0/8 · 0/24 | 2/8 · 1/24 | 2/8 · 1/24 | 0/8 · 0/24 | 2/8 · 1/24 | 8/8 · 19/24 | 0/8 · 0/24 |
+| Tablets | PDS (12) | 0/9 · 0/12 | 4/9 · 0/12 | 1/9 · 1/12 | 3/9 · 0/12 | – | 6/9 · 7/12 | 0/9 · 0/12 |
+| Tablets | SBC (12) | 0/9 · 0/12 | 6/9 · 1/12 | 6/9 · 1/12 | 6/9 · 1/12 | 6/9 · 1/12 | 7/9 · 8/12 | 0/9 · 0/12 |
+| Mango, season | SBC (4) | 0/3 · 0/4 | 0/3 · 0/4 | 0/3 · 0/4 | 0/3 · 0/4 | 0/3 · 0/4 | 3/3 · 4/4 | 0/3 · 0/4 |
+| Mango, instruments | PDS (12) | 0/9 · 0/12 | 0/9 · 0/12 | 0/9 · 0/12 | 0/9 · 0/12 | – | 0/9 · 0/12 | 0/9 · 0/12 |
+| Mango, instruments | SBC (12) | 0/9 · 0/12 | 3/9 · 0/12 | 4/9 · 0/12 | 3/9 · 0/12 | 3/9 · 0/12 | 9/9 · 11/12 | 0/9 · 0/12 |
 
-Table: **Table 3.** Simpler interval formulas on identical, randomly chosen standards (200 repetitions per scenario). Each cell gives the number of scenarios in which the method was too narrow at 95% / at 90% (number of scenarios in parentheses after the pipeline). OLS-PI applies to slope/bias correction only; Split: half of the standards fit the transfer, half calibrate the interval. Results at 80% and interval scores: Supplementary Table S12.
+Table: **Table 3.** Simpler interval formulas on identical, randomly chosen standards (200 repetitions per scenario). Each cell: scenarios too narrow at 95%, counted only for m ≥ 20 where TJ+N gives bounded 95% intervals · scenarios too narrow at 90%, all m (number of scenarios in parentheses after the pipeline). OLS-PI applies to slope/bias correction only; Split: half of the standards fit the transfer, half calibrate the interval. Results at 80% and interval scores: Supplementary Table S12.
 
 
 
@@ -288,7 +288,7 @@ The shortfall was largest for slope/bias correction (Supplementary Table S11). A
 
 Spreading the 20 standards over more consignments reduced the problem. TJ+N was too narrow in 4 of 8 combinations with 5 × 4 standards, and in 3 of 8 with 10 × 2. With one fruit from each of 20 consignments, available for the instrument pairs only, it was too narrow in none (0 of 6), as Appendix B predicts. The 15 × 1 design, the only one-per-consignment design possible for the season shift, uses 15 standards. It also showed no under-coverage (0 of 8), but its coverage of 0.93–0.98 is inflated by the rank rule, because with 15 standards the 90% limit is the largest left-out error. We had expected the intra-consignment correlation to explain which combinations failed. It did not (Spearman ρ = 0.52, p = 0.18 across the eight combinations with two consignments; Supplementary Fig. S6): the correlation was high everywhere, and the number of consignments decided the outcome.
 
-The methods that treat the consignment as the unit held their level. TJ+B was never too narrow where it gave a bounded interval (0 of 22 combinations at 90%, 0 of 30 at 80%, 0 of 6 at 95%; coverage 0.90–0.98 at 90%). With fewer than nine consignments it gives no finite 90% interval. With 10 × 2 standards its intervals were wider than those of TJ+N (median width ratio 1.38). With one fruit per consignment the two methods are identical. In the designs studied here, the max-score variant TJ+G gave exactly the same intervals as TJ+B.
+The methods that treat the consignment as the unit held their level. TJ+B was never too narrow where it gave a bounded interval (0 of 22 combinations at 90%, 0 of 30 at 80%, 0 of 6 at 95%; coverage 0.90–0.98 at 90%). With fewer than nine consignments it gives no finite 90% interval. With 10 × 2 standards its intervals were wider than those of TJ+N (median width ratio 1.38). With one fruit per consignment the two methods are identical. At 90% and 95%, the max-score variant TJ+G gave exactly the same intervals as TJ+B in these designs; at 80% its coverage was up to 0.04 higher.
 
 The simplest batch-aware option worked as well. A *t*-interval built from leave-one-consignment-out errors, with K − 1 degrees of freedom (Gauss-LGO), was too narrow in 0 of 38 of the random-design combinations at 90%. It has no distribution-free guarantee, and with two consignments its *t* factor made it 5.3 times wider than TJ+N. From five consignments onwards its width was reasonable (width ratio to TJ+N 1.27–1.65 with 5 × 4, 1.02–1.33 with 10 × 2). The classical random-effects interval for a new batch (ANOVA-PI), computed from the same leave-one-consignment-out errors, did similarly. It was too narrow in 2 of 8 combinations with 2 × 10 standards and in none with five or more consignments (0 of 8 with 5 × 4, 0 of 8 with 10 × 2), with widths 1.22–1.58 times those of TJ+N with 5 × 4 standards. In these data, the classical batch-aware formulas therefore did as well as TJ+B, and they gave bounded intervals from fewer consignments. What TJ+B adds is a coverage guarantee that does not depend on normal errors, at the price of needing at least nine consignments. The common message of these results is that the standards must be left out *consignment by consignment* when the errors are estimated. Which formula is then applied to those errors matters less, as long as it accounts for the small number of consignments.
 
@@ -361,7 +361,7 @@ For someone who transfers an NIR calibration and must report results with an unc
 
 1. Do not reuse the uncertainty formula of the original calibration after a change of instrument or season. Re-establish it on the new instrument.
 
-2. Collect the reference samples for the transfer from as many different batches as practical, ideally one or two per batch, and from at least nine batches if a 90% statement is to cover future batches. In our data, twenty samples from twenty consignments served far better than twenty from two, at the same cost in reference analyses.
+2. Collect the reference samples for the transfer from as many different batches as practical, ideally one or two per batch. A distribution-free 90% statement for future batches (TJ+B) needs at least nine batches; the Gaussian and random-effects batch formulas worked from five batches in our data. In our data, twenty samples from twenty consignments served far better than twenty from two, at the same cost in reference analyses.
 
 3. Fit the transfer as usual. Then re-fit it with each standard left out, or each batch left out if several standards share a batch, and build the interval of Eq. (3) from the left-out errors. A *t*-interval or a random-effects interval from the leave-one-batch-out errors are simpler alternatives that worked as well in our data, although without a distribution-free guarantee.
 
@@ -467,8 +467,8 @@ where the quantiles are taken over the $K$ batches with the ranks of Eq. (3) ($m
 
 1. **One standard per batch.** With $n_g=1$, TJ+G coincides with TJ+. Ordinary TJ+ is therefore valid for samples from *new* batches when every standard comes from a different, randomly drawn batch.
 
-2. **The hierarchical jackknife+.** The hierarchical jackknife+ of Lee, Barber & Willett [@lee2026] uses the same leave-one-batch-out fits. It weights each member score by $1/((K+1)n_k)$ and places a mass $1/(K+1)$ at $\pm\infty$, with the same $1-2\alpha$ guarantee. TJ+H is its instantiation for the transfer step. It is less conservative than the maximum score of TJ+G when $n_g>1$. We use TJ+H as the primary batch-level construction and claim no new conformal methodology.
+2. **The hierarchical jackknife+.** The hierarchical jackknife+ of Lee, Barber & Willett [@lee2026] uses the same leave-one-batch-out fits. It weights each member score by $1/((K+1)n_k)$ and places a mass $1/(K+1)$ at $\pm\infty$, with the same $1-2\alpha$ guarantee. TJ+B (Section 2.4) is its instantiation for the transfer step. It can be less conservative than the maximum score of TJ+G when $n_g>1$; in our designs this happened only at $\alpha=0.20$. We use TJ+B as the primary batch-level construction and claim no new conformal methodology.
 
-3. **Number of batches.** Both constructions give finite bounds only if $\lceil(1-\alpha)(K+1)\rceil\le K$, i.e. $K\ge9$ batches at $\alpha=0.10$, $K\ge19$ at $\alpha=0.05$ and $K\ge4$ at $\alpha=0.20$, whatever the number of standards per batch. The number of distinct batches, not the number of standards, determines whether a valid statement for new batches can be made.
+3. **Number of batches.** Both constructions give finite bounds only if $\lceil(1-\alpha)(K+1)\rceil\le K$, i.e. $K\ge9$ batches at $\alpha=0.10$, $K\ge19$ at $\alpha=0.05$ and $K\ge4$ at $\alpha=0.20$, whatever the number of standards per batch. The number of distinct batches, not the number of standards, determines whether a distribution-free statement for new batches can be made.
 
 4. **Samples from batches that supplied standards.** For routine samples from such batches, neither construction is tailored. Prediction sets for a new observation from an already observed group have been studied for hierarchical models [@dunn2023] and are not pursued here.
