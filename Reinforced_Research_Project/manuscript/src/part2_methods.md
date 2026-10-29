@@ -25,7 +25,7 @@ Here $\hat q^{\text{+}}_{\alpha}$ is the $\lceil(1-\alpha)(m+1)\rceil$-th smalle
 
 **Proposition 1** [@barber2021]. *If the $m$ standards and the future sample are exchangeable (for instance, all drawn at random from the routine population), and $f$ and $\sigma$ do not use the standards, then $\Pr\{y\in\hat C(\mathbf{x})\}\ge 1-2\alpha$.*
 
-This is the jackknife+ theorem applied to the transfer step, which is a symmetric fitting algorithm; Appendix A writes out the argument for this setting. In practice the coverage is usually close to $1-\alpha$ [@barber2021]. A bounded interval needs $m\ge9$ standards at $\alpha=0.10$ and $m\ge19$ at $\alpha=0.05$. With fewer, the method honestly returns an unbounded interval rather than an over-confident one.
+This is the jackknife+ theorem applied to the transfer step, which is a symmetric fitting algorithm; Appendix A writes out the argument for this setting. In practice the coverage is usually close to $1-\alpha$ [@barber2021]. A bounded interval needs $m\ge9$ standards at $\alpha=0.10$ and $m\ge19$ at $\alpha=0.05$. With fewer standards the method returns an unbounded interval rather than an over-confident one.
 
 ## 2.3. Making the width follow the sample
 
@@ -33,7 +33,7 @@ PLS calibrations come with two standard warning signals: Hotelling $T^2$, for sa
 
 $$\sigma(\mathbf{x}) = \max\left\{\varepsilon,\; c_0 + c_1\sqrt{T^2(\mathbf{x})} + c_2\sqrt{Q(\mathbf{x})}\right\}, \qquad (4)$$
 
-with $c_j\ge0$ fitted on the source cross-validation residuals only. Such normalised scores are standard in conformal regression [@papadopoulos2011; @jovic2025]. Inside TJ+N it is evaluated on the spectrum after each fold's transfer, so a spectrum that the transfer maps poorly gets a large $Q$ and a wider interval. This scaling is a refinement, not the core of the method. Its effect on efficiency was modest (Section 4.2), and the guarantee holds without it.
+with $c_j\ge0$ fitted on the source cross-validation residuals only. Such normalised scores are standard in conformal regression [@papadopoulos2011; @jovic2025]. Inside TJ+N it is evaluated on the spectrum after each fold's transfer, so a spectrum that the transfer maps poorly gets a large $Q$ and a wider interval. This scaling is a refinement, not the core of the method. Its effect on efficiency was modest (Supplementary Table S3), and the guarantee holds without it.
 
 ## 2.4. When the standards come in batches
 
@@ -45,7 +45,7 @@ First, a bounded interval needs at least nine *batches* at $\alpha=0.10$, howeve
 
 Second, if every standard comes from a different, randomly chosen batch, the ordinary TJ+ already is the batch-level method, so nothing else is needed.
 
-Appendix B also gives a simpler variant (TJ+G, the largest error per batch) with a short proof.
+We use this construction with the σ(x) scaling and call it TJ+B. Appendix B also gives a variant that keeps only the largest error per batch (TJ+G), with a short self-contained proof. In the designs studied here both gave identical intervals.
 
 ## 2.5. Methods compared
 
@@ -72,8 +72,9 @@ All methods use the same transferred predictor and differ only in the interval. 
 
 *Batch-aware alternatives:*
 
-- ANOVA-PI: the random-effects (one-way ANOVA) prediction interval for a new batch, the classical counterpart of TJ+B [@mee1984];
-- Gauss-LGO: a Gaussian interval from leave-batch-out errors, with $K-1$ degrees of freedom.
+- Gauss-LGO: a Gaussian interval from leave-one-batch-out errors, with $K-1$ degrees of freedom;
+- ANOVA-PI: the random-effects (one-way ANOVA) prediction interval for a new batch [@mee1984], computed from the same leave-one-batch-out errors;
+- LGO-CV+N: CV+ with batches as folds but with every sample counted as a separate unit, a natural shortcut without a guarantee for new batches.
 
 An exploratory label-free variant and the ablations of TJ+N (no leave-one-out, no "+", five-fold CV+, single-diagnostic scaling) are reported in the Supplementary Material.
 
@@ -108,7 +109,7 @@ All settings, seeds and criteria were fixed before target results were computed 
 
 This gives {{n_scen_main}} main scenarios, with 500 repetitions for corn and tablets and 300 for mango. A further 200 repetitions per scenario compared the simpler interval formulas (Gauss-LOO-N, ASTM-T, OLS-PI, Boot-T) on identical standards.
 
-**Standards from batches.** For the four mango settings (season shift with SBC; three instrument shifts with PDS and SBC), $K$ consignments were drawn at random and $n_g$ fruit taken from each, always with 20 standards or fewer:
+**Standards from batches.** For the four mango settings, giving eight setting-pipeline combinations (season shift with SBC and without transfer; three instrument shifts with PDS and SBC), $K$ consignments were drawn at random and $n_g$ fruit taken from each, always with 20 standards or fewer:
 
 - 2 × 10;
 - 5 × 4;
@@ -116,7 +117,7 @@ This gives {{n_scen_main}} main scenarios, with 500 repetitions for corn and tab
 - 15 × 1;
 - 20 × 1, for the instrument data only.
 
-A chronological design took 4 fruit from each of the five earliest-harvested consignments. Coverage was measured on the fruit of the consignments that supplied no standards, averaging first within and then across consignments. Each design was repeated 300 times. This part of the study was specified after the first submission draft and before any of its results were computed.
+A chronological design took 4 fruit from each of the five earliest-harvested consignments. Coverage was measured on the fruit of the consignments that supplied no standards, averaging first within and then across consignments. Each design was repeated 300 times. This part of the study was specified after the first manuscript draft and before any of its results were computed. One baseline (ANOVA-PI) was corrected after an internal review and the experiment re-run (deviation R3).
 
 **Application.** For the harvest-maturity case study, each test fruit was classified with its 90% interval:
 
@@ -124,7 +125,7 @@ A chronological design took 4 fruit from each of the five earliest-harvested con
 - *fail* if the upper limit was below 14%;
 - *refer* for a re-measurement otherwise.
 
-The usual point rule (pass if the prediction is at least 14%) served as reference. We recorded how many immature fruit were passed, and how many fruit had to be referred (200 repetitions).
+The usual point rule (pass if the prediction is at least 14%) served as reference. We recorded how many immature fruit were passed, and how many fruit had to be referred (200 repetitions). This case study was added after the batch results were known.
 
 **Robustness and sensitivity.** These checks covered:
 
@@ -136,4 +137,4 @@ The usual point rule (pass if the prediction is at least 14%) served as referenc
 - other model types (ridge, 1D-CNN);
 - the reverse transfer direction.
 
-**Evaluation.** For each repetition we recorded the share of test samples inside their interval (coverage), the interval width, and the interval score, which rewards narrow intervals and penalises misses [@gneiting2007]. Mean coverage over repetitions is given with a 95% bootstrap confidence interval. A method was flagged as *too narrow* in a scenario when the upper end of this interval was below the nominal level. As a positive check, we also report how often the lower end stayed within 0.02 of nominal. Interval scores were compared within scenarios with paired Wilcoxon tests and Holm correction [@holm1979]. Because realised coverage varies from one set of standards to the next, we also report the share of standard sets whose coverage on the test samples reached at least 0.85, which is what a laboratory validating a single transfer experiences. Computations used Python (NumPy, SciPy, scikit-learn, PyTorch) on 4 CPU cores.
+**Evaluation.** For each repetition we recorded the share of test samples inside their interval (coverage), the interval width, and the interval score, which rewards narrow intervals and penalises misses [@gneiting2007]. Mean coverage over repetitions is given with a 95% bootstrap confidence interval. A method was flagged as *too narrow* in a scenario when the upper end of this interval was below the nominal level. As a positive check, we also report how often the lower end stayed within 0.02 of nominal. Interval scores were compared within scenarios with paired Wilcoxon tests and Holm correction [@holm1979]. Because realised coverage varies from one set of standards to the next, we also report the share of standard sets whose coverage on their test samples reached at least 0.85. For small test sets (corn: 10–20 samples) this share also reflects the randomness of the test set itself. Bootstrap intervals resample repetitions and are therefore conditional on the data sets and, for the batch study, on the available consignments. Computations used Python (NumPy, SciPy, scikit-learn, PyTorch) on 4 CPU cores.

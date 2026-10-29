@@ -47,7 +47,8 @@ class GroupTransferFits:
             self.mu_i[out] = d.predict(Xt_std[out])
             t2, q = d.diagnostics(Xt_std[out]); self.t2_i[out], self.q_i[out] = t2, q
             self.g_index[out] = k
-        self.r = np.abs(tf.y_std - self.mu_i)
+        self.e = tf.y_std - self.mu_i          # signed leave-one-batch-out residuals
+        self.r = np.abs(self.e)
 
     def _scales(self, sigma):
         if sigma is None:
@@ -105,26 +106,31 @@ def tj_plus_hier(g, alpha, sigma=None):
 
 def anova_pi(g, alpha):
     """Classical random-effects (one-way ANOVA) prediction interval for a sample from a new batch
-    (beta-expectation tolerance interval in the sense of Mee 1984), from the signed leave-one-standard-out
-    residuals of the standards grouped by batch; Satterthwaite degrees of freedom. The centre is corrected by the
-    mean leave-one-out residual (bias), whose estimation variance is included in V."""
-    tf = g.tf
-    e = tf.y_std - tf.mu_loo_i
+    (beta-expectation tolerance interval in the sense of Mee 1984). Corrected after review (deviation R3): it uses
+    the signed leave-one-BATCH-out residuals (the transfer is re-fitted without the whole batch, so the residuals
+    contain the between-batch error), ANOVA moment estimators with the usual truncation of the between-batch
+    variance at zero, and Satterthwaite degrees of freedom. The centre is corrected by the mean residual."""
+    e = g.e
     K = g.K; labs = g.g_index
-    n = np.bincount(labs, minlength=K); nbar = float(np.mean(n))
+    n = np.bincount(labs, minlength=K); nbar = float(np.mean(n)); N = len(e)
     means = np.array([e[labs == k].mean() for k in range(K)])
-    if nbar <= 1 or K < 2:
-        V = np.var(e, ddof=1) * (1 + 1 / len(e)); df = max(len(e) - 1, 1)
+    if K < 2:
+        V = np.var(e, ddof=1) * (1 + 1 / N); df = max(N - 1, 1)
+    elif nbar <= 1:
+        # one sample per batch: the between-batch and within-batch errors are confounded; plain t-interval
+        V = np.var(e, ddof=1) * (1 + 1 / N); df = N - 1
     else:
         msb = (n * (means - e.mean()) ** 2).sum() / (K - 1)
-        msw = sum(((e[labs == k] - means[k]) ** 2).sum() for k in range(K)) / max(len(e) - K, 1)
-        if msb <= msw:
-            V = ((e - e.mean()) ** 2).sum() / (len(e) - 1) * (1 + 1 / len(e)); df = len(e) - 1
+        msw = sum(((e[labs == k] - means[k]) ** 2).sum() for k in range(K)) / max(N - K, 1)
+        sb2 = max((msb - msw) / nbar, 0.0)
+        # variance of a new observation from a new batch minus the estimated mean
+        V = sb2 * (1 + 1 / K) + msw * (1 + 1 / N)
+        a, c = (1 + 1 / K) / nbar, (1 + 1 / N) - (1 + 1 / K) / nbar
+        if sb2 > 0:
+            df = V ** 2 / ((a * msb) ** 2 / (K - 1) + (c * msw) ** 2 / max(N - K, 1))
         else:
-            a, c = (1 + 1 / K) / nbar, 1 - 1 / nbar
-            V = a * msb + c * msw
-            df = V ** 2 / ((a * msb) ** 2 / (K - 1) + (c * msw) ** 2 / max(len(e) - K, 1))
+            df = N - 1
     t = stats.t.ppf(1 - alpha / 2, max(df, 1))
     half = t * np.sqrt(V)
-    centre = tf.mu_full_test + e.mean()
+    centre = g.tf.mu_full_test + e.mean()
     return centre - half, centre + half

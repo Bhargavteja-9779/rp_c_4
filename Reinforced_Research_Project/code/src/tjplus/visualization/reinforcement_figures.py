@@ -26,7 +26,7 @@ def fig_batch_coverage(out, figdir, alpha=0.1):
     _style()
     fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.0), sharey=True)
     panels = [("Sample-level intervals", ["TJ+N", "Gauss-LOO", "SCP-T-split-N", "ASTM-PI"]),
-              ("Batch-level intervals", ["TJ+H-N", "TJ+G-N", "LGO-CV+N", "ANOVA-PI"])]
+              ("Batch-level intervals", ["TJ+H-N", "Gauss-LGO", "LGO-CV+N", "ANOVA-PI"])]
     xs = np.arange(len(order))
     for ax, (title, meths) in zip(axes, panels):
         for j, meth in enumerate(meths):
@@ -42,7 +42,7 @@ def fig_batch_coverage(out, figdir, alpha=0.1):
             ax.plot(xs + off, ys, color=col, lw=1.0, alpha=0.6)
             for x, y, h in zip(xs + off, ys, hollow):
                 ax.plot(x, y, mk, color=col, mfc="white" if h else col, mec=col, ms=5)
-            ax.plot([], [], mk, color=col, label=meth)
+            ax.plot([], [], mk, color=col, label={"TJ+H-N": "TJ+B"}.get(meth, meth))
         ax.axhline(1 - alpha, color=INK, lw=0.8, ls="--")
         ax.set_xticks(xs, [f"{K}×{ng}" for K, ng in order])
         ax.set_xlabel("Standards: batches K × standards per batch")
@@ -150,6 +150,7 @@ def fig_application(out, figdir):
     if not os.path.exists(p):
         return
     s = pd.read_csv(p)
+    s = s[s["kind"] == "sbc"]
     meths = [("Point", "point\nrule"), ("ASTM-PI", "ASTM-\nPI"), ("Gauss-LOO", "Gauss-\nLOO"), ("TJ+N", "TJ+N"), ("TJ+H-N", "TJ+B")]
     designs = sorted({(int(k), int(n)) for k, n in zip(s["K"], s["n_g"])})
     cols = {2: SLOT[3], 10: SLOT[0], 20: SLOT[2]}

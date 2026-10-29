@@ -174,3 +174,18 @@ TJ+G (max-member score; validity proof in the manuscript appendix) is retained a
 - Rate of mature fruit failed.
 
 No inferential test is planned. The outcomes are reported with bootstrap CIs over repetitions.
+
+**R3 (2026-10-29; after an independent review of the revised manuscript).** The review found that ANOVA-PI had been computed from leave-one-*standard*-out residuals. Those residuals come from transfer fits that still contain the other members of the same consignment, so they understate the between-consignment error, and the comparison was unfair to the classical method. ANOVA-PI was corrected:
+
+- it now uses the signed leave-one-*batch*-out residuals;
+- it uses moment estimators, with the between-batch variance truncated at zero;
+- it uses Satterthwaite degrees of freedom.
+
+E10 was re-run with unchanged seeds. The superseded raw files are kept in `results/raw/superseded_E10_anova_loo/`. All other E10 methods must reproduce exactly, and this was checked.
+
+In response to the same review, the following analyses were added. They are descriptive re-analyses, not new hypotheses:
+
+- the 95% comparisons restricted to cases where TJ+N is bounded;
+- non-inferiority counts for every method;
+- per-α counts;
+- SBC-only application results.

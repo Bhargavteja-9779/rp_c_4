@@ -1623,67 +1623,16 @@
   "title": "Distribution-free inference with hierarchical data",
   "author": [
    {
-    "ORCID": "https://orcid.org/0009-0006-8779-1176",
-    "authenticated-orcid": false,
-    "given": "Yonghoon",
     "family": "Lee",
-    "sequence": "first",
-    "affiliation": [
-     {
-      "name": "statistics, University of Pennsylvania",
-      "place": [
-       "Philadelphia, United States"
-      ]
-     }
-    ],
-    "role": [
-     {
-      "role": "author",
-      "vocabulary": "crossref"
-     }
-    ]
+    "given": "Yonghoon"
    },
    {
-    "ORCID": "https://orcid.org/0000-0002-4854-8644",
-    "authenticated-orcid": false,
-    "given": "Rina",
     "family": "Barber",
-    "sequence": "additional",
-    "affiliation": [
-     {
-      "name": "Statistics, The University of Chicago",
-      "place": [
-       "Chicago, United States"
-      ]
-     }
-    ],
-    "role": [
-     {
-      "role": "author",
-      "vocabulary": "crossref"
-     }
-    ]
+    "given": "Rina"
    },
    {
-    "ORCID": "https://orcid.org/0000-0002-8109-7582",
-    "authenticated-orcid": false,
-    "given": "Rebecca",
     "family": "Willett",
-    "sequence": "additional",
-    "affiliation": [
-     {
-      "name": "Statistics, The University of Chicago",
-      "place": [
-       "Chicago, United States"
-      ]
-     }
-    ],
-    "role": [
-     {
-      "role": "author",
-      "vocabulary": "crossref"
-     }
-    ]
+    "given": "Rebecca"
    }
   ],
   "container-title": "ACM Journal of Data Science",
@@ -1706,64 +1655,16 @@
   "title": "Distribution-Free Prediction Sets for Two-Layer Hierarchical Models",
   "author": [
    {
-    "ORCID": "https://orcid.org/0000-0003-1620-0413",
-    "authenticated-orcid": false,
-    "given": "Robin",
     "family": "Dunn",
-    "sequence": "first",
-    "affiliation": [
-     {
-      "name": "Advanced Methodology and Data Science, Novartis Pharmaceuticals Corporation, East Hanover, NJ"
-     }
-    ],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Robin"
    },
    {
-    "ORCID": "https://orcid.org/0000-0003-1874-5601",
-    "authenticated-orcid": false,
-    "given": "Larry",
     "family": "Wasserman",
-    "sequence": "additional",
-    "affiliation": [
-     {
-      "name": "Department of Statistics &amp; Data Science, Carnegie Mellon University, Pittsburgh, PA"
-     },
-     {
-      "name": "Machine Learning Department, Carnegie Mellon University, Pittsburgh, PA"
-     }
-    ],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Larry"
    },
    {
-    "ORCID": "https://orcid.org/0000-0003-0497-311X",
-    "authenticated-orcid": false,
-    "given": "Aaditya",
     "family": "Ramdas",
-    "sequence": "additional",
-    "affiliation": [
-     {
-      "name": "Department of Statistics &amp; Data Science, Carnegie Mellon University, Pittsburgh, PA"
-     },
-     {
-      "name": "Machine Learning Department, Carnegie Mellon University, Pittsburgh, PA"
-     }
-    ],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Aaditya"
    }
   ],
   "container-title": "Journal of the American Statistical Association",
@@ -1786,36 +1687,12 @@
   "title": "Training-conditional coverage for distribution-free predictive inference",
   "author": [
    {
-    "given": "Michael",
     "family": "Bian",
-    "sequence": "first",
-    "affiliation": [
-     {
-      "name": "Department of Statistics, University of Chicago"
-     }
-    ],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Michael"
    },
    {
-    "given": "Rina Foygel",
     "family": "Barber",
-    "sequence": "additional",
-    "affiliation": [
-     {
-      "name": "Department of Statistics, University of Chicago"
-     }
-    ],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Rina Foygel"
    }
   ],
   "container-title": "Electronic Journal of Statistics",
@@ -1840,36 +1717,12 @@
   "title": "Algorithmic stability implies training-conditional coverage for distribution-free prediction methods",
   "author": [
    {
-    "given": "Ruiting",
     "family": "Liang",
-    "sequence": "first",
-    "affiliation": [
-     {
-      "name": "Committee on Computational and Applied Mathematics, University of Chicago"
-     }
-    ],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Ruiting"
    },
    {
-    "given": "Rina Foygel",
     "family": "Barber",
-    "sequence": "additional",
-    "affiliation": [
-     {
-      "name": "Department of Statistics, University of Chicago"
-     }
-    ],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Rina Foygel"
    }
   ],
   "container-title": "The Annals of Statistics",
@@ -1894,16 +1747,8 @@
   "title": "β-Expectation and β-Content Tolerance Limits for Balanced One-Way ANOVA Random Model",
   "author": [
    {
-    "given": "Robert W.",
     "family": "Mee",
-    "sequence": "first",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Robert W."
    }
   ],
   "container-title": "Technometrics",
@@ -1927,184 +1772,64 @@
   "title": "Harmonization of strategies for the validation of quantitative analytical procedures",
   "author": [
    {
-    "given": "Ph.",
     "family": "Hubert",
-    "sequence": "first",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Ph."
    },
    {
-    "given": "J.-J.",
     "family": "Nguyen-Huu",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "J.-J."
    },
    {
-    "given": "B.",
     "family": "Boulanger",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "B."
    },
    {
-    "given": "E.",
     "family": "Chapuzet",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "E."
    },
    {
-    "given": "P.",
     "family": "Chiap",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "P."
    },
    {
-    "given": "N.",
     "family": "Cohen",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "N."
    },
    {
-    "given": "P.-A.",
     "family": "Compagnon",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "P.-A."
    },
    {
-    "given": "W.",
     "family": "Dewé",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "W."
    },
    {
-    "given": "M.",
     "family": "Feinberg",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "M."
    },
    {
-    "given": "M.",
     "family": "Lallier",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "M."
    },
    {
-    "given": "M.",
     "family": "Laurentie",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "M."
    },
    {
-    "given": "N.",
     "family": "Mercier",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "N."
    },
    {
-    "given": "G.",
     "family": "Muzard",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "G."
    },
    {
-    "given": "C.",
     "family": "Nivet",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "C."
    },
    {
-    "given": "L.",
     "family": "Valat",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "L."
    }
   ],
   "container-title": "Journal of Pharmaceutical and Biomedical Analysis",
@@ -2128,112 +1853,40 @@
   "title": "Chemometric and machine-learning strategies for calibration transfer and uncertainty quantification in portable optical analytical systems",
   "author": [
    {
-    "given": "Reda A.",
     "family": "Haggam",
-    "sequence": "first",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Reda A."
    },
    {
-    "given": "Ravikumar",
     "family": "Jayabal",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Ravikumar"
    },
    {
-    "given": "Kulmani",
     "family": "Mehar",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Kulmani"
    },
    {
-    "given": "Satish Kumar",
     "family": "Jangid",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Satish Kumar"
    },
    {
-    "given": "Jajneswar",
     "family": "Nanda",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Jajneswar"
    },
    {
-    "given": "Shahul Hameed",
     "family": "M",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Shahul Hameed"
    },
    {
-    "given": "Beemkumar",
     "family": "Nagappan",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Beemkumar"
    },
    {
-    "given": "Divyesh Rameshbhai",
     "family": "Vaghela",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Divyesh Rameshbhai"
    },
    {
-    "given": "Mirjalol",
     "family": "Ismoilov",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Mirjalol"
    }
   ],
   "container-title": "Chemometrics and Intelligent Laboratory Systems",
@@ -2257,25 +1910,8 @@
   "title": "Distribution-Shift-Aware Conformal Prediction for Meteorite and Asteroid Reflectance Spectroscopy: Finite-Sample Class Guarantees from the Laboratory to the Telescope",
   "author": [
    {
-    "ORCID": "https://orcid.org/0000-0002-0477-5896",
-    "authenticated-orcid": true,
-    "given": "Ali A.",
     "family": "Khairbek",
-    "sequence": "first",
-    "affiliation": [
-     {
-      "name": "Chandigarh University , , Gharuan , , ,",
-      "place": [
-       "Mohali, Punjab, India, 140413"
-      ]
-     }
-    ],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Ali A."
    }
   ],
   "container-title": "ACS Earth and Space Chemistry",
@@ -2297,114 +1933,40 @@
   "title": "Uncertainty calibration for latent-variable regression models",
   "author": [
    {
-    "ORCID": "https://orcid.org/0000-0002-4893-6524",
-    "authenticated-orcid": false,
-    "given": "Zina-Sabrina",
     "family": "Duma",
-    "sequence": "first",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Zina-Sabrina"
    },
    {
-    "given": "Otto",
     "family": "Lamminpää",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Otto"
    },
    {
-    "given": "Jouni",
     "family": "Susiluoto",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Jouni"
    },
    {
-    "given": "Heikki",
     "family": "Haario",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Heikki"
    },
    {
-    "given": "Ting",
     "family": "Zheng",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Ting"
    },
    {
-    "given": "Tuomas",
     "family": "Sihvonen",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Tuomas"
    },
    {
-    "given": "Amy",
     "family": "Braverman",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Amy"
    },
    {
-    "given": "Philip A.",
     "family": "Townsend",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Philip A."
    },
    {
-    "given": "Satu-Pia",
     "family": "Reinikainen",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "Satu-Pia"
    }
   ],
   "container-title": "Chemometrics and Intelligent Laboratory Systems",
@@ -2428,46 +1990,16 @@
   "title": "A bootstrap-assisted methodology for the estimation of prediction uncertainty in multilayer perceptron-based calibration",
   "author": [
    {
-    "ORCID": "https://orcid.org/0000-0001-8427-4428",
-    "authenticated-orcid": false,
-    "given": "Fabricio A.",
     "family": "Chiappini",
-    "sequence": "first",
-    "affiliation": [],
-    "role": [
-     {
-      "role": "author",
-      "vocabulary": "crossref"
-     }
-    ]
+    "given": "Fabricio A."
    },
    {
-    "ORCID": "https://orcid.org/0000-0002-1827-1605",
-    "authenticated-orcid": false,
-    "given": "Mirta R.",
     "family": "Alcaraz",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "role": "author",
-      "vocabulary": "crossref"
-     }
-    ]
+    "given": "Mirta R."
    },
    {
-    "ORCID": "https://orcid.org/0000-0002-5032-5132",
-    "authenticated-orcid": false,
-    "given": "Liliana",
     "family": "Forzani",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "role": "author",
-      "vocabulary": "crossref"
-     }
-    ]
+    "given": "Liliana"
    }
   ],
   "container-title": "Analytica Chimica Acta",
@@ -2491,28 +2023,12 @@
   "title": "Bootstrap Methods and their Application",
   "author": [
    {
-    "given": "A. C.",
     "family": "Davison",
-    "sequence": "first",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "A. C."
    },
    {
-    "given": "D. V.",
     "family": "Hinkley",
-    "sequence": "additional",
-    "affiliation": [],
-    "role": [
-     {
-      "vocabulary": "crossref",
-      "role": "author"
-     }
-    ]
+    "given": "D. V."
    }
   ],
   "issued": {
@@ -2550,5 +2066,34 @@
   },
   "ISBN": "978-0-7341-3968-9",
   "URL": "https://era.dpi.qld.gov.au/id/eprint/6544/"
+ },
+ {
+  "type": "posted-content",
+  "title": "Aggregated Inductive Conformal Prediction for Distribution-Free Uncertainty Quantification in Near-Infrared Spectroscopy: A Chemometric Framework with Application to Botanical Adulteration Quantification",
+  "author": [
+   {
+    "family": "Sun",
+    "given": "Changhai"
+   },
+   {
+    "family": "Cui",
+    "given": "Huinan"
+   },
+   {
+    "family": "Qiao",
+    "given": "Youfu"
+   }
+  ],
+  "issued": {
+   "date-parts": [
+    [
+     2026
+    ]
+   ]
+  },
+  "DOI": "10.2139/ssrn.7611591",
+  "publisher": "Elsevier BV",
+  "id": "sun2026",
+  "genre": "SSRN preprint"
  }
 ]
