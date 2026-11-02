@@ -18,9 +18,9 @@ This folder is the second, more demanding research cycle on the project in `../T
 | `audit/scripts/`, `audit/data/` | PubMed and Crossref timing scripts with raw data; consistency-check script and output |
 | `literature/updated_literature_matrix.csv`, `literature/competing_work_analysis.md` | Verified competing work, including the hierarchical jackknife+ prior art |
 | `research_design/reinforcement_plan.md` | Weaknesses → changes, with the 12-field specification |
-| `research_design/revised_experimental_protocol.md` | Protocol of E10–E14, written before the results, with deviation log R1–R2 |
-| `code/` | Full code (original plus reinforcement modules), `run_all.py`, `run_reinforcement.py`, `config/`, `tests/` (18 tests), `README.md` |
-| `results/raw/` | Per-repetition raw results of E10, E11 and E14 (26 files, about 1.0 M rows) |
+| `research_design/revised_experimental_protocol.md` | Protocol of E10–E15 (E15 confirmatory, with written predictions), deviation log R1–R3 |
+| `code/` | Full code (original plus reinforcement modules), `run_all.py`, `run_reinforcement.py`, `config/`, `tests/` (21 tests), `README.md` |
+| `results/raw/` | Per-repetition raw results of E10, E11, E14, E14b and E15 (current and superseded files are listed in `raw_results.csv`) |
 | `results/raw_results.csv` | Index of the raw files with SHA-256 hashes |
 | `results/summary/`, `results/statistics/`, `results/tables/` | Aggregates, tests and generated tables |
 | `results/statistics.json`, `results/metrics.json` | Key numbers, machine-readable |
@@ -28,7 +28,8 @@ This folder is the second, more demanding research cycle on the project in `../T
 | `figures/` | New figures plus copies of the original figures used; `figures/README.md` gives provenance; `figures/submission/` holds files named by manuscript number |
 | `tables/` | Generated tables used in the revised manuscript |
 | `manuscript/` | `Revised_Manuscript.docx/.pdf`, `Revised_Cover_Letter.docx/.pdf`, `Highlights.txt`; sources in `src/`; build scripts in `build/` |
-| `supplementary/` | `Supplementary_Material.docx/.pdf` (Tables S1–S14, Figs S1–S10) |
+| `supplementary/` | `Supplementary_Material.docx/.pdf` (Tables S1–S16, Figs S1–S10) |
+| `software/` | Browser tool `transfer_interval_tool.html` and a guide to the Python package and command-line program |
 | `review/reinforcement_review.md` | Which hypotheses held and which did not |
 | `review/second_adversarial_review.md` | Second review round on the revised manuscript, with resolutions |
 | `review/final_consistency_audit.md` | Reproducibility and manuscript-consistency report |
