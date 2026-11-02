@@ -150,3 +150,60 @@ def fill_text(V):
                              f"immature fruit passed as mature from {V['r_app_point_imm_K10']} (predicted value alone) to "
                              f"{V['r_app_tjn_imm_K10']}, at the cost of referring about half of the fruit for a second "
                              f"measurement.")
+
+def fill_round3(V, RES):
+    """Planning model (E10 a posteriori check), E15 confirmatory study and E14b guard bands."""
+    import json, sys
+    sys.path.insert(0, os.path.join(RES, "..", "code", "src"))
+    from tjplus.planning import expected_coverage, kappa
+    st = json.load(open(os.path.join(RES, "statistics_reinforcement.json")))["E15"]
+    s = pd.read_csv(os.path.join(RES, "summary", "E15_summary.csv"))
+    a = s[s["alpha"] == 0.1]
+    V["r15_n"] = st["n_settings"]
+    V["r15_icc"] = st["icc_range"]; V["r15_rmsep"] = st["rmsep_range"]
+    def cnt(K, meth):
+        x = a[(a["K"] == K) & (a["method"] == meth)]
+        x = x[x["new_frac_inf"] < 0.5]
+        return f"{int(x['under'].sum())} of {len(x)}", f"{x['coverage_mean'].min():.2f}–{x['coverage_mean'].max():.2f}", x["coverage_mean"].mean()
+    for K in (2, 5, 10, 20):
+        for meth, key in (("TJ+N", "tjn"), ("Gauss-LOO", "gauss"), ("OLS-PI", "ols"), ("ANOVA-PI", "anova"), ("Gauss-LGO", "lgo"), ("TJ+H-N", "tjb")):
+            x = a[(a["K"] == K) & (a["method"] == meth)]
+            if (x["new_frac_inf"] < 0.5).any():
+                u, r, mn = cnt(K, meth)
+                V[f"r15_{key}_K{K}"] = u; V[f"r15_{key}_K{K}_cov"] = r; V[f"r15_{key}_K{K}_mean"] = f"{mn:.2f}"
+    V["r15_tjb_under"] = st["P2_tjb_under_bounded"].replace("/", " of ")
+    V["r15_lgo_anova_under"] = st["P5_lgo_anova_under"].replace("/", " of ")
+    V["r15_mae_tjn"] = f"{st['P3_mae_TJ+N']:.3f}"; V["r15_mae_gauss"] = f"{st['P3_mae_Gauss-LOO']:.3f}"
+    V["r15_corr"] = f"{min(st['P3_corr_TJ+N'], st['P3_corr_Gauss-LOO']):.2f}"
+    V["r15_bias"] = f"{max(st['P3_bias_TJ+N'], st['P3_bias_Gauss-LOO']):.3f}"
+    pr = pd.read_csv(os.path.join(RES, "statistics", "E15_prior_predictions.csv"))
+    k2 = pr[(pr["K"] == 2) & (pr["method"] == "Gauss-LOO")].iloc[0]
+    V["r15_prior_k2_obs"] = f"{k2['observed']:.3f}"; V["r15_prior_k2_pred"] = f"{k2['predicted']:.3f}"
+    V["r15_prior_maxdiff"] = f"{pr['diff'].abs().max():.3f}"
+    V["r15_prior_maxdiff_k5"] = f"{pr[pr['K'] >= 5]['diff'].abs().max():.3f}"
+    V["r15_anova_width_k2"] = f"{(a[(a['K'] == 2) & (a['method'] == 'ANOVA-PI')].set_index('setting')['new_median_width'] / a[(a['K'] == 2) & (a['method'] == 'TJ+N')].set_index('setting')['new_median_width']).median():.1f}"
+    # E10 a posteriori check of the planning model
+    e10 = pd.read_csv(os.path.join(RES, "summary", "E10_summary.csv"))
+    rows = []
+    for (stt, kd, K, n), g in e10[(e10["alpha"] == 0.1) & (e10["design"] == "random")].groupby(["setting", "kind", "K", "n_g"]):
+        rho = float(g[g["method"] == "TJ+N"]["icc_new"].iloc[0])
+        pr_ = expected_coverage(int(K), int(n), rho, 0.1, rules=("gauss_loo", "tj_plus"), sims=20000, seed=5)
+        for meth, rr in (("Gauss-LOO", "gauss_loo"), ("TJ+N", "tj_plus")):
+            rows.append(abs(pr_[rr]["coverage"] - float(g[g["method"] == meth]["coverage_mean"].iloc[0])))
+    V["r10_plan_mae"] = f"{np.mean(rows):.3f}"
+    V["r_kappa_2x10"] = f"{kappa(2, 10, 0.5):.2f}"; V["r_kappa_10x2"] = f"{kappa(10, 2, 0.5):.2f}"
+    V["r_plan_2x10"] = f"{expected_coverage(2, 10, 0.5, 0.1, rules=('gauss_loo',), sims=40000, seed=1)['gauss_loo']['coverage']:.2f}"
+    # E14b guard bands
+    gb = pd.read_csv(os.path.join(RES, "summary", "E14b_summary.csv"))
+    def gv(K, m, col):
+        return float(gb[(gb["K"] == K) & (gb["method"] == m)][col].iloc[0])
+    guards = gb[gb["method"].str.startswith("Guard")].copy()
+    g10 = guards[guards["K"] == 10]
+    tg = g10.iloc[(g10["referred"] - gv(10, "Gauss-LOO", "referred")).abs().argsort().iloc[0]]
+    V["r14b_gauss_equiv_k"] = tg["method"].replace("Guard-", "")
+    # matched referral comparison between designs (interpolated guard-band curves at the TJ+N 10x2 referral rate)
+    ref = gv(2, "TJ+N", "referred")
+    def interp(K):
+        c = guards[guards["K"] == K].sort_values("referred")
+        return float(np.interp(ref, c["referred"], c["immature_passed"]))
+    V["r14b_ref"] = f"{100 * ref:.0f}%"; V["r14b_imm_k2"] = f"{100 * interp(2):.1f}%"; V["r14b_imm_k10"] = f"{100 * interp(10):.1f}%"

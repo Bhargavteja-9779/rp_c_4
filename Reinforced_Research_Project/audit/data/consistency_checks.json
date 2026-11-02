@@ -1,6 +1,6 @@
 {
  "unfilled_placeholders": 0,
- "figures_referenced": 6,
+ "figures_referenced": 7,
  "figures_missing": [],
  "citations_missing_in_bib": [],
  "bib_entries_uncited": [
@@ -36,7 +36,9 @@
   11,
   12,
   13,
-  14
+  14,
+  15,
+  16
  ],
  "supp_tables_present": [
   1,
@@ -52,12 +54,14 @@
   11,
   12,
   13,
-  14
+  14,
+  15,
+  16
  ],
  "supp_tables_cited_but_missing": [],
  "main_tables": 5,
  "main_table_refs_out_of_range": [],
- "main_figures": 6,
+ "main_figures": 7,
  "main_fig_refs_out_of_range": [],
  "broken_glyphs_Revised_Manuscript.pdf": 0,
  "broken_glyphs_Revised_Cover_Letter.pdf": 0,
@@ -67,5 +71,5 @@
  "highlight_max_chars": 81,
  "raw_files_checked": 32,
  "raw_hash_mismatches": 0,
- "main_text_words": 8346
+ "main_text_words": 9638
 }

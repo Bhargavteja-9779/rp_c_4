@@ -61,7 +61,7 @@ def main():
             if len(line.lstrip("- ").strip()) > 85:
                 sys.exit(f"Highlight longer than 85 characters: {line}")
     figs = {"Fig1": "fig1_overview", "Fig2": "fig2_datasets", "Fig3": "fig3_coverage_vs_m", "Fig4": "fig_batch_coverage",
-            "Fig5": "fig_application", "Fig6": "fig6_robustness", "GraphicalAbstract": "graphical_abstract_revised"}
+            "Fig5": "fig_confirm", "Fig6": "fig_tradeoff", "Fig7": "fig6_robustness", "GraphicalAbstract": "graphical_abstract_revised"}
     sub = os.path.join(ROOT, "figures", "submission"); os.makedirs(sub, exist_ok=True)
     for new, old in figs.items():
         for ext in (".png", ".pdf"):

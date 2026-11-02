@@ -12,9 +12,9 @@ title: "Trustworthy prediction intervals after moving an NIR calibration to a ne
 
 **Background:** When a near-infrared (NIR) calibration is moved to a new instrument or harvest season, a few reference samples are measured to adapt it. Results are then reported, and products accepted or rejected, with an uncertainty range. Whether that range still holds after the move, and how the reference samples should be chosen, is rarely checked.
 
-**Results:** On three public data sets (corn, tablets, mango), 90% ranges taken from the original calibration contained as few as 0.03 of the reference values after transfer. Re-fitting the transfer with each reference sample left out in turn (a jackknife+) gave intervals that were never detectably below their nominal coverage in 40 planned scenarios with randomly chosen samples, without extra reference analyses; simple Gaussian and regression intervals did almost as well at 90% but fell slightly short at 95%. How the samples were collected mattered more. With 20 reference fruit from two consignments, intervals were too narrow for fruit from other consignments in 6 of 8 instrument and season combinations (coverage 0.67–0.91). Taking one fruit from each of 15–20 consignments, or leaving out whole consignments when re-fitting, restored coverage. In a mango harvest-maturity check at 14% dry matter, passing fruit on the predicted value alone accepted 36–41% of immature fruit; 90% intervals cut this to 3.2% with reference fruit from ten consignments and 9.8% with fruit from two.
+**Results:** On three public data sets (corn, tablets, mango), 90% ranges taken from the original calibration contained as few as 0.03 of the reference values after transfer. Re-fitting the transfer with each reference sample left out (a jackknife+) gave intervals never detectably below nominal coverage in 40 scenarios with randomly chosen samples, without extra reference analyses; simple Gaussian and regression intervals were almost as good at 90%. How the samples were collected mattered more. With 20 reference fruit from two consignments, intervals were too narrow for fruit from new consignments in 6 of 8 combinations of the main study and in 14 of 14 further handheld-instrument settings tested afterwards (coverage 0.65–0.81). Leaving out whole consignments, or taking one fruit per consignment, restored coverage. A random-effects planning model predicted these losses (correlation 0.99 with observed coverage). In a harvest-maturity check, passing fruit on the predicted value alone accepted 36–41% of immature fruit, against 3.2% with intervals from well-spread reference fruit.
 
-**Significance:** Reliable uncertainty for a transferred NIR method can be obtained from the reference samples the transfer already needs, provided they come from many batches.
+**Significance:** Reliable uncertainty for a transferred NIR method can be obtained from the reference samples the transfer already needs, provided they come from many batches. Free software plans the sampling and computes the intervals.
 
 **Keywords:** calibration transfer; prediction interval; near-infrared spectroscopy; measurement uncertainty; conformal prediction; fruit dry matter
 
@@ -39,6 +39,8 @@ We therefore organised the study around four questions a laboratory would ask:
 3. Does it matter whether the reference samples come from a few batches or from many?
 
 4. What does this mean for a real accept/reject decision, here harvest-maturity screening of mango?
+
+To answer the third question in a way that a laboratory can use before collecting any samples, we also give a simple planning model that predicts how much coverage a sampling design will lose. We tested it, and the batch findings, on fourteen further handheld instruments that were set aside for confirmation. Finally, we turned the procedure into a Python package and a browser tool.
 
 The study uses public data only. The main experiments were specified in advance; the batch study and the harvest case study were added in a second round, and every change is recorded in a dated deviation log that accompanies the code, which reproduces every number in the paper.
 
@@ -92,7 +94,15 @@ Second, if every standard comes from a different, randomly chosen batch, the ord
 
 We use this construction with the σ(x) scaling and call it TJ+B. Appendix B also gives a variant that keeps only the largest error per batch (TJ+G), with a short self-contained proof. At 90% and 95% both gave identical intervals in the designs studied here, because both then reduce to the largest left-out error; at 80% TJ+B was slightly less conservative. The guarantee of TJ+B rests on the theorem of Lee et al. [@lee2026], that of TJ+G on Appendix B.
 
-## 2.5. Methods compared
+## 2.5. Planning the reference samples
+
+Whether sample-level intervals will be too narrow for new batches can be anticipated before any reference analysis is made. Write the error of the original calibration on target samples as $e_{kj}=b_k+w_{kj}$, with a batch effect $b_k$ and a within-batch part $w_{kj}$, and let $\rho=\mathrm{Var}(b)/\mathrm{Var}(e)$ be the intra-batch correlation. Suppose the $m=Kn$ standards come from $K$ batches with $n$ samples each, and the transfer corrects the bias. The mean squared leave-one-out error of the standards then estimates
+
+$$\kappa(K,n,\rho)\;=\;\frac{\frac{N}{N-1}(1-\rho)+\left(\frac{N}{N-1}\right)^2\left(1-\frac1K\right)\rho}{\left(1+\frac1N\right)(1-\rho)+\left(1+\frac1K\right)\rho}\qquad(N=Kn) \qquad (5)$$
+
+times the variance of the error of a sample from a new batch. With one standard per batch, $\kappa\approx1$. With few batches and correlated errors it falls well below one (0.63 for 2 × 10 standards at $\rho=0.5$, against 0.95 for 10 × 2), and every interval built from leave-one-out errors is too narrow by roughly $\sqrt{\kappa}$. A short simulation of the same model gives the expected coverage of each interval rule for any design, including the randomness of the estimated width. It is included in the accompanying software (Section 4.7). For 2 × 10 standards and $\rho=0.5$, it predicts a coverage of 0.79 for a nominal 90% Gaussian interval. A laboratory can use it with a value of $\rho$ from earlier data, or with a conservative guess, to decide how many batches to sample.
+
+## 2.6. Methods compared
 
 All methods use the same transferred predictor and differ only in the interval. They fall into four groups.
 
@@ -171,7 +181,7 @@ For the main experiments with random standards, all settings, seeds and criteria
 
 This gives 40 main scenarios, with 500 repetitions for corn and tablets and 300 for mango. A further 200 repetitions per scenario compared the simpler interval formulas (Gauss-LOO-N, ASTM-T, OLS-PI, Boot-T) on identical standards.
 
-**Standards from batches.** For the four mango settings, giving eight setting-pipeline combinations (season shift with SBC and without transfer; three instrument shifts with PDS and SBC), $K$ consignments were drawn at random and $n_g$ fruit taken from each, always with 20 standards or fewer:
+**Standards from batches.** For four mango settings, giving eight setting-pipeline combinations (season shift with SBC and without transfer; three instrument shifts with PDS and SBC), $K$ consignments were drawn at random and $n_g$ fruit taken from each, always with 20 standards or fewer:
 
 - 2 × 10;
 
@@ -184,6 +194,10 @@ This gives 40 main scenarios, with 500 repetitions for corn and tablets and 300 
 - 20 × 1, for the instrument data only.
 
 A chronological design took 4 fruit from each of the five earliest-harvested consignments. Coverage was measured on the fruit of the consignments that supplied no standards, averaging first within and then across consignments. Each design was repeated 300 times. This part of the study was specified after the first manuscript draft and before any of its results were computed. One baseline (ANOVA-PI) was corrected after an internal review and the experiment re-run (deviation R3).
+
+**Confirmation on new instruments.** Fourteen further instrument-season combinations of the extended mango data were reserved for a confirmatory test: handheld units not used anywhere else in the study, each with at least 12 consignments in one season (2016–2018). For each, the original calibration was a PLS model of the master unit trained without any fruit of the target consignments or the target unit. The transfer was slope/bias correction, and the designs were 2 × 10, 5 × 4, 10 × 2 and, where 23 or more consignments existed, 20 × 1, with 300 repetitions. Before running it, we wrote down the planning model's predictions and five hypotheses with explicit pass criteria (protocol, section E15).
+
+**Guard bands.** For the harvest case study we also evaluated point rules with a fixed guard band around the threshold (pass if the prediction exceeds 14% by $k$ times the leave-one-out RMSE, $k$ = 0.25–3), so that interval rules can be compared with them at equal re-measurement effort.
 
 **Application.** For the harvest-maturity case study, each test fruit was classified with its 90% interval:
 
@@ -286,7 +300,7 @@ Table 4, Fig. 4 and Supplementary Table S11 show the coverage for fruit from con
 
 The shortfall was largest for slope/bias correction (Supplementary Table S11). A plausible reason is that a slope and offset fitted on two consignments absorb part of those consignments' own bias, so their left-out errors underestimate how different the next consignment will be. For the remaining fruit of the two sampled consignments, the same TJ+N intervals were accurate (coverage 0.91–0.93).
 
-Spreading the 20 standards over more consignments reduced the problem. TJ+N was too narrow in 4 of 8 combinations with 5 × 4 standards, and in 3 of 8 with 10 × 2. With one fruit from each of 20 consignments, available for the instrument pairs only, it was too narrow in none (0 of 6), as Appendix B predicts. The 15 × 1 design, the only one-per-consignment design possible for the season shift, uses 15 standards. It also showed no under-coverage (0 of 8), but its coverage of 0.93–0.98 is inflated by the rank rule, because with 15 standards the 90% limit is the largest left-out error. We had expected the intra-consignment correlation to explain which combinations failed. It did not (Spearman ρ = 0.52, p = 0.18 across the eight combinations with two consignments; Supplementary Fig. S6): the correlation was high everywhere, and the number of consignments decided the outcome.
+Spreading the 20 standards over more consignments reduced the problem. TJ+N was too narrow in 4 of 8 combinations with 5 × 4 standards, and in 3 of 8 with 10 × 2. With one fruit from each of 20 consignments, available for the instrument pairs only, it was too narrow in none (0 of 6), as Appendix B predicts. The 15 × 1 design, the only one-per-consignment design possible for the season shift, uses 15 standards. It also showed no under-coverage (0 of 8), but its coverage of 0.93–0.98 is inflated by the rank rule, because with 15 standards the 90% limit is the largest left-out error. We had expected the intra-consignment correlation alone to explain which combinations failed. It did not (Spearman ρ = 0.52, p = 0.18 across the eight combinations with two consignments; Supplementary Fig. S6): the correlation was high everywhere, and the number of consignments decided the outcome. The planning model of Section 2.5, which combines the number of consignments, the fruit per consignment and the correlation, reproduced the observed coverage of the sample-level intervals closely (mean absolute difference 0.028), but because it was formulated after these results were known, we tested it on fresh data (Section 4.4).
 
 The methods that treat the consignment as the unit held their level. TJ+B was never too narrow where it gave a bounded interval (0 of 22 combinations at 90%, 0 of 30 at 80%, 0 of 6 at 95%; coverage 0.90–0.98 at 90%). With fewer than nine consignments it gives no finite 90% interval. With 10 × 2 standards its intervals were wider than those of TJ+N (median width ratio 1.38). With one fruit per consignment the two methods are identical. At 90% and 95%, the max-score variant TJ+G gave exactly the same intervals as TJ+B in these designs; at 80% its coverage was up to 0.04 higher.
 
@@ -312,15 +326,27 @@ Table: **Table 4.** Coverage of nominal 90% intervals for fruit from consignment
 
 
 
-## 4.4. What this means for a harvest decision
+## 4.4. Confirmation on fourteen further instruments
+
+The batch results above rest on four settings, and the planning model was formulated after seeing them. Both were therefore put to a test on data that had not been touched: 14 combinations of handheld unit and season, each with its own consignments, an original calibration built without any of their fruit, and slope/bias correction as the transfer. The predictions and pass criteria were written down before the analysis (protocol, section E15). The transfers worked well (RMSEP 0.80–1.33% dry matter with 10 × 2 standards), and errors were again shared within consignments (intra-consignment correlation 0.32–0.66).
+
+The batch effect replicated without exception (Fig. 5a; Supplementary Table S15). With 20 standards from two consignments, the sample-level intervals were too narrow for new consignments in all fourteen settings: TJ+N in 14 of 14 (coverage 0.65–0.81), the Gaussian interval in 14 of 14 and the textbook regression interval of slope/bias correction in 14 of 14. With five consignments they still failed in 14 of 14 settings (coverage 0.81–0.88), and with ten in about half (8 of 14 for TJ+N). With one fruit from each of 20 consignments, possible in two settings, none was too narrow. The intervals that leave out whole consignments were never too narrow: TJ+B in 0 of 46 cells where it was bounded, and the Gaussian and random-effects consignment formulas in 0 of 60 cells with five or more consignments. The random-effects interval was valid even with two consignments, but then 3.5 times wider than TJ+N.
+
+The planning model passed its test with one exception. Using each setting's observed intra-consignment correlation, it predicted the coverage of the sample-level intervals with a mean absolute error of 0.030 (TJ+N) and 0.033 (Gaussian), within the pre-set limit of 0.04, and with a correlation of 0.99 between predicted and observed values (Fig. 5b). The errors were not centred: the model was optimistic by 0.032 on average, most of all for two consignments. With a single prior correlation of 0.5 for every setting, the predictions for five or more consignments were within 0.022 of the observed mean coverage. For two consignments the observed coverage (0.727) fell 0.066 below the prediction (0.793), outside the pre-set ±0.05. For planning, the model should therefore be read as an upper bound on what few batches can deliver.
+
+![**Fig. 5.** Confirmatory study on 14 handheld-instrument × season settings not used elsewhere in the study (slope/bias correction, 300 repetitions per design). (a) Coverage of nominal 90% intervals for fruit from consignments without standards; markers: mean over settings, lines: range, hollow: unbounded. (b) Coverage of the Gaussian leave-one-out interval predicted by the planning model of Section 2.5 against the observed coverage, for the earlier batch study (open circles, used to formulate the model) and for the confirmatory settings (filled).](figures/fig_confirm.png){width=16.5cm}
+
+
+
+## 4.5. What this means for a harvest decision
 
 To see what interval validity means in practice, we used the mango data for the task the handheld instruments are bought for: deciding whether fruit have reached the 14% dry matter recommended at harvest [@ainsworth2016]. This case study was added after the batch results were known (deviation R2 in the protocol). It translates those results into decision terms and is not an independent test.
 
-Each test fruit came from a consignment that had supplied no standards. A fruit was passed as mature if the lower limit of its 90% interval was at least 14%, and referred for re-measurement if the interval contained 14%. The reference was the simplest rule, passing every fruit whose predicted value is at least 14%. We report slope/bias correction, which predicted these fruit with an RMSEP of 1.1–1.2% dry matter (Table 5, Fig. 5). PDS between the handheld units was not usable for this purpose (RMSEP 3.0–5.4%), and its results are in Supplementary Table S14. About 22% of the test fruit were below 14%.
+Each test fruit came from a consignment that had supplied no standards. A fruit was passed as mature if the lower limit of its 90% interval was at least 14%, and referred for re-measurement if the interval contained 14%. The reference was the simplest rule, passing every fruit whose predicted value is at least 14%. We report slope/bias correction, which predicted these fruit with an RMSEP of 1.1–1.2% dry matter (Table 5, Fig. 6). PDS between the handheld units was not usable for this purpose (RMSEP 3.0–5.4%), and its results are in Supplementary Table S14. About 22% of the test fruit were below 14%.
 
 Deciding on the predicted value alone passed 36% of the immature fruit (range over settings 31%–42%). Intervals taken over from the original calibration reduced this to 7.0%. Intervals rebuilt from the reference fruit reduced it further, and here the sampling of the reference fruit mattered more than the formula. With reference fruit from two consignments, TJ+N passed 9.8% of the immature fruit and the Gaussian interval 10%. With the same number spread over ten consignments, the rates were 3.2% and 3.2%. The two interval formulas behaved almost identically at this level, so the case study does not favour TJ+N over a Gaussian interval. What it shows is the cost of drawing the reference fruit from too few consignments: 3.1 times as many immature fruit passed with TJ+N. The leave-one-consignment-out TJ+B passed 1.4% with ten consignments. With two consignments it referred every fruit, because a bounded 90% interval requires at least nine consignments.
 
-The price of these decisions is the share of fruit that needs a second look: 49% with TJ+N and 58% with TJ+B, for ten consignments. A cruder alternative would be to add a fixed guard band to the threshold, for example passing fruit only if the prediction exceeds 14% by one RMSE. That would also reduce the share of immature fruit passed, but its error rate cannot be set in advance. A valid interval provides the same kind of margin, with a width chosen to give the stated coverage for each fruit. Neither can make a single NIR reading more precise; for fruit close to the threshold a second measurement is the only remedy.
+The price of these decisions is the share of fruit that needs a second look: 49% with TJ+N and 58% with TJ+B, for ten consignments. A simpler alternative is a fixed guard band around the threshold, for example passing fruit only if the prediction exceeds 14% by one RMSE. Fig. 6 and Supplementary Table S16 show the whole trade-off between the immature fruit passed and the fruit referred, as the guard band is widened. The interval rules lie on these curves: the 90% Gaussian interval behaves like a guard band of 1.75 RMSE, and TJ+N sits next to it. Intervals therefore do not beat a well-chosen guard band. What they add is the choice of the band from a stated coverage, instead of by trial and error. The sampling of the reference fruit, by contrast, moved the whole curve. At the re-measurement rate of TJ+N with two consignments (38% of fruit referred), guard bands passed 9.1% of the immature fruit when the reference fruit came from two consignments and 6.4% when they came from ten. Neither intervals nor guard bands can make a single NIR reading more precise; for fruit close to the threshold, a second measurement is the only remedy.
 
 | Rule | 2 × 10: immature passed | 2 × 10: referred | 10 × 2: immature passed | 10 × 2: referred | 20 × 1: immature passed | 20 × 1: referred |
 |:--|--:|--:|--:|--:|--:|--:|
@@ -333,51 +359,53 @@ The price of these decisions is the share of fruit that needs a second look: 49%
 Table: **Table 5.** Harvest-maturity screening of mango at 14% dry matter with 90% intervals, slope/bias correction, for fruit from consignments that supplied no standards. Immature passed: percentage of truly immature fruit (DM < 14%) declared mature, mean (range) over the season shift and the three handheld-instrument pairs; referred: percentage of all fruit whose interval contains 14%. Designs: consignments × fruit per consignment (20 × 1: instrument pairs only). 200 repetitions. PDS results: Supplementary Table S14.
 
 
-![**Fig. 5.** Harvest-maturity screening at 14% dry matter with slope/bias correction, for fruit from consignments without standards. (a) Share of immature fruit passed as mature; (b) share of fruit referred for re-measurement because the 90% interval contains 14%. Bars: mean over the season shift and the three handheld-instrument pairs; lines: range. Colours: how 20 reference fruit were spread over consignments.](figures/fig_application.png){width=16.5cm}
+![**Fig. 6.** Harvest-maturity screening at 14% dry matter with slope/bias correction, for fruit from consignments without standards: share of immature fruit passed as mature against share of fruit referred for re-measurement. Lines: fixed guard bands of 0–3 times the leave-one-out RMSE around the threshold; markers: interval rules. Colours: 20 reference fruit from 2 or from 10 consignments. Mean over the season shift and the three handheld-instrument pairs (200 repetitions).](figures/fig_tradeoff.png){width=12cm}
 
 
 
-## 4.5. What the intervals cannot do
+## 4.6. What the intervals cannot do
 
 Two further situations break the exchangeability on which every method here relies, and they are worth knowing before the intervals are used.
 
 **Selecting standards by design.** Kennard–Stone selection picks standards that span the target population, so they are not a random sample. In our tests it made TJ+N conservative (coverage 0.93–0.96), because extreme standards produce larger left-out errors than typical samples. This is reassuring for a common practice, but it is an observation, not a guarantee.
 
-**Drift after standardisation.** A shift of the routine spectra by one wavelength channel *after* the transfer had been fitted simulates an instrument that drifts between set-up and use. Under this shift no interval method remained valid (Fig. 6; Supplementary Table S5). On tablets, TJ+N covered only 0.04–0.07 of the samples. On corn and mango the $Q$ residual in the difficulty scaling caught much of the damage (TJ+N 0.60–0.94 and 0.73–0.97, against 0.02–0.29 and 0.07–0.21 for Gaussian intervals). Even a quarter-channel shift left TJ+N too narrow in 4/12 combinations (Supplementary Table S8). Spectral drift must therefore be monitored, for example through the $Q$ residual or periodic check samples, and the transfer repeated when it appears; an interval computed at set-up time cannot absorb it.
+**Drift after standardisation.** A shift of the routine spectra by one wavelength channel *after* the transfer had been fitted simulates an instrument that drifts between set-up and use. Under this shift no interval method remained valid (Fig. 7; Supplementary Table S5). On tablets, TJ+N covered only 0.04–0.07 of the samples. On corn and mango the $Q$ residual in the difficulty scaling caught much of the damage (TJ+N 0.60–0.94 and 0.73–0.97, against 0.02–0.29 and 0.07–0.21 for Gaussian intervals). Even a quarter-channel shift left TJ+N too narrow in 4/12 combinations (Supplementary Table S8). Spectral drift must therefore be monitored, for example through the $Q$ residual or periodic check samples, and the transfer repeated when it appears; an interval computed at set-up time cannot absorb it.
 
 Added spectral noise and halving the source data did not cause under-coverage (0 of 30 robustness scenarios without drift). Neither did changing the PDS window or the number of PLS components (0 of 27; Supplementary Table S9), although these settings changed the prediction error considerably. Poorer transfer settings simply produced wider intervals.
 
-![**Fig. 6.** Coverage of nominal 90% intervals under Kennard–Stone selection of the standards, added spectral noise, a ±1-channel wavelength shift of the routine spectra after standardisation, and halved source data. Results for a ±0.25-channel shift are in Supplementary Table S8.](figures/fig6_robustness.png){width=16.5cm}
+![**Fig. 7.** Coverage of nominal 90% intervals under Kennard–Stone selection of the standards, added spectral noise, a ±1-channel wavelength shift of the routine spectra after standardisation, and halved source data. Results for a ±0.25-channel shift are in Supplementary Table S8.](figures/fig6_robustness.png){width=16.5cm}
 
-## 4.6. Cost and use in routine work
+## 4.7. Cost, and software for routine use
 
 TJ+N needs *m* extra fits of the transfer step, carried out once, when the instrument is set up. A PDS fit with prediction took 4.6 ms for corn and 24.3 ms for tablets on one CPU core. The complete interval computation took 0.15 s, 2.79 s and 0.06 s for corn, tablets and mango (Supplementary Table S10). In routine use, each new spectrum is passed through the *m* stored transfers, which is negligible for any laboratory computer. The leave-one-batch-out version needs only *K* fits and is cheaper still.
 
+To make the procedure usable without programming, we provide two tools with this paper. The Python package `tjplus` contains the planning model and, for slope/bias correction, a function and a command-line program. These take the original calibration's predictions and the reference values of the standards (with their batch labels) and return corrected predictions, prediction intervals, and pass/fail/re-measure decisions against a threshold. A generic function wraps any other transfer method supplied as a fitting routine, for example PDS on spectra. The same calculations run in a browser tool that needs no installation: it plans the number of batches and computes intervals and decisions from pasted data. Unit tests check that the package reproduces the research code exactly. The browser tool was checked against the package.
 
 
-## 4.7. A procedure for the laboratory
+
+## 4.8. A procedure for the laboratory
 
 For someone who transfers an NIR calibration and must report results with an uncertainty range, the results suggest the following procedure:
 
 1. Do not reuse the uncertainty formula of the original calibration after a change of instrument or season. Re-establish it on the new instrument.
 
-2. Collect the reference samples for the transfer from as many different batches as practical, ideally one or two per batch. A distribution-free 90% statement for future batches (TJ+B) needs at least nine batches; the Gaussian and random-effects batch formulas worked from five batches in our data. In our data, twenty samples from twenty consignments served far better than twenty from two, at the same cost in reference analyses.
+2. Collect the reference samples for the transfer from as many different batches as practical, ideally one or two per batch. The planning model (Section 2.5, and the accompanying tool) shows in advance how much coverage a design will lose. A distribution-free 90% statement for future batches (TJ+B) needs at least nine batches; the Gaussian and random-effects batch formulas worked from five batches in our data. In 14 of 14 confirmatory settings, twenty samples from two consignments gave intervals that were too narrow for new consignments, at the same cost in reference analyses as twenty from twenty.
 
 3. Fit the transfer as usual. Then re-fit it with each standard left out, or each batch left out if several standards share a batch, and build the interval of Eq. (3) from the left-out errors. A *t*-interval or a random-effects interval from the leave-one-batch-out errors are simpler alternatives that worked as well in our data, although without a distribution-free guarantee.
 
 4. For 90% statements with standards from many batches, a Gaussian interval from the leave-one-out RMSE (or, for slope/bias correction, the regression prediction interval) is a reasonable shortcut. For 95% statements these formulas fell one or two points short in some scenarios, and TJ+N needs at least 19 standards.
 
-5. Monitor the instrument after set-up, as described in Section 4.5.
+5. Monitor the instrument after set-up, as described in Section 4.6.
 
-## 4.8. Relation to measurement uncertainty
+## 4.9. Relation to measurement uncertainty
 
 The intervals studied here are prediction intervals for the reference value of an individual routine sample. In method-validation terms they are β-expectation tolerance intervals [@hubert2004; @mee1984]. Their width therefore contains everything that separates the NIR result from the reference method: reference-method error, spectral noise, model error and the error added by the transfer. They are not a GUM-type uncertainty budget, in which components are estimated separately and propagated. Instead, they provide an empirical check that the transferred method meets a stated coverage. Error-propagation methods for multivariate calibration [@faber1997; @olivieri2006; @allegrini2016] give sample-specific uncertainties, but they rest on the original calibration's error model, which Section 4.1 shows no longer applies after transfer.
 
 The guarantee is an average over possible sets of standards. For a single transfer, the realised coverage on the following samples varies. Across the main scenarios (m = 10–50 random standards; test sets of 10–700 samples), a median of 0.88 of the standard sets gave a realised coverage of at least 0.85 on their test samples. In the least favourable scenario the share was 0.74 (Supplementary Table S13). The Gaussian intervals reached 0.82. Statements about one particular set of standards (β-content intervals in validation terms) cannot be guaranteed by the jackknife+ in general [@bian2023], unless the fitting procedure is stable in a quantifiable sense [@liang2025]. A laboratory that needs them should use more standards, or a lower α, and re-check coverage on fresh samples.
 
-## 4.9. Limitations
+## 4.10. Limitations
 
-The evidence comes from three public data sets. The batch results, which carry the main practical finding, come from one product (mango), in one season shift and on three handheld-instrument pairs. These eight combinations share a product, a master instrument, consignments and standards, and are closer to two independent settings than to eight. We found no other public NIR transfer data set that records lots. Whether the findings carry over to pharmaceutical production lots or grain deliveries is therefore a conjecture to be tested.
+The evidence comes from three public data sets. The batch results, which carry the main practical finding, come from one product (mango): one season shift and three handheld-instrument pairs in the main study, and 14 further instrument-season combinations in the confirmatory study. These settings share a product, a master instrument and some consignments, so they are not fully independent. We found no other public NIR transfer data set that records lots. Whether the findings carry over to pharmaceutical production lots or grain deliveries is therefore a conjecture to be tested; the planning model gives a concrete prediction for such tests. The planning model assumes a bias correction and normally distributed batch effects. It was optimistic for designs with two batches.
 
 The batches used as standards were drawn at random from the available consignments, which is more favourable than many real set-ups, and the bootstrap intervals are conditional on those consignments. The chronological design is a single configuration per setting. The 15 × 1 design used 15 rather than 20 standards, because the season shift has only 18 consignments.
 
@@ -387,9 +415,9 @@ The noise, wavelength-drift and Kennard–Stone experiments are simulations on r
 
 Moving an NIR calibration to a new instrument or season breaks its old uncertainty statement. In our data, nominal 90% intervals carried over from the original calibration covered as few as 0.03 of the reference values. The reference samples used for the transfer are enough to restore a valid statement, without measuring anything extra, if the transfer is re-fitted with each of them left out in turn and the left-out errors are used to set the interval. This takes seconds. With randomly chosen standards, simple Gaussian and regression intervals built from the same left-out errors were nearly as good at 90%, so the main benefit of the jackknife+ is its guarantee and its behaviour at 95%.
 
-How the reference samples are collected turned out to matter more than the formula. Intervals built from samples of a few consignments were accurate for those consignments but too narrow for new ones, whichever sample-level formula was used. Spreading the same number of reference samples over many consignments, or leaving out whole consignments when estimating the errors, gave intervals that held for new consignments. In a harvest-maturity check of mango, intervals from well-spread reference fruit reduced the share of immature fruit passed as mature from 36% (predicted value alone) to 3.2%, at the cost of referring about half of the fruit for a second measurement.
+How the reference samples are collected turned out to matter more than the formula. Intervals built from samples of a few consignments were accurate for those consignments but too narrow for new ones, whichever sample-level formula was used, and this was confirmed on 14 further handheld instruments that had not been used to develop the analysis. Spreading the same number of reference samples over many consignments, or leaving out whole consignments when estimating the errors, gave intervals that held for new consignments. A simple random-effects planning model predicts the size of the problem before any sample is measured. In a harvest-maturity check of mango, intervals from well-spread reference fruit reduced the share of immature fruit passed as mature from 36% (predicted value alone) to 3.2%, at the cost of referring about half of the fruit for a second measurement.
 
-For laboratories this leads to a rule that costs nothing: collect transfer standards from as many batches as possible, and estimate the interval from errors obtained by leaving them out one at a time, or one batch at a time.
+For laboratories this leads to a rule that costs nothing: collect transfer standards from as many batches as possible, and estimate the interval from errors obtained by leaving them out one at a time, or one batch at a time. The accompanying Python package and browser tool do both the planning and the calculation.
 
 # Declarations {.unnumbered}
 
@@ -400,6 +428,8 @@ For laboratories this leads to a rule that costs nothing: collect transfer stand
 **Declaration of generative AI and AI-assisted technologies in the writing process.** During the preparation of this work the authors used an AI assistant (Claude, Anthropic) for literature search support, code development, data analysis and drafting of the manuscript. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
 
 **Funding.** [To be completed by the authors.]
+
+**Software availability.** The Python package `tjplus` (planning model, interval functions and command-line program) and the browser tool are part of the code archive listed below.
 
 **Data availability.** All data sets are public: corn and IDRC Shootout 2002 tablets from Eigenvector Research [@eigenvector_data], and mango dry matter from Mendeley Data (record version 1, doi:10.17632/46htwnp833.1 [@mango_data]; record version 6, doi:10.17632/46htwnp833.6 [@mango_data_v6]). All code, configuration files, raw per-repetition results and the scripts that regenerate every table and figure are available at [repository URL / archived DOI to be inserted].
 

@@ -47,7 +47,15 @@ Second, if every standard comes from a different, randomly chosen batch, the ord
 
 We use this construction with the σ(x) scaling and call it TJ+B. Appendix B also gives a variant that keeps only the largest error per batch (TJ+G), with a short self-contained proof. At 90% and 95% both gave identical intervals in the designs studied here, because both then reduce to the largest left-out error; at 80% TJ+B was slightly less conservative. The guarantee of TJ+B rests on the theorem of Lee et al. [@lee2026], that of TJ+G on Appendix B.
 
-## 2.5. Methods compared
+## 2.5. Planning the reference samples
+
+Whether sample-level intervals will be too narrow for new batches can be anticipated before any reference analysis is made. Write the error of the original calibration on target samples as $e_{kj}=b_k+w_{kj}$, with a batch effect $b_k$ and a within-batch part $w_{kj}$, and let $\rho=\mathrm{Var}(b)/\mathrm{Var}(e)$ be the intra-batch correlation. Suppose the $m=Kn$ standards come from $K$ batches with $n$ samples each, and the transfer corrects the bias. The mean squared leave-one-out error of the standards then estimates
+
+$$\kappa(K,n,\rho)\;=\;\frac{\frac{N}{N-1}(1-\rho)+\left(\frac{N}{N-1}\right)^2\left(1-\frac1K\right)\rho}{\left(1+\frac1N\right)(1-\rho)+\left(1+\frac1K\right)\rho}\qquad(N=Kn) \qquad (5)$$
+
+times the variance of the error of a sample from a new batch. With one standard per batch, $\kappa\approx1$. With few batches and correlated errors it falls well below one ({{r_kappa_2x10}} for 2 × 10 standards at $\rho=0.5$, against {{r_kappa_10x2}} for 10 × 2), and every interval built from leave-one-out errors is too narrow by roughly $\sqrt{\kappa}$. A short simulation of the same model gives the expected coverage of each interval rule for any design, including the randomness of the estimated width. It is included in the accompanying software (Section 4.7). For 2 × 10 standards and $\rho=0.5$, it predicts a coverage of {{r_plan_2x10}} for a nominal 90% Gaussian interval. A laboratory can use it with a value of $\rho$ from earlier data, or with a conservative guess, to decide how many batches to sample.
+
+## 2.6. Methods compared
 
 All methods use the same transferred predictor and differ only in the interval. They fall into four groups.
 
@@ -109,7 +117,7 @@ For the main experiments with random standards, all settings, seeds and criteria
 
 This gives {{n_scen_main}} main scenarios, with 500 repetitions for corn and tablets and 300 for mango. A further 200 repetitions per scenario compared the simpler interval formulas (Gauss-LOO-N, ASTM-T, OLS-PI, Boot-T) on identical standards.
 
-**Standards from batches.** For the four mango settings, giving eight setting-pipeline combinations (season shift with SBC and without transfer; three instrument shifts with PDS and SBC), $K$ consignments were drawn at random and $n_g$ fruit taken from each, always with 20 standards or fewer:
+**Standards from batches.** For four mango settings, giving eight setting-pipeline combinations (season shift with SBC and without transfer; three instrument shifts with PDS and SBC), $K$ consignments were drawn at random and $n_g$ fruit taken from each, always with 20 standards or fewer:
 
 - 2 × 10;
 - 5 × 4;
@@ -118,6 +126,10 @@ This gives {{n_scen_main}} main scenarios, with 500 repetitions for corn and tab
 - 20 × 1, for the instrument data only.
 
 A chronological design took 4 fruit from each of the five earliest-harvested consignments. Coverage was measured on the fruit of the consignments that supplied no standards, averaging first within and then across consignments. Each design was repeated 300 times. This part of the study was specified after the first manuscript draft and before any of its results were computed. One baseline (ANOVA-PI) was corrected after an internal review and the experiment re-run (deviation R3).
+
+**Confirmation on new instruments.** Fourteen further instrument-season combinations of the extended mango data were reserved for a confirmatory test: handheld units not used anywhere else in the study, each with at least 12 consignments in one season (2016–2018). For each, the original calibration was a PLS model of the master unit trained without any fruit of the target consignments or the target unit. The transfer was slope/bias correction, and the designs were 2 × 10, 5 × 4, 10 × 2 and, where 23 or more consignments existed, 20 × 1, with 300 repetitions. Before running it, we wrote down the planning model's predictions and five hypotheses with explicit pass criteria (protocol, section E15).
+
+**Guard bands.** For the harvest case study we also evaluated point rules with a fixed guard band around the threshold (pass if the prediction exceeds 14% by $k$ times the leave-one-out RMSE, $k$ = 0.25–3), so that interval rules can be compared with them at equal re-measurement effort.
 
 **Application.** For the harvest-maturity case study, each test fruit was classified with its 90% interval:
 

@@ -74,6 +74,25 @@ def main():
         rows.append(r)
     t = pd.DataFrame(rows, columns=["Setting", "Pipeline", "Design", "Immature %"] + [l for _, l in rules])
     P.append("# Table S14. Harvest-maturity case study, all settings\n\n" + md(t, "**Table S14.** Screening at 14% dry matter with 90% intervals, fruit from consignments without standards (200 repetitions). Each cell: percentage of immature fruit passed as mature / percentage of all fruit referred for re-measurement. Bootstrap CIs: results/summary/E14_summary.csv."))
+    e15 = pd.read_csv(os.path.join(RES, "summary", "E15_summary.csv")); e15 = e15[e15.alpha == 0.1]
+    ms = [("TJ+N", "TJ+N"), ("Gauss-LOO", "Gauss-LOO"), ("OLS-PI", "OLS-PI"), ("ASTM-PI", "ASTM-PI"), ("TJ+H-N", "TJ+B"),
+          ("Gauss-LGO", "Gauss-LGO"), ("ANOVA-PI", "ANOVA-PI")]
+    rows = []
+    for (st, K, ng), g in e15.groupby(["setting", "K", "n_g"], sort=True):
+        r = [st.replace("_", " / "), f"{K}×{ng}"]
+        for m, _ in ms:
+            x = g[g.method == m].iloc[0]
+            r.append("unb." if x.new_frac_inf > 0.5 else f"{x.coverage_mean:.3f}" + ("*" if x.under else ""))
+        x = g[g.method == "TJ+N"].iloc[0]
+        r += [f"{x.pred_oracle:.3f}", f"{x.icc_new:.2f}", f"{x.rmsep_new:.2f}"]
+        rows.append(r)
+    t = pd.DataFrame(rows, columns=["Unit / season", "Design"] + [l for _, l in ms] + ["Planning model (TJ+)", "ICC", "RMSEP"])
+    P.append("# Table S15. Confirmatory study, every setting\n\n" + md(t, "**Table S15.** Confirmatory study on 14 handheld-unit × season settings (slope/bias correction; α = 0.10; 300 repetitions). Coverage for fruit from consignments without standards; * flagged as too narrow; unb.: unbounded. Planning model: predicted coverage of sample-level TJ+ from the design and the observed ICC."))
+    gb = pd.read_csv(os.path.join(RES, "summary", "E14b_summary.csv"))
+    gb = gb.assign(design=gb.apply(lambda r: f"{int(r.K)}×{int(r.n_g)}", axis=1), immature_passed=(100 * gb.immature_passed).round(1),
+                   referred=(100 * gb.referred).round(1))[["design", "method", "immature_passed", "referred"]].sort_values(["design", "referred"])
+    gb.columns = ["Design", "Rule", "Immature passed, %", "Referred, %"]
+    P.append("# Table S16. Guard bands and interval rules\n\n" + md(gb, "**Table S16.** Harvest-maturity screening at 14% dry matter (slope/bias correction; mean over the season shift and three handheld-instrument pairs; 200 repetitions). Guard-k: pass if the prediction exceeds 14% by k × leave-one-out RMSE, fail if it is more than that below, refer otherwise. TJ+N@a, Gauss-LOO@a: intervals at miscoverage a."))
     figs = [("fig5_ablation", "Ablation of TJ+N: mean coverage (left) and median interval score relative to TJ+N (right)."),
             ("fig7_conditional_coverage", "Coverage within thirds of the difficulty σ(x) of the test spectra (main pipelines, α = 0.10)."),
             ("fig8_error_analysis", "Miss rate by Q-residual quintile of the test spectra (first 100 repetitions)."),
