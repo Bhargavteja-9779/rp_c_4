@@ -1,5 +1,5 @@
 - Uncertainty ranges of a calibration do not survive a move to a new NIR instrument
 - Re-fitting the transfer with each standard left out restores valid intervals
 - Standards from few batches give intervals too narrow for new batches
-- Confirmed on 14 handheld instruments; a planning model predicts the loss
+- Confirmed in 14 settings on 11 further handheld instruments
 - Free software plans the sampling and computes intervals and decisions

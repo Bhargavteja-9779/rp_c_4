@@ -1,0 +1,3 @@
+batch  gauss      max abs difference 0.004
+batch  anova      max abs difference 0.005
+worst difference over all rules: 0.005 (table shows 2 decimals)

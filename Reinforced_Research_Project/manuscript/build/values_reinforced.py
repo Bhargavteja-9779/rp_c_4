@@ -132,6 +132,7 @@ def main():
         ns["fill"](V, RES)
         ns["fill_text"](V)
         ns["fill_round3"](V, RES)
+        ns["fill_round3b"](V, RES)
     json.dump(V, open(os.path.join(HERE, "values.json"), "w"), indent=1, ensure_ascii=False)
     print(f"{len(V)} values written")
 

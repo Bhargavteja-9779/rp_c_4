@@ -79,7 +79,7 @@ footer{font-size:12.5px;color:var(--muted);max-width:80ch}
         <div class="field"><label for="pa">Confidence</label><select id="pa"><option value="0.2">80 %</option><option value="0.1" selected>90 %</option><option value="0.05">95 %</option></select></div>
       </div>
       <div class="field"><label for="prho">Intra-batch correlation of errors: <span id="prhov">0.50</span></label><input id="prho" type="range" min="0" max="0.9" step="0.05" value="0.5"></div>
-      <p class="note">Samples per batch are taken as reference samples ÷ batches (rounded down). 6,000 simulated draws.</p>
+      <p class="note">Samples per batch are taken as reference samples ÷ batches, rounded down. The model assumes a bias correction and normal errors; in tests on 14 instrument–season settings it was optimistic by about 0.06 with two batches, so read it as an upper bound. 6,000 simulated draws.</p>
     </div>
     <div class="field" style="gap:14px">
       <div class="bars" id="pbars" aria-live="polite"></div>
@@ -93,13 +93,13 @@ footer{font-size:12.5px;color:var(--muted);max-width:80ch}
   <p class="lead">Paste the original calibration's predictions and the reference values of the transfer standards (with their batch if known), and the predictions for routine samples. The tool fits slope/bias correction and builds the interval by refitting it with each standard, or each batch, left out (transfer jackknife+).</p>
   <div class="grid">
     <div class="field" style="gap:14px">
-      <div class="field"><label for="std">Reference samples: prediction, reference, batch</label>
+      <div class="field"><label for="std">Reference samples: prediction, reference, batch (lines starting with a letter are read as headers)</label>
         <textarea id="std" spellcheck="false"></textarea></div>
       <div class="field"><label for="new">Routine samples: prediction</label>
         <textarea id="new" spellcheck="false" style="min-height:110px"></textarea></div>
       <div class="row">
         <div class="field"><label for="unit">Leave out</label><select id="unit"><option value="batch">one batch at a time</option><option value="sample">one sample at a time</option></select></div>
-        <div class="field"><label for="rule">Interval</label><select id="rule"><option value="jk">jackknife+</option><option value="gauss">Gaussian (t)</option></select></div>
+        <div class="field"><label for="rule">Interval</label><select id="rule"><option value="jk">jackknife+</option><option value="gauss">Gaussian (t)</option><option value="anova">random effects (batches)</option></select></div>
         <div class="field"><label for="ca">Confidence</label><select id="ca"><option value="0.2">80 %</option><option value="0.1" selected>90 %</option><option value="0.05">95 %</option></select></div>
         <div class="field"><label for="thr">Threshold (optional)</label><input id="thr" type="number" step="0.1" value="14"></div>
       </div>
@@ -115,7 +115,7 @@ footer{font-size:12.5px;color:var(--muted);max-width:80ch}
   </div>
 </section>
 
-<footer>Method: slope/bias correction refitted with each reference sample (or batch) left out; interval from the left-out predictions and errors (jackknife+; Barber et al., Ann. Stat. 2021; batch version: Lee, Barber &amp; Willett, ACM J. Data Sci. 2026). Coverage holds on average if the reference samples, or their batches, are a random draw of what will be measured later, and if the instrument does not drift after set-up. A batch-level 90 % jackknife+ interval needs at least 9 batches. Decision: pass if the whole interval is at or above the threshold, fail if it is entirely below, otherwise re-measure.</footer>
+<footer>Method: slope/bias correction refitted with each reference sample (or batch) left out; interval from the left-out predictions and errors (unscaled jackknife+; Barber et al., Ann. Stat. 2021; batch version: Lee, Barber &amp; Willett, ACM J. Data Sci. 2026), or Gaussian and random-effects (one-way ANOVA) intervals from the same left-out errors. Coverage holds on average if the reference samples, or their batches, are a random draw of what will be measured later, and if the instrument does not drift after set-up. A batch-level 90 % jackknife+ interval needs at least 9 batches. Decision: pass if the whole interval is at or above the threshold, fail if it is entirely below, otherwise re-measure.</footer>
 </div>
 
 <script>
@@ -205,10 +205,20 @@ function compute(){
     const nk={};groups.forEach(x=>nk[x]=(nk[x]||0)+1);
     const w=unit==="batch"?groups.map(x=>1/((K+1)*nk[x])):null;
     const df=unit==="batch"?K-1:f.length-1,rms=Math.sqrt(res.reduce((s,r)=>s+r*r,0)/res.length);const tt=df>=1?tq(1-alpha/2,df):Infinity;
+    if(rule==="anova"&&unit!=="batch")throw new Error("The random-effects interval needs batches: choose 'one batch at a time'.");
+    let aC=0,aH=Infinity;
+    if(rule==="anova"){const N=res.length,em=res.reduce((p,q)=>p+q,0)/N;const idx=groups.map(x=>labels.indexOf(x));
+      const n=labels.map((_,k)=>idx.filter(v=>v===k).length),nb=N/K;const mk=labels.map((_,k)=>res.filter((_,i)=>idx[i]===k).reduce((p,q)=>p+q,0)/n[k]);
+      let V,df;if(K<2||nb<=1){V=res.reduce((p,q)=>p+(q-em)**2,0)/(N-1)*(1+1/N);df=N-1;}
+      else{const msb=n.reduce((p,nk,k)=>p+nk*(mk[k]-em)**2,0)/(K-1);const msw=res.reduce((p,q,i)=>p+(q-mk[idx[i]])**2,0)/Math.max(N-K,1);
+        const sb2=Math.max((msb-msw)/nb,0);V=sb2*(1+1/K)+msw*(1+1/N);const A=(1+1/K)/nb,C=(1+1/N)-(1+1/K)/nb;
+        df=sb2>0?V*V/((A*msb)**2/(K-1)+(C*msw)**2/Math.max(N-K,1)):N-1;}
+      aC=em;aH=tq(1-alpha/2,Math.max(df,1))*Math.sqrt(V);}
     const out=fn.map(x=>{const yh=a+b*x;let L,U;
-      if(rule==="gauss"){L=yh-tt*rms;U=yh+tt*rms;}
+      if(rule==="anova"){L=yh+aC-aH;U=yh+aC+aH;}
+      else if(rule==="gauss"){L=yh-tt*rms;U=yh+tt*rms;}
       else{const c=groups.map((lab,i)=>({c:loo[lab][1]+loo[lab][0]*x,r:Math.abs(res[i])}));[L,U]=jkplus(c,alpha,w);}
-      let d="";if(thr!==null)d=L>=thr?"pass":(U<thr?"fail":"refer");return{x,yh,L,U,d};});
+      let d="";if(thr!==null)d=L>=thr?"pass":(U<thr?"fail":"refer");return{x,yh:rule==="anova"?yh+aC:yh,L,U,d};});
     const tb=$("ctab").querySelector("tbody");const fmt=v=>isFinite(v)?v.toFixed(2):(v>0?"+∞":"−∞");
     tb.innerHTML=out.map((o,i)=>`<tr><td>${i+1}</td><td class="mono">${o.x.toFixed(2)}</td><td class="mono">${o.yh.toFixed(2)}</td><td class="mono">${fmt(o.L)}</td><td class="mono">${fmt(o.U)}</td><td class="${o.d?"d-"+o.d:""}">${o.d||"–"}</td></tr>`).join("");
     const cnt=k=>out.filter(o=>o.d===k).length;const width=out.filter(o=>isFinite(o.U-o.L)).map(o=>o.U-o.L);

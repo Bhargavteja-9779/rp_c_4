@@ -143,9 +143,11 @@ def fill_text(V):
                            f"{V['r_app_tjn_imm_K10']} with reference fruit from ten consignments and {V['r_app_tjn_imm_K2']} "
                            f"with fruit from two.")
     V["r_cover_app"] = (f"In a harvest-maturity check of mango at the recommended minimum of 14% dry matter, deciding on the "
-                        f"predicted value alone passed {V['r_app_point_imm_designs']} of immature fruit; intervals from well-spread "
-                        f"reference fruit reduced this to {V['r_app_tjn_imm_K10']}, against {V['r_app_tjn_imm_K2']} with "
-                        f"fruit from two consignments, and flagged the fruit that needed a second measurement.")
+                        f"predicted value alone passed {V['r_app_point_imm_K10']} of immature fruit; intervals from well-spread "
+                        f"reference fruit reduced this to {V['r_app_tjn_imm_K10']} (against {V['r_app_tjn_imm_K2']} with "
+                        f"fruit from two consignments), at the cost of re-measuring about half of the fruit. A fixed guard "
+                        f"band around the threshold does about as well; the intervals choose its width from a stated "
+                        f"coverage.")
     V["r_conclusion_app"] = (f"In a harvest-maturity check of mango, intervals from well-spread reference fruit reduced the share of "
                              f"immature fruit passed as mature from {V['r_app_point_imm_K10']} (predicted value alone) to "
                              f"{V['r_app_tjn_imm_K10']}, at the cost of referring about half of the fruit for a second "
@@ -207,3 +209,45 @@ def fill_round3(V, RES):
         c = guards[guards["K"] == K].sort_values("referred")
         return float(np.interp(ref, c["referred"], c["immature_passed"]))
     V["r14b_ref"] = f"{100 * ref:.0f}%"; V["r14b_imm_k2"] = f"{100 * interp(2):.1f}%"; V["r14b_imm_k10"] = f"{100 * interp(10):.1f}%"
+
+def fill_round3b(V, RES):
+    """Per-design reporting of the planning model in E15 (third review)."""
+    import json
+    s = pd.read_csv(os.path.join(RES, "summary", "E15_summary.csv"))
+    a = s[(s["alpha"] == 0.1) & s["method"].isin(["TJ+N", "Gauss-LOO"]) & (s["new_frac_inf"] < 0.5)].copy()
+    a["err"] = a["pred_oracle"] - a["coverage_mean"]
+    for K in (2, 5, 10):
+        x = a[a["K"] == K]
+        V[f"r15_bias_K{K}"] = f"{x['err'].min():.3f}–{x.groupby('method')['err'].mean().max():.3f}"
+        V[f"r15_biasmean_K{K}"] = f"{x.groupby('method')['err'].mean().min():.3f}–{x.groupby('method')['err'].mean().max():.3f}"
+        V[f"r15_r_K{K}"] = "–".join(f"{np.corrcoef(g['pred_oracle'], g['coverage_mean'])[0, 1]:.2f}" for _, g in x.groupby("method"))
+    pr = pd.read_csv(os.path.join(RES, "statistics", "E15_prior_predictions.csv"))
+    t2 = pr[(pr["K"] == 2) & (pr["method"] == "TJ+N")].iloc[0]
+    V["r15_prior_k2_tjn_obs"] = f"{t2['observed']:.3f}"; V["r15_prior_k2_tjn_pred"] = f"{t2['predicted']:.3f}"
+    V["r15_prior_k2_tjn_diff"] = f"{abs(t2['diff']):.3f}"
+    st = s[(s["alpha"] == 0.1) & (s["K"] == 2) & (s["method"] == "ASTM-PI")]
+    V["r15_astm_K2_mean"] = f"{st['coverage_mean'].mean():.2f}"; V["r15_astm_K2_under"] = f"{int(st['under'].sum())} of {len(st)}"
+    for al, key in ((0.1, "a01"), (0.2, "a02"), (0.05, "a005")):
+        x = s[(s["method"] == "TJ+H-N") & (s["alpha"] == al) & (s["new_frac_inf"] < 0.5)]
+        V[f"r15_tjb_{key}"] = f"{int(x['under'].sum())} of {len(x)}"
+    cfg = json.load(open(os.path.join(RES, "..", "code", "config", "reinforcement.json")))["experiments"]["E15_confirm"]
+    V["r15_units"] = len({x.split("_")[0] for x in cfg["settings"]})
+    # E10 a posteriori fit, separately
+    import sys
+    sys.path.insert(0, os.path.join(RES, "..", "code", "src"))
+    from tjplus.planning import expected_coverage
+    e10 = pd.read_csv(os.path.join(RES, "summary", "E10_summary.csv"))
+    obs = {"Gauss-LOO": [], "TJ+N": []}; prd = {"Gauss-LOO": [], "TJ+N": []}
+    for (stt, kd, K, n), g in e10[(e10["alpha"] == 0.1) & (e10["design"] == "random")].groupby(["setting", "kind", "K", "n_g"]):
+        rho = float(g[g["method"] == "TJ+N"]["icc_new"].iloc[0])
+        pr_ = expected_coverage(int(K), int(n), rho, 0.1, rules=("gauss_loo", "tj_plus"), sims=20000, seed=5)
+        for meth, rr in (("Gauss-LOO", "gauss_loo"), ("TJ+N", "tj_plus")):
+            obs[meth].append(float(g[g["method"] == meth]["coverage_mean"].iloc[0])); prd[meth].append(pr_[rr]["coverage"])
+    for meth, key in (("Gauss-LOO", "gauss"), ("TJ+N", "tjn")):
+        o, p_ = np.array(obs[meth]), np.array(prd[meth])
+        V[f"r10_plan_mae_{key}"] = f"{np.mean(np.abs(p_ - o)):.3f}"; V[f"r10_plan_r_{key}"] = f"{np.corrcoef(p_, o)[0, 1]:.2f}"
+    gb = pd.read_csv(os.path.join(RES, "summary", "E14b_summary.csv"))
+    tj = gb[(gb["K"] == 10) & (gb["method"] == "TJ+N")].iloc[0]
+    guards = gb[(gb["K"] == 10) & gb["method"].str.startswith("Guard")].sort_values("referred")
+    V["r14b_k10_tjn_ref"] = f"{100 * tj['referred']:.0f}%"
+    V["r14b_k10_guard_at_tjn"] = f"{100 * float(np.interp(tj['referred'], guards['referred'], guards['immature_passed'])):.1f}%"

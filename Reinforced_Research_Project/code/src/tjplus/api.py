@@ -57,8 +57,10 @@ class SBCIntervals:
     def __init__(self, alpha=0.1, unit="sample", rule="jackknife+", slope=True):
         if unit not in ("sample", "batch"):
             raise ValueError("unit must be 'sample' or 'batch'")
-        if rule not in ("jackknife+", "gauss"):
-            raise ValueError("rule must be 'jackknife+' or 'gauss'")
+        if rule not in ("jackknife+", "gauss", "anova"):
+            raise ValueError("rule must be 'jackknife+', 'gauss' or 'anova'")
+        if rule == "anova" and unit != "batch":
+            raise ValueError("rule='anova' (random-effects interval for a new batch) needs unit='batch'")
         self.alpha, self.unit, self.rule, self.slope = alpha, unit, rule, slope
 
     def _fit_one(self, f, y):
@@ -93,6 +95,22 @@ class SBCIntervals:
         f = np.atleast_1d(np.asarray(f_new, float))
         b, a = self.full_
         yhat = a + b * f
+        if self.rule == "anova":
+            e = self.residuals_; labs = self.unit_of_; K = self.K_; N = len(e)
+            n = np.bincount(labs, minlength=K); nbar = float(np.mean(n))
+            means = np.array([e[labs == k].mean() for k in range(K)])
+            if K < 2 or nbar <= 1:
+                V = np.var(e, ddof=1) * (1 + 1 / N); df = N - 1
+            else:
+                msb = (n * (means - e.mean()) ** 2).sum() / (K - 1)
+                msw = sum(((e[labs == k] - means[k]) ** 2).sum() for k in range(K)) / max(N - K, 1)
+                sb2 = max((msb - msw) / nbar, 0.0)
+                V = sb2 * (1 + 1 / K) + msw * (1 + 1 / N)
+                a_, c_ = (1 + 1 / K) / nbar, (1 + 1 / N) - (1 + 1 / K) / nbar
+                df = V ** 2 / ((a_ * msb) ** 2 / (K - 1) + (c_ * msw) ** 2 / max(N - K, 1)) if sb2 > 0 else N - 1
+            half = stats.t.ppf(1 - self.alpha / 2, max(df, 1)) * np.sqrt(V)
+            centre = yhat + e.mean()
+            return centre, centre - half, centre + half
         if self.rule == "gauss":
             df = (self.K_ - 1) if self.unit == "batch" else (self.n_ - 1)
             half = stats.t.ppf(1 - self.alpha / 2, max(df, 1)) * np.sqrt(np.mean(self.residuals_ ** 2))

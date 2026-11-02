@@ -18,7 +18,7 @@ def main(argv=None):
     a = sub.add_parser("interval", help="slope/bias correction with prediction intervals")
     a.add_argument("--standards", required=True); a.add_argument("--new", required=True)
     a.add_argument("--batch-column", default=None); a.add_argument("--alpha", type=float, default=0.1)
-    a.add_argument("--rule", default="jackknife+", choices=["jackknife+", "gauss"])
+    a.add_argument("--rule", default="jackknife+", choices=["jackknife+", "gauss", "anova"])
     a.add_argument("--threshold", type=float, default=None); a.add_argument("--out", default=None)
     p = sub.add_parser("plan", help="expected coverage for new batches for a sampling design")
     p.add_argument("--standards", type=int, required=True); p.add_argument("--batches", type=int, required=True)

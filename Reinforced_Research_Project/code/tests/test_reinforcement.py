@@ -169,3 +169,43 @@ def test_cli_runs(tmp_path):
     o = pd.read_csv(tmp_path / "o.csv")
     assert {"corrected", "lower", "upper", "decision"} <= set(o.columns) and len(o) == 20
     assert main(["plan", "--standards", "20", "--batches", "2"]) == 0
+
+def test_api_gaussian_and_anova_match_research_implementation():
+    from tjplus.api import SBCIntervals
+    from tjplus.intervals.methods import gauss_loo
+    rng = np.random.default_rng(13)
+    src = _LinSource(np.array([1.0]))
+    X = rng.normal(size=(60, 1)); g = np.repeat(np.arange(12), 5)
+    y = 0.9 * X[:, 0] + 0.3 + rng.normal(0, 0.5, 12)[g] + rng.normal(0, 0.3, 60)
+    std, new = np.arange(30), np.arange(30, 60)
+    tf = TransferFits("sbc", src, X[std], y[std], None, X[new])
+    gt = G.GroupTransferFits(tf, g[std], X[std], X[new])
+    for (unit, rule), ref in {("sample", "gauss"): gauss_loo(tf, 0.1), ("batch", "gauss"): G.gauss_lgo(gt, 0.1),
+                              ("batch", "anova"): G.anova_pi(gt, 0.1)}.items():
+        iv = SBCIntervals(0.1, unit, rule).fit(X[std, 0], y[std], batch=g[std] if unit == "batch" else None)
+        _, lo, hi = iv.predict(X[new, 0])
+        assert np.allclose(lo, ref[0]) and np.allclose(hi, ref[1]), (unit, rule)
+
+def test_browser_tool_matches_python():
+    """Runs the numerical core of software/transfer_interval_tool.html in Node.js (skipped if Node is missing)."""
+    import shutil, subprocess, json, pytest
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("node not available")
+    from scipy import stats as st
+    from tjplus.planning import expected_coverage
+    from tjplus.api import _jackknife_plus
+    html = open(os.path.join(os.path.dirname(__file__), "..", "..", "software", "transfer_interval_tool.html")).read()
+    js = html[html.index("<script>") + 8: html.index("</script>")]
+    core = js[js.index("function lgamma"): js.index("const $=id")]
+    c = [0, 0.5, -0.2, 0.1, 0, 0.3, 0.1, -0.1, 0, 0.2]; r = [1, 2, 0.5, 1.5, 0.2, 0.9, 1.1, 0.7, 3, 0.4]
+    core += ("\nconsole.log(JSON.stringify({t1: tq(0.95,19), t2: tq(0.975,9), p: plan(20,2,0.5,0.1), q: plan(20,10,0.5,0.1),"
+             f" jk: jkplus({json.dumps([{'c': a, 'r': b} for a, b in zip(c, r)])}, 0.2)}}));")
+    out = json.loads(subprocess.run([node, "-e", core], capture_output=True, text=True, check=True).stdout)
+    assert abs(out["t1"] - st.t.ppf(0.95, 19)) < 1e-4 and abs(out["t2"] - st.t.ppf(0.975, 9)) < 1e-4
+    for key, (K, n) in (("p", (2, 10)), ("q", (10, 2))):
+        py = expected_coverage(K, n, 0.5, 0.1, sims=40000, seed=2)
+        assert abs(out[key]["gl"] - py["gauss_loo"]["coverage"]) < 0.01
+        assert abs(out[key]["tj"] - py["tj_plus"]["coverage"]) < 0.01
+    lo, hi = _jackknife_plus(np.array(c)[:, None], np.array(r)[:, None], 0.2)
+    assert abs(out["jk"][0] - lo[0]) < 1e-12 and abs(out["jk"][1] - hi[0]) < 1e-12

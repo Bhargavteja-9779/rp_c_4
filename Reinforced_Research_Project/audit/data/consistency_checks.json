@@ -66,10 +66,10 @@
  "broken_glyphs_Revised_Manuscript.pdf": 0,
  "broken_glyphs_Revised_Cover_Letter.pdf": 0,
  "broken_glyphs_supplement": 0,
- "abstract_words": 249,
+ "abstract_words": 246,
  "highlights": 5,
  "highlight_max_chars": 81,
- "raw_files_checked": 32,
+ "raw_files_checked": 42,
  "raw_hash_mismatches": 0,
- "main_text_words": 9638
+ "main_text_words": 10104
 }
