@@ -110,6 +110,33 @@ JIF and quartile could not be verified against JCR from this environment. See `a
 4. Decide on the title. The current title follows the request for a plain, student-friendly wording. The independent reviewer suggested a more technical alternative: "Valid prediction intervals for transferred NIR calibrations: leave-one-out re-fitting of the transfer step and sampling standards across batches".
 5. Review the generative-AI declaration.
 
+## 7b. Third research round (planning model, confirmation, software)
+
+**What was added.**
+
+- **Planning model (§2.5).** A random-effects model of transfer errors with the closed-form variance ratio κ, Eq. (5), verified by simulation.
+- **Confirmatory study E15.** It covered 14 instrument–season settings on 11 handheld units not analysed before. Predictions and hypotheses were committed before the runs.
+- **Guard-band trade-off (E14b).** The harvest case study now compares interval rules with fixed guard bands at equal re-measurement effort.
+- **Software.** The `tjplus` API and command-line program, and a browser tool (private claude.ai artifact, shareable by the owner; HTML in `software/`).
+
+**Confirmatory results, against the hypotheses fixed in advance.**
+
+| Hypothesis | Result | Status |
+|---|---|---|
+| P1: sample-level intervals too narrow with 2 × 10 standards | TJ+N, Gauss-LOO and OLS-PI too narrow in 14/14 settings; also 14/14 with 5 × 4 | Supported |
+| P2: TJ+B never too narrow where bounded | 0/46 | Supported |
+| P3: planning-model mean absolute error ≤ 0.04 | 0.030–0.033, but using the ICC of the test consignments, and optimistic by 0.06–0.07 at K = 2 | Passed |
+| P4: predictions with a fixed prior ρ within ±0.05 | Missed at K = 2 for both rules | Failed; the model is reported as descriptive, as the protocol requires |
+| P5: Gauss-LGO and ANOVA-PI not too narrow at K ≥ 5 | 0/60 | Supported |
+
+**Third independent review.** Major revision on the first upgraded draft. All 11 items were fixed (`review/third_review_round3.md`), the documents rebuilt, and the tests re-run (23 passed, including an end-to-end browser check of the tool).
+
+**What this round changes for the rejection risk.**
+
+- **Generality, the main weakness.** It is much reduced: the batch effect replicated in 14/14 independent-unit settings, with all consignment-level methods valid. The evidence still comes from a single product.
+- **Novelty.** It is reduced: the paper now offers a quantitative design model and a usable tool, besides the benchmark. The model is honestly reported as optimistic and descriptive, so it is a modest contribution, not a breakthrough.
+- **Length.** About 10,100 words including tables and captions is long for ACA. If the editor asks, §4.6 (robustness) and §4.9 (measurement uncertainty) can move to the supplement.
+
 ## 8. Final decision (Part XIII)
 
 ### A. SCIENTIFICALLY REINFORCED — READY FOR SUBMISSION
@@ -118,7 +145,7 @@ This decision is conditional on the author actions in Section 7. They require in
 
 Why this decision applies:
 
-- **Defensible contribution.** The central contribution is stated precisely and without overclaiming novelty. It is a benchmark and design study. Its headline finding (batch sampling decides validity for new batches) is new for chemometrics, shown on real lot structure, and supported by theory.
+- **Defensible contribution.** The central contribution is stated precisely and without overclaiming novelty. It is a benchmark and design study. Its headline finding (batch sampling decides validity for new batches) is new for chemometrics, shown on real lot structure, supported by theory, and confirmed in 14 further instrument–season settings with predictions fixed in advance.
 - **Experiments complete.** All experiments needed to answer the critical and major objections were executed as specified; deviations R1–R3 are documented. The one correction (ANOVA-PI) was re-run with unchanged seeds, and every other method reproduced exactly.
 - **Claims match evidence.** Every number is generated from result files: 0 hand-typed results, 0 unfilled placeholders. An independent verification pass found 30/30 spot-checked numbers correct and no remaining critical or major issue. Its eight moderate and minor items were fixed.
 - **Reproducibility checks pass.** These cover tests, hashes, value regeneration and the PDF render (`review/final_consistency_audit.md`).
