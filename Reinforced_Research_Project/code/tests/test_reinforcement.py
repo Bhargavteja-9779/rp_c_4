@@ -130,3 +130,42 @@ def test_planning_model_basic_properties():
     assert abs(kappa(2, 10, 0.0) - 1) < 0.01 and kappa(2, 10, 0.5) < 0.7
     # TJ+B unbounded with fewer than nine batches at alpha = 0.1
     assert expected_coverage(5, 4, 0.5, 0.1, rules=("tj_b",), sims=500)["tj_b"]["frac_inf"] == 1.0
+
+def test_api_matches_research_implementation():
+    from tjplus.api import SBCIntervals, transfer_jackknife
+    rng = np.random.default_rng(11)
+    beta = np.array([1.0]); src = _LinSource(beta)
+    X = rng.normal(size=(60, 1)); g = np.repeat(np.arange(12), 5)
+    y = 0.9 * X[:, 0] + 0.3 + rng.normal(0, 0.5, 12)[g] + rng.normal(0, 0.3, 60)
+    std, new = np.arange(30), np.arange(30, 60)
+    tf = TransferFits("sbc", src, X[std], y[std], None, X[new])
+    lo, hi = tj_plus(tf, 0.1)
+    yh, lo2, hi2 = SBCIntervals(0.1, "sample").fit(X[std, 0], y[std]).predict(X[new, 0])
+    assert np.allclose(lo, lo2) and np.allclose(hi, hi2) and np.allclose(yh, tf.mu_full_test)
+    gt = G.GroupTransferFits(tf, g[std], X[std], X[new])
+    lo, hi = G.tj_plus_hier(gt, 0.1)
+    _, lo3, hi3 = SBCIntervals(0.1, "batch").fit(X[std, 0], y[std], batch=g[std]).predict(X[new, 0])
+    assert np.allclose(lo, lo3) and np.allclose(hi, hi3)
+    # generic wrapper reproduces the SBC result
+    def fit(idx):
+        return np.polyfit(X[std][idx, 0], y[std][idx], 1)
+    def pred(c, which):
+        f = X[new, 0] if isinstance(which, str) else X[std][which, 0]
+        return c[1] + c[0] * f
+    lo4, hi4 = transfer_jackknife(fit, pred, {"y": y[std]}, None, 0.1, groups=g[std])
+    assert np.allclose(lo, lo4) and np.allclose(hi, hi4)
+    d = SBCIntervals(0.1, "batch").fit(X[std, 0], y[std], batch=g[std]).decide(X[new, 0], 0.0)
+    assert set(d) <= {"pass", "fail", "refer"}
+
+def test_cli_runs(tmp_path):
+    import pandas as pd
+    from tjplus.cli import main
+    rng = np.random.default_rng(2)
+    f = rng.normal(15, 2, 40); y = f + 0.5 + rng.normal(0, 1, 40)
+    pd.DataFrame({"prediction": f[:20], "reference": y[:20], "lot": np.repeat(np.arange(10), 2)}).to_csv(tmp_path / "s.csv", index=False)
+    pd.DataFrame({"prediction": f[20:]}).to_csv(tmp_path / "n.csv", index=False)
+    assert main(["interval", "--standards", str(tmp_path / "s.csv"), "--new", str(tmp_path / "n.csv"),
+                 "--batch-column", "lot", "--threshold", "14", "--out", str(tmp_path / "o.csv")]) == 0
+    o = pd.read_csv(tmp_path / "o.csv")
+    assert {"corrected", "lower", "upper", "decision"} <= set(o.columns) and len(o) == 20
+    assert main(["plan", "--standards", "20", "--batches", "2"]) == 0

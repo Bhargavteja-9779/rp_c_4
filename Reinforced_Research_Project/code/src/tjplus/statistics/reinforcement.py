@@ -295,6 +295,8 @@ def analyse_reinforcement(out, orig_dir, cfg, log=None):
     if os.path.isdir(os.path.join(orig_dir, "raw")):
         res["E13"] = analyse_e13(orig_dir, out, log)
     res["E14"] = analyse_e14(raw, out, log)
+    res["E15"] = analyse_e15(raw, out, log)
+    res["E14b"] = analyse_e14b(raw, out, log)
     json.dump(_clean(res), open(os.path.join(out, "statistics_reinforcement.json"), "w"), indent=1)
     return res
 
@@ -336,4 +338,88 @@ def analyse_e14(raw_dir, out, log=None):
     lines.append("\nTable: **Table S14.** Harvest-maturity screening at 14% dry matter with 90% intervals, for fruit from consignments without standards (200 repetitions). Immature passed: share of truly immature fruit (DM < 14%) declared mature; Referred: share of fruit whose interval contains 14%.\n")
     open(os.path.join(out, "tables", "E14_application_detail.md"), "w").write("\n".join(lines) + "\n")
     if log: log.info("E14 analysed")
+    return {"n_rows": len(d)}
+
+# ----------------------------------------------------------------------------- E15 confirmatory study + planning model
+PRIOR_PRED = {  # written in the protocol before E15 was run (prior rho = 0.5)
+    (2, 0.1): {"Gauss-LOO": 0.793, "TJ+N": 0.797}, (5, 0.1): {"Gauss-LOO": 0.864, "TJ+N": 0.869},
+    (10, 0.1): {"Gauss-LOO": 0.888, "TJ+N": 0.892}, (20, 0.1): {"Gauss-LOO": 0.900, "TJ+N": 0.904}}
+
+def analyse_e15(raw_dir, out, log=None):
+    from ..planning import expected_coverage
+    d = _load(raw_dir, "E15_confirm*.csv.gz")
+    if d.empty:
+        return {}
+    keys = ["setting", "design", "K", "n_g", "alpha", "method"]
+    if d.duplicated(keys + ["rep"]).sum():
+        raise RuntimeError("E15: duplicated rows")
+    rng = np.random.default_rng(20261103)
+    s = _cov_summary(d, keys, "new_coverage", rng)
+    extra = d.groupby(keys, sort=False).agg(new_median_width=("new_median_width", "median"),
+                                            new_frac_inf=("new_frac_inf", "mean"), icc_new=("icc_new", "mean"),
+                                            rmsep_new=("rmsep_new", "mean")).reset_index()
+    s = s.merge(extra, on=keys)
+    # planning-model predictions with each cell's observed ICC (oracle) and with the prior rho = 0.5
+    mp = {"TJ+N": "tj_plus", "Gauss-LOO": "gauss_loo", "TJ+H-N": "tj_b", "Gauss-LGO": "gauss_lgo"}
+    cache = {}
+    def pred(K, n, rho, al, meth):
+        k = (K, n, round(rho, 3), al)
+        if k not in cache:
+            cache[k] = expected_coverage(int(K), int(n), float(rho), float(al), sims=20000, seed=5)
+        return cache[k][mp[meth]]["coverage"]
+    s["pred_oracle"] = [pred(r.K, r.n_g, r.icc_new, r.alpha, r.method) if r.method in mp else np.nan for r in s.itertuples()]
+    s.to_csv(os.path.join(out, "summary", "E15_summary.csv"), index=False, float_format="%.6g")
+    res = {}
+    a = s[s["alpha"] == 0.1]
+    k2 = a[a["K"] == 2]
+    for meth in ("TJ+N", "Gauss-LOO", "OLS-PI", "ASTM-PI", "Gauss-LGO", "ANOVA-PI"):
+        x = k2[k2["method"] == meth]
+        res[f"P1_K2_under_{meth}"] = f"{int(x['under'].sum())}/{len(x)}"
+        res[f"K2_cov_{meth}"] = f"{x['coverage_mean'].min():.2f}–{x['coverage_mean'].max():.2f}"
+    for K in sorted(a["K"].unique()):
+        for meth in ("TJ+N", "Gauss-LOO", "OLS-PI", "TJ+H-N", "Gauss-LGO", "ANOVA-PI"):
+            x = a[(a["K"] == K) & (a["method"] == meth)]
+            bounded = x[x["new_frac_inf"] < 0.5]
+            res[f"K{K}_{meth}"] = (f"{int(bounded['under'].sum())}/{len(bounded)}" if len(bounded) else "unbounded") + \
+                                  (f" (mean {bounded['coverage_mean'].mean():.3f})" if len(bounded) else "")
+    tb = s[s["method"].isin(["TJ+H-N"]) & (s["new_frac_inf"] < 0.5) & s["alpha"].isin([0.1, 0.2])]
+    res["P2_tjb_under_bounded"] = f"{int(tb['under'].sum())}/{len(tb)}"
+    o = a[a["method"].isin(["TJ+N", "Gauss-LOO"]) & (a["new_frac_inf"] < 0.5)].copy()
+    o["err"] = o["pred_oracle"] - o["coverage_mean"]
+    for meth in ("TJ+N", "Gauss-LOO"):
+        x = o[o["method"] == meth]
+        res[f"P3_mae_{meth}"] = round(float(x["err"].abs().mean()), 4)
+        res[f"P3_bias_{meth}"] = round(float(x["err"].mean()), 4)
+        res[f"P3_corr_{meth}"] = round(float(np.corrcoef(x["pred_oracle"], x["coverage_mean"])[0, 1]), 3)
+    rows = []
+    for K in sorted(a["K"].unique()):
+        for meth in ("Gauss-LOO", "TJ+N"):
+            x = a[(a["K"] == K) & (a["method"] == meth)]
+            p = PRIOR_PRED.get((int(K), 0.1), {}).get(meth)
+            rows.append(dict(K=int(K), method=meth, n_settings=len(x), observed=float(x["coverage_mean"].mean()), predicted=p,
+                             diff=None if p is None else float(x["coverage_mean"].mean()) - p))
+    pr = pd.DataFrame(rows)
+    pr.to_csv(os.path.join(out, "statistics", "E15_prior_predictions.csv"), index=False, float_format="%.4f")
+    res["P4_max_abs_diff"] = round(float(pr["diff"].abs().max()), 4)
+    res["P4_within_005"] = bool((pr["diff"].abs() <= 0.05).all())
+    g5 = a[(a["K"] >= 5) & a["method"].isin(["Gauss-LGO", "ANOVA-PI"])]
+    res["P5_lgo_anova_ok_share"] = round(float(1 - g5["under"].mean()), 3)
+    res["P5_lgo_anova_under"] = f"{int(g5['under'].sum())}/{len(g5)}"
+    res["icc_range"] = f"{a[a['method'] == 'TJ+N'].groupby('setting')['icc_new'].mean().min():.2f}–{a[a['method'] == 'TJ+N'].groupby('setting')['icc_new'].mean().max():.2f}"
+    res["rmsep_range"] = f"{a[(a['method'] == 'TJ+N') & (a['K'] == 10)]['rmsep_new'].min():.2f}–{a[(a['method'] == 'TJ+N') & (a['K'] == 10)]['rmsep_new'].max():.2f}"
+    res["n_settings"] = int(a["setting"].nunique())
+    if log: log.info("E15 analysed")
+    return res
+
+def analyse_e14b(raw_dir, out, log=None):
+    d = _load(raw_dir, "E14b_guard*.csv.gz")
+    if d.empty:
+        return {}
+    g = d.groupby(["setting", "K", "n_g", "method"]).agg(imm=("immature_passed", "sum"), nimm=("n_immature", "sum"),
+                                                        ref=("n_referred", "sum"), n=("n", "sum")).reset_index()
+    g["immature_passed"] = g["imm"] / g["nimm"]; g["referred"] = g["ref"] / g["n"]
+    s = g.groupby(["K", "n_g", "method"]).agg(immature_passed=("immature_passed", "mean"),
+                                              referred=("referred", "mean")).reset_index()
+    s.to_csv(os.path.join(out, "summary", "E14b_summary.csv"), index=False, float_format="%.5g")
+    if log: log.info("E14b analysed")
     return {"n_rows": len(d)}

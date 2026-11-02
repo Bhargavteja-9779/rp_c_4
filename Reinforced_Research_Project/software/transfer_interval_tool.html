@@ -1,0 +1,234 @@
+<title>Transfer Interval Tool</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,600&display=swap">
+<style>
+/* Layout: one working column; two tools stacked as instrument panels, results beside inputs on wide screens */
+:root{
+  --bg:#f3f5f4; --panel:#ffffff; --ink:#18211e; --muted:#5b6762; --line:#d6ddda;
+  --accent:#0e6b5a; --accent-soft:#e2f0ec; --mango:#c9821d;
+  --pass:#1f7a3f; --fail:#b3322b; --refer:#9a6a00;
+  --display:"Literata", Georgia, serif; --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif; --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121816; --panel:#19211e; --ink:#e6ece9; --muted:#9aa7a2; --line:#2c3733;
+  --accent:#5cc4ad; --accent-soft:#1d332d; --mango:#e3a548; --pass:#5fc27e; --fail:#ef7d74; --refer:#e0b14d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121816; --panel:#19211e; --ink:#e6ece9; --muted:#9aa7a2; --line:#2c3733;
+  --accent:#5cc4ad; --accent-soft:#1d332d; --mango:#e3a548; --pass:#5fc27e; --fail:#ef7d74; --refer:#e0b14d; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+header h1{font-family:var(--display);font-weight:600;font-size:clamp(26px,4vw,36px);margin:0 0 6px;text-wrap:balance}
+header p{margin:0;color:var(--muted);max-width:68ch}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.panel h2{font-family:var(--display);font-weight:600;font-size:21px;margin:0}
+.panel .lead{margin:0;color:var(--muted);max-width:72ch}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:22px}
+@media (max-width:820px){.grid{grid-template-columns:minmax(0,1fr)}}
+label{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:14px}
+.row .field{flex:1 1 140px}
+input[type=number],select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%}
+textarea{font-family:var(--mono);font-size:13px;min-height:150px;resize:vertical}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;font-weight:500;border-radius:6px;padding:9px 16px;border:1px solid var(--accent);background:var(--accent);color:var(--panel);cursor:pointer}
+button.ghost{background:transparent;color:var(--accent)}
+.note{font-size:13px;color:var(--muted)}
+.ex{font-size:12px;color:var(--mango);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr) 4.2rem;align-items:center;gap:10px}
+.bar .name{font-size:14px}
+.bar .track{position:relative;height:14px;background:var(--accent-soft);border-radius:3px}
+.bar .fill{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:3px}
+.bar .nominal{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.bar .val{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;font-size:14px}
+.bar.low .fill{background:var(--fail)}
+@media (max-width:520px){.bar{grid-template-columns:minmax(0,1fr) 4.2rem}.bar .name{grid-column:1/-1}}
+.verdict{border-left:3px solid var(--accent);padding:8px 12px;background:var(--accent-soft);border-radius:0 6px 6px 0;font-size:14px}
+.verdict.warn{border-color:var(--refer)}
+.summary{display:flex;flex-wrap:wrap;gap:10px}
+.chip{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-variant-numeric:tabular-nums}
+.chip b{font-family:var(--mono)}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:6px;max-height:340px;overflow-y:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:13.5px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{position:sticky;top:0;background:var(--panel);font-weight:500;color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+td.mono{font-family:var(--mono)}
+.d-pass{color:var(--pass);font-weight:600}.d-fail{color:var(--fail);font-weight:600}.d-refer{color:var(--refer);font-weight:600}
+.err{color:var(--fail);font-size:14px}
+footer{font-size:12.5px;color:var(--muted);max-width:80ch}
+</style>
+
+<div class="wrap">
+<header>
+  <h1>Transfer Interval Tool</h1>
+  <p>For NIR calibrations moved to a new instrument or season with slope/bias correction. Plan how to collect the reference samples, then turn the instrument's predictions into corrected values with prediction intervals that hold for future batches. Everything runs in your browser; no data leave the page.</p>
+</header>
+
+<section class="panel" aria-labelledby="plan-h">
+  <h2 id="plan-h">1 · Plan the reference samples</h2>
+  <p class="lead">Expected coverage of a prediction interval for a sample from a <em>new</em> batch, from a random-effects model of the transfer errors. The intra-batch correlation describes how strongly errors are shared within a lot; 0.5 is a typical value in the mango data behind this tool.</p>
+  <div class="grid">
+    <div class="field" style="gap:14px">
+      <div class="row">
+        <div class="field"><label for="pm">Reference samples</label><input id="pm" type="number" min="4" max="200" value="20"></div>
+        <div class="field"><label for="pk">Batches they come from</label><input id="pk" type="number" min="1" max="200" value="2"></div>
+        <div class="field"><label for="pa">Confidence</label><select id="pa"><option value="0.2">80 %</option><option value="0.1" selected>90 %</option><option value="0.05">95 %</option></select></div>
+      </div>
+      <div class="field"><label for="prho">Intra-batch correlation of errors: <span id="prhov">0.50</span></label><input id="prho" type="range" min="0" max="0.9" step="0.05" value="0.5"></div>
+      <p class="note">Samples per batch are taken as reference samples ÷ batches (rounded down). 6,000 simulated draws.</p>
+    </div>
+    <div class="field" style="gap:14px">
+      <div class="bars" id="pbars" aria-live="polite"></div>
+      <div class="verdict" id="pverdict"></div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" aria-labelledby="calc-h">
+  <h2 id="calc-h">2 · Intervals from your reference samples</h2>
+  <p class="lead">Paste the original calibration's predictions and the reference values of the transfer standards (with their batch if known), and the predictions for routine samples. The tool fits slope/bias correction and builds the interval by refitting it with each standard, or each batch, left out (transfer jackknife+).</p>
+  <div class="grid">
+    <div class="field" style="gap:14px">
+      <div class="field"><label for="std">Reference samples: prediction, reference, batch</label>
+        <textarea id="std" spellcheck="false"></textarea></div>
+      <div class="field"><label for="new">Routine samples: prediction</label>
+        <textarea id="new" spellcheck="false" style="min-height:110px"></textarea></div>
+      <div class="row">
+        <div class="field"><label for="unit">Leave out</label><select id="unit"><option value="batch">one batch at a time</option><option value="sample">one sample at a time</option></select></div>
+        <div class="field"><label for="rule">Interval</label><select id="rule"><option value="jk">jackknife+</option><option value="gauss">Gaussian (t)</option></select></div>
+        <div class="field"><label for="ca">Confidence</label><select id="ca"><option value="0.2">80 %</option><option value="0.1" selected>90 %</option><option value="0.05">95 %</option></select></div>
+        <div class="field"><label for="thr">Threshold (optional)</label><input id="thr" type="number" step="0.1" value="14"></div>
+      </div>
+      <div class="row"><button id="run" type="button">Compute intervals</button><button id="exbtn" class="ghost" type="button">Load example</button></div>
+      <p class="ex" id="exflag">Example data: simulated mango dry matter (%), 20 reference fruit from 10 consignments</p>
+    </div>
+    <div class="field" style="gap:12px;min-width:0">
+      <div class="summary" id="csum"></div>
+      <div class="verdict" id="cverdict" hidden></div>
+      <div class="err" id="cerr" hidden></div>
+      <div class="tablebox"><table id="ctab"><thead><tr><th>#</th><th>Prediction</th><th>Corrected</th><th>Lower</th><th>Upper</th><th>Decision</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<footer>Method: slope/bias correction refitted with each reference sample (or batch) left out; interval from the left-out predictions and errors (jackknife+; Barber et al., Ann. Stat. 2021; batch version: Lee, Barber &amp; Willett, ACM J. Data Sci. 2026). Coverage holds on average if the reference samples, or their batches, are a random draw of what will be measured later, and if the instrument does not drift after set-up. A batch-level 90 % jackknife+ interval needs at least 9 batches. Decision: pass if the whole interval is at or above the threshold, fail if it is entirely below, otherwise re-measure.</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+// ---------- numerics ----------
+function lgamma(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+0.5)*Math.log(t);let s=1.000000000190015;for(let j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x);}
+function betacf(a,b,x){let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<1e-30)d=1e-30;d=1/d;let h=d;for(let m=1;m<=200;m++){let m2=2*m,aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;h*=d*c;aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-12)break;}return h;}
+function ibeta(a,b,x){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(lgamma(a+b)-lgamma(a)-lgamma(b)+a*Math.log(x)+b*Math.log(1-x));return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+function tcdf(t,df){const x=df/(df+t*t);const p=0.5*ibeta(df/2,0.5,x);return t>0?1-p:p;}
+function tq(p,df){let lo=0,hi=1000;for(let i=0;i<100;i++){const mid=(lo+hi)/2;if(tcdf(mid,df)<p)lo=mid;else hi=mid;}return (lo+hi)/2;}
+function ncdf(x){return 0.5*(1+erf(x/Math.SQRT2));}
+function erf(x){const s=Math.sign(x);x=Math.abs(x);const t=1/(1+0.3275911*x);const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);return s*y;}
+function rng(seed){let s=seed>>>0;return function(){s=(s+0x6D2B79F5)>>>0;let t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};}
+function gauss(r){let u=0,v=0;while(u===0)u=r();v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+// jackknife+ bounds; cand: array of {c, r}; weights optional (sum K/(K+1))
+function jkplus(cands,alpha,weights){
+  const m=cands.length;
+  const up=cands.map((c,i)=>({v:c.c+c.r,w:weights?weights[i]:1/(m+1)})).sort((a,b)=>a.v-b.v);
+  const lo=cands.map((c,i)=>({v:-(c.c-c.r),w:weights?weights[i]:1/(m+1)})).sort((a,b)=>a.v-b.v);
+  function q(arr){let cw=0;for(const e of arr){cw+=e.w;if(cw>=1-alpha-1e-12)return e.v;}return Infinity;}
+  return [-q(lo),q(up)];
+}
+// ---------- planner ----------
+function plan(m,K,rho,alpha){
+  const n=Math.max(1,Math.floor(m/K));const N=K*n;const sims=6000;const r=rng(20261102);
+  const res={gl:0,tj:0,tb:0,lg:0,tbInf:0};const sb=Math.sqrt(rho),sw=Math.sqrt(1-rho);
+  const tN=tq(1-alpha/2,N-1),tK=K>1?tq(1-alpha/2,K-1):Infinity;
+  const ku=Math.ceil((1-alpha)*(N+1)-1e-12),kl=Math.floor(alpha*(N+1)+1e-12);
+  const kuB=Math.ceil((1-alpha)*(K+1)*n-1e-9),klB=N+1-kuB;
+  const e=new Float64Array(N),bk=new Float64Array(K);
+  for(let s=0;s<sims;s++){
+    let tot=0;for(let k=0;k<K;k++)bk[k]=sb*gauss(r);
+    const gs=new Float64Array(K);
+    for(let i=0;i<N;i++){const k=Math.floor(i/n);e[i]=bk[k]+sw*gauss(r);tot+=e[i];gs[k]+=e[i];}
+    const mean=tot/N;let ss=0;const up=[],lo=[],upB=[],loB=[];let ssB=0;
+    for(let i=0;i<N;i++){const c=(tot-e[i])/(N-1);const ri=e[i]-c;ss+=ri*ri;up.push(c+Math.abs(ri));lo.push(c-Math.abs(ri));
+      if(K>1){const k=Math.floor(i/n);const cb=(tot-gs[k])/(N-n);const rb=e[i]-cb;ssB+=rb*rb;upB.push(cb+Math.abs(rb));loB.push(cb-Math.abs(rb));}}
+    let h=tN*Math.sqrt(ss/N);res.gl+=ncdf(mean+h)-ncdf(mean-h);
+    up.sort((a,b)=>a-b);lo.sort((a,b)=>a-b);
+    const U=ku<=N?up[ku-1]:Infinity,L=kl>=1?lo[kl-1]:-Infinity;res.tj+=(isFinite(U)?ncdf(U):1)-(isFinite(L)?ncdf(L):0);
+    if(K>1){upB.sort((a,b)=>a-b);loB.sort((a,b)=>a-b);const UB=kuB<=N?upB[kuB-1]:Infinity,LB=klB>=1?loB[klB-1]:-Infinity;
+      if(!isFinite(UB))res.tbInf++;res.tb+=(isFinite(UB)?ncdf(UB):1)-(isFinite(LB)?ncdf(LB):0);
+      const hb=tK*Math.sqrt(ssB/N);res.lg+=ncdf(mean+hb)-ncdf(mean-hb);}
+    else{res.tbInf++;res.tb+=1;res.lg+=1;}
+  }
+  return {n,N,gl:res.gl/sims,tj:res.tj/sims,tb:res.tb/sims,lg:res.lg/sims,tbInf:res.tbInf/sims};
+}
+const $=id=>document.getElementById(id);
+function renderPlan(){
+  const m=+$("pm").value,K=Math.max(1,+$("pk").value),rho=+$("prho").value,alpha=+$("pa").value;
+  $("prhov").textContent=rho.toFixed(2);
+  if(!(m>=4)||K>m){$("pbars").innerHTML="";$("pverdict").textContent="Enter at least 4 reference samples and no more batches than samples.";return;}
+  const p=plan(m,K,rho,alpha);const nom=1-alpha;
+  const rows=[["Gaussian, leave one sample out",p.gl,false],["Jackknife+, leave one sample out",p.tj,false],
+              ["Jackknife+, leave one batch out",p.tb,p.tbInf>0.5],["Gaussian, leave one batch out",p.lg,K<2]];
+  const lo=Math.min(0.6,nom-0.2);
+  $("pbars").innerHTML=rows.map(([name,c,inf])=>{
+    const w=inf?100:Math.max(0,Math.min(100,(c-lo)/(1-lo)*100)),pos=(nom-lo)/(1-lo)*100,bad=!inf&&c<nom-0.015;
+    return `<div class="bar${bad?" low":""}"><span class="name">${name}</span><span class="track"><span class="fill" style="width:${w}%;${inf?"opacity:.25":""}"></span><span class="nominal" style="left:${pos}%"></span></span><span class="val">${inf?"none":c.toFixed(3)}</span></div>`;}).join("");
+  let msg;
+  if(p.gl<nom-0.015) msg=`With ${p.n} samples from each of ${K} batch${K>1?"es":""}, intervals that leave out one sample at a time are expected to cover only ${(100*Math.min(p.gl,p.tj)).toFixed(0)}–${(100*Math.max(p.gl,p.tj)).toFixed(0)} % of samples from new batches (nominal ${(100*nom).toFixed(0)} %). Take the same number of samples from more batches, or leave out whole batches.`;
+  else msg=`With ${p.n} sample${p.n>1?"s":""} from each of ${K} batches, intervals are expected to reach about their nominal ${(100*nom).toFixed(0)} % for new batches.`;
+  if(p.tbInf>0.5) msg+=` A batch-level jackknife+ interval needs at least ${Math.ceil(nom/(1-nom))} batches at this confidence.`;
+  $("pverdict").textContent=msg;$("pverdict").className="verdict"+(p.gl<nom-0.015?" warn":"");
+}
+["pm","pk","prho","pa"].forEach(id=>$(id).addEventListener("input",renderPlan));
+// ---------- calculator ----------
+function parse(text,cols){
+  const rows=[];text.split(/\r?\n/).forEach(l=>{const t=l.trim();if(!t||/^[A-Za-z]/.test(t))return;const f=t.split(/[,;\t ]+/);
+    if(f.length<cols)throw new Error(`Each line needs ${cols} value${cols>1?"s":""}: "${t}"`);rows.push(f);});return rows;}
+function polyfit(x,y){const n=x.length;let sx=0,sy=0;for(let i=0;i<n;i++){sx+=x[i];sy+=y[i];}const mx=sx/n,my=sy/n;let sxx=0,sxy=0;for(let i=0;i<n;i++){sxx+=(x[i]-mx)**2;sxy+=(x[i]-mx)*(y[i]-my);}
+  if(sxx<1e-12)return[1,my-mx];const b=sxy/sxx;return[b,my-b*mx];}
+function compute(){
+  $("cerr").hidden=true;$("cverdict").hidden=true;
+  try{
+    const S=parse($("std").value,2),R=parse($("new").value,1);
+    const f=S.map(r=>+r[0]),y=S.map(r=>+r[1]),g=S.map((r,i)=>r.length>2?r[2]:"s"+i),fn=R.map(r=>+r[0]);
+    if(f.some(isNaN)||y.some(isNaN)||fn.some(isNaN))throw new Error("Predictions and reference values must be numbers.");
+    if(f.length<3)throw new Error("Paste at least three reference samples.");
+    const unit=$("unit").value,rule=$("rule").value,alpha=+$("ca").value,thr=$("thr").value===""?null:+$("thr").value;
+    const groups=unit==="batch"?g:f.map((_,i)=>"s"+i);const labels=[...new Set(groups)];const K=labels.length;
+    if(unit==="batch"&&S.some(r=>r.length<3))throw new Error("Leaving out batches needs a batch label in the third column of every reference sample.");
+    const [b,a]=polyfit(f,y);const loo={},res=new Array(f.length);
+    for(const lab of labels){const idx=f.map((_,i)=>i).filter(i=>groups[i]!==lab);if(idx.length<2)throw new Error("Each left-out fit needs at least two remaining reference samples.");
+      loo[lab]=polyfit(idx.map(i=>f[i]),idx.map(i=>y[i]));f.forEach((fi,i)=>{if(groups[i]===lab)res[i]=y[i]-(loo[lab][1]+loo[lab][0]*fi);});}
+    const nk={};groups.forEach(x=>nk[x]=(nk[x]||0)+1);
+    const w=unit==="batch"?groups.map(x=>1/((K+1)*nk[x])):null;
+    const df=unit==="batch"?K-1:f.length-1,rms=Math.sqrt(res.reduce((s,r)=>s+r*r,0)/res.length);const tt=df>=1?tq(1-alpha/2,df):Infinity;
+    const out=fn.map(x=>{const yh=a+b*x;let L,U;
+      if(rule==="gauss"){L=yh-tt*rms;U=yh+tt*rms;}
+      else{const c=groups.map((lab,i)=>({c:loo[lab][1]+loo[lab][0]*x,r:Math.abs(res[i])}));[L,U]=jkplus(c,alpha,w);}
+      let d="";if(thr!==null)d=L>=thr?"pass":(U<thr?"fail":"refer");return{x,yh,L,U,d};});
+    const tb=$("ctab").querySelector("tbody");const fmt=v=>isFinite(v)?v.toFixed(2):(v>0?"+∞":"−∞");
+    tb.innerHTML=out.map((o,i)=>`<tr><td>${i+1}</td><td class="mono">${o.x.toFixed(2)}</td><td class="mono">${o.yh.toFixed(2)}</td><td class="mono">${fmt(o.L)}</td><td class="mono">${fmt(o.U)}</td><td class="${o.d?"d-"+o.d:""}">${o.d||"–"}</td></tr>`).join("");
+    const cnt=k=>out.filter(o=>o.d===k).length;const width=out.filter(o=>isFinite(o.U-o.L)).map(o=>o.U-o.L);
+    const mw=width.length?width.sort((p,q)=>p-q)[Math.floor(width.length/2)]:NaN;
+    $("csum").innerHTML=`<span class="chip">slope <b>${b.toFixed(3)}</b>, bias <b>${a.toFixed(2)}</b></span><span class="chip">${unit==="batch"?"batches":"standards"} left out: <b>${K}</b></span><span class="chip">median width <b>${isFinite(mw)?mw.toFixed(2):"∞"}</b></span>`+
+      (thr!==null?`<span class="chip">pass <b>${cnt("pass")}</b> · fail <b>${cnt("fail")}</b> · re-measure <b>${cnt("refer")}</b></span>`:"");
+    const msgs=[];
+    if(out.some(o=>!isFinite(o.U)))msgs.push(`No finite interval: with ${K} ${unit==="batch"?"batches":"standards"} a ${(100*(1-alpha)).toFixed(0)} % ${rule==="jk"?"jackknife+ ":""}interval needs at least ${Math.ceil((1-alpha)/alpha)}. Add ${unit==="batch"?"batches":"standards"}, lower the confidence, or use the Gaussian interval.`);
+    if(unit==="sample"&&new Set(g).size<f.length&&new Set(g).size<10&&S.every(r=>r.length>2))msgs.push(`Your standards come from only ${new Set(g).size} batches. Sample-level intervals may be too narrow for new batches; leave out whole batches instead.`);
+    if(msgs.length){$("cverdict").textContent=msgs.join(" ");$("cverdict").className="verdict warn";$("cverdict").hidden=false;}
+  }catch(err){$("cerr").textContent=err.message;$("cerr").hidden=false;}
+}
+function example(){
+  const r=rng(7);const lines=["prediction,reference,batch"];const bias=[];for(let k=0;k<10;k++)bias.push(0.6*gauss(r));
+  for(let k=0;k<10;k++)for(let j=0;j<2;j++){const yy=15+2.2*gauss(r);const f=0.92*yy+0.6+bias[k]+0.6*gauss(r);lines.push(`${f.toFixed(2)},${yy.toFixed(2)},C${k+1}`);}
+  const nl=["prediction"];for(let i=0;i<25;i++){const yy=15+2.2*gauss(r);nl.push((0.92*yy+0.6+0.6*gauss(r)+0.6*gauss(r)).toFixed(2));}
+  $("std").value=lines.join("\n");$("new").value=nl.join("\n");$("exflag").hidden=false;compute();
+}
+$("run").addEventListener("click",()=>{$("exflag").hidden=true;compute();});
+$("exbtn").addEventListener("click",example);
+renderPlan();example();
+})();
+</script>

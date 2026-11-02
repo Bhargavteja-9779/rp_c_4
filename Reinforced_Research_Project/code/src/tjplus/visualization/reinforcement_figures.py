@@ -92,6 +92,8 @@ def make_reinforcement_figures(out, figdir):
     fig_batch_mechanism(out, figdir)
     fig_training_conditional(out, figdir)
     fig_application(out, figdir)
+    fig_confirm(out, figdir)
+    fig_tradeoff(out, figdir)
 
 # ------------------------------------------------------------------ schematic figures (not data)
 def fig_overview(figdir, name="fig1_overview", size=(7.2, 2.15)):
@@ -175,3 +177,74 @@ def fig_application(out, figdir):
         ax.grid(axis="x", visible=False)
     axes[0].legend(title="consignments × fruit", frameon=False, fontsize=6.5, title_fontsize=6.5)
     _save(fig, figdir, "fig_application")
+
+def fig_confirm(out, figdir):
+    """E15 confirmatory study: (a) coverage by design on 14 new settings; (b) planning model, predicted vs observed."""
+    p = os.path.join(out, "summary", "E15_summary.csv")
+    if not os.path.exists(p):
+        return
+    s = pd.read_csv(p); a = s[s["alpha"] == 0.1]
+    e10 = pd.read_csv(os.path.join(out, "summary", "E10_summary.csv"))
+    _style()
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(7.2, 3.1), gridspec_kw={"width_ratios": [1.25, 1]})
+    designs = sorted({(int(k), int(n)) for k, n in zip(a["K"], a["n_g"])})
+    xs = np.arange(len(designs))
+    meths = [("TJ+N", "TJ+N"), ("Gauss-LOO", "Gauss-LOO"), ("OLS-PI", "OLS-PI"), ("TJ+H-N", "TJ+B"),
+             ("ANOVA-PI", "ANOVA-PI"), ("Gauss-LGO", "Gauss-LGO")]
+    sty = {"OLS-PI": (SLOT[3], "D"), **STYLE}
+    for j, (m, lab) in enumerate(meths):
+        col, mk = sty[m]
+        off = (j - (len(meths) - 1) / 2) * 0.1
+        ys, lo, hi, hol = [], [], [], []
+        for K, n in designs:
+            g = a[(a["K"] == K) & (a["n_g"] == n) & (a["method"] == m)]
+            ys.append(g["coverage_mean"].mean()); lo.append(g["coverage_mean"].min()); hi.append(g["coverage_mean"].max())
+            hol.append(g["new_frac_inf"].mean() > 0.5)
+        ax.vlines(xs + off, lo, hi, color=col, lw=1.0, alpha=0.8)
+        for x, y, h in zip(xs + off, ys, hol):
+            ax.plot(x, y, mk, color=col, mfc="white" if h else col, ms=4.5)
+        ax.plot([], [], mk, color=col, label=lab, ms=4.5)
+    ax.axhline(0.9, color=INK, ls="--", lw=0.8)
+    ax.set_xticks(xs, [f"{K}×{n}" for K, n in designs]); ax.set_xlabel("Consignments × fruit per consignment")
+    ax.set_ylabel("Coverage, new consignments"); ax.set_title("(a) 14 new instrument–season settings", loc="left")
+    ax.legend(frameon=False, fontsize=6.2, ncol=2, loc="lower right")
+    # (b) predicted vs observed: E10 (a posteriori) and E15 (confirmatory), Gauss-LOO and TJ+N
+    from ..planning import expected_coverage
+    pts10 = []
+    for (st, kd, K, n), g in e10[(e10["alpha"] == 0.1) & (e10["design"] == "random")].groupby(["setting", "kind", "K", "n_g"]):
+        rho = float(g[g["method"] == "TJ+N"]["icc_new"].iloc[0])
+        pr = expected_coverage(int(K), int(n), rho, 0.1, rules=("gauss_loo",), sims=8000, seed=5)["gauss_loo"]["coverage"]
+        pts10.append((pr, float(g[g["method"] == "Gauss-LOO"]["coverage_mean"].iloc[0])))
+    pts10 = np.array(pts10)
+    e15 = a[(a["method"] == "Gauss-LOO")]
+    bx.plot([0.6, 1.0], [0.6, 1.0], color=INK2, lw=0.8)
+    bx.plot(pts10[:, 0], pts10[:, 1], "o", mfc="white", color=SLOT[0], ms=4, label="E10 (fitted, a posteriori)")
+    bx.plot(e15["pred_oracle"], e15["coverage_mean"], "o", color=SLOT[1], ms=4, label="E15 (confirmatory)")
+    bx.set_xlim(0.6, 1.0); bx.set_ylim(0.6, 1.0)
+    bx.set_xlabel("Predicted coverage (planning model)"); bx.set_ylabel("Observed coverage")
+    bx.set_title("(b) Gaussian interval, new consignments", loc="left")
+    bx.legend(frameon=False, fontsize=6.3, loc="upper left")
+    _save(fig, figdir, "fig_confirm")
+
+def fig_tradeoff(out, figdir):
+    p = os.path.join(out, "summary", "E14b_summary.csv")
+    if not os.path.exists(p):
+        return
+    s = pd.read_csv(p)
+    _style()
+    fig, ax = plt.subplots(figsize=(4.6, 3.3))
+    for K, col in ((2, SLOT[3]), (10, SLOT[0])):
+        g = s[s["K"] == K]
+        gb = g[g["method"].str.startswith("Guard") | (g["method"] == "Point")].sort_values("referred")
+        ax.plot(100 * gb["referred"], 100 * gb["immature_passed"], "-", color=col, lw=1.2, alpha=0.8,
+                label=f"guard bands, {K} consignments × {20 // K}")
+        for m, mk in (("TJ+N", "o"), ("Gauss-LOO", "^"), ("TJ+N@0.05", "o"), ("TJ+N@0.2", "o")):
+            x = g[g["method"] == m]
+            if len(x):
+                ax.plot(100 * x["referred"], 100 * x["immature_passed"], mk, color=col, ms=5,
+                        mfc=col if m in ("TJ+N", "Gauss-LOO") else "white")
+    ax.plot([], [], "o", color=INK2, label="TJ+N 90% (filled); 80%, 95% (open)")
+    ax.plot([], [], "^", color=INK2, label="Gauss-LOO 90%")
+    ax.set_xlabel("Fruit referred for re-measurement (%)"); ax.set_ylabel("Immature fruit passed (%)")
+    ax.legend(frameon=False, fontsize=6.3)
+    _save(fig, figdir, "fig_tradeoff")
