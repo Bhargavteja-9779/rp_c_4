@@ -218,6 +218,125 @@
    "threshold": 14.0,
    "alpha": 0.1,
    "_comment": "Application case study (harvest-maturity screening at 14 % DM; Ainsworth 2016, Hort Innovation MG15002). Specified before running; added on 2026-10-28 after E10 was analysed (deviation R2)."
+  },
+  "E15_confirm": {
+   "dataset": "mango_confirm",
+   "reps_full": 300,
+   "reps_quick": 2,
+   "settings": [
+    "14002_2016",
+    "15015_2016",
+    "15023_2016",
+    "15038_2016",
+    "30004_2016",
+    "14002_2017",
+    "15023_2017",
+    "16033_2017",
+    "16041_2017",
+    "17033_2017",
+    "17052_2017",
+    "30004_2017",
+    "16048_2018",
+    "17057_2018"
+   ],
+   "designs": [
+    [
+     "random",
+     2,
+     10
+    ],
+    [
+     "random",
+     5,
+     4
+    ],
+    [
+     "random",
+     10,
+     2
+    ]
+   ],
+   "designs_large": [
+    [
+     "random",
+     20,
+     1
+    ]
+   ],
+   "min_new_batches": 3,
+   "alphas": [
+    0.05,
+    0.1,
+    0.2
+   ],
+   "methods": [
+    "TJ+N",
+    "Gauss-LOO",
+    "OLS-PI",
+    "ASTM-PI",
+    "TJ+H-N",
+    "Gauss-LGO",
+    "ANOVA-PI"
+   ],
+   "_comment": "Confirmatory study on 14 instrument x season settings never used before; specified with numerical predictions of the planning model before running (protocol section E15)."
+  },
+  "E14b_guard": {
+   "dataset": "mango_application",
+   "reps_full": 200,
+   "reps_quick": 2,
+   "settings": [
+    "season",
+    "inst_15016",
+    "inst_15014",
+    "inst_15029"
+   ],
+   "kinds": {
+    "season": [
+     "sbc"
+    ],
+    "inst": [
+     "sbc"
+    ]
+   },
+   "designs": [
+    [
+     "random",
+     2,
+     10
+    ],
+    [
+     "random",
+     10,
+     2
+    ]
+   ],
+   "designs_inst_extra": [
+    [
+     "random",
+     20,
+     1
+    ]
+   ],
+   "threshold": 14.0,
+   "alpha": 0.1,
+   "_comment": "E14b: guard-band trade-off for the harvest case study (identical seeds and designs as E14, SBC only); specified before running (protocol E14b).",
+   "guard_ks": [
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5,
+    1.75,
+    2.0,
+    2.5,
+    3.0
+   ],
+   "extra_alphas": [
+    0.05,
+    0.2,
+    0.3
+   ]
   }
  },
  "classical_methods": [

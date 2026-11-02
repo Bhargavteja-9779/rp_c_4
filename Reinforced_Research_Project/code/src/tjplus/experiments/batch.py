@@ -176,6 +176,12 @@ def run_application_rep(rep, cfg):
                 s_tq = S["sigmas"]["tq"]
                 cand = {"Point": None, "TJ+N": M.tj_plus(tf, alpha, s_tq), "TJ+H-N": G.tj_plus_hier(g, alpha, s_tq),
                         "Gauss-LOO": M.gauss_loo(tf, alpha), "ASTM-PI": M.astm_pi(tf, S["source"], alpha)}
+                rmse_loo = float(np.sqrt(np.mean(tf.r_loo ** 2)))
+                for k in cfg.get("guard_ks", []):          # E14b: fixed guard bands of k x RMSE_LOO around the threshold
+                    cand[f"Guard-{k:g}"] = (tf.mu_full_test - k * rmse_loo, tf.mu_full_test + k * rmse_loo)
+                for al in cfg.get("extra_alphas", []):     # E14b: interval rules at other confidence levels
+                    cand[f"TJ+N@{al:g}"] = M.tj_plus(tf, al, s_tq)
+                    cand[f"Gauss-LOO@{al:g}"] = M.gauss_loo(tf, al)
                 for name, iv in cand.items():
                     if iv is None:
                         passed = tf.mu_full_test >= thr; failed = ~passed

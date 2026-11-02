@@ -115,3 +115,18 @@ def test_icc_estimator():
     g = np.repeat(np.arange(200), 10)
     e = rng.normal(0, 1, 200)[g] + rng.normal(0, 1, len(g))     # true ICC = 0.5
     assert abs(_icc(e, g) - 0.5) < 0.08
+
+def test_planning_model_basic_properties():
+    from tjplus.planning import expected_coverage, kappa
+    # one standard per batch: no batch penalty, coverage close to nominal for every rule
+    p = expected_coverage(20, 1, 0.6, 0.1, sims=20000, seed=3)
+    for r in ("gauss_loo", "tj_plus", "tj_b"):
+        assert abs(p[r]["coverage"] - 0.9) < 0.02
+    # few batches with correlated errors: sample-level rules under-cover, more so with fewer batches
+    c2 = expected_coverage(2, 10, 0.5, 0.1, sims=20000, seed=3)["gauss_loo"]["coverage"]
+    c5 = expected_coverage(5, 4, 0.5, 0.1, sims=20000, seed=3)["gauss_loo"]["coverage"]
+    assert c2 < c5 < 0.9
+    # closed-form variance ratio: 1 without batch effects (up to finite-sample factors), < 1 with them
+    assert abs(kappa(2, 10, 0.0) - 1) < 0.01 and kappa(2, 10, 0.5) < 0.7
+    # TJ+B unbounded with fewer than nine batches at alpha = 0.1
+    assert expected_coverage(5, 4, 0.5, 0.1, rules=("tj_b",), sims=500)["tj_b"]["frac_inf"] == 1.0

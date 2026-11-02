@@ -189,3 +189,71 @@ In response to the same review, the following analyses were added. They are desc
 - non-inferiority counts for every method;
 - per-α counts;
 - SBC-only application results.
+
+---
+
+## Third research round (2026-11-02): planning model, confirmatory study, guard bands
+
+### Planning model (exploratory, derived after E10)
+
+`code/src/tjplus/planning.py` contains a one-way random-effects model of the target errors (intra-batch correlation ρ) with a fitted bias. Given K batches × n standards and ρ, it computes the expected coverage, for a sample from a new batch, of Gauss-LOO, sample-level TJ+, TJ+B and Gauss-LGO, together with the closed-form variance ratio κ. It was checked *a posteriori* on the 38 random-design E10 cells at α = 0.10, using each cell's observed ICC:
+
+| Method | Mean absolute error of predicted coverage | Correlation with observed |
+|---|---|---|
+| Gauss-LOO | 0.021 | 0.92 |
+| TJ+N | 0.035 | 0.75 |
+| TJ+B | 0.015 | 0.72 |
+| Gauss-LGO | 0.009 | 0.95 |
+
+Because the check used results already seen, it is only an exploratory fit. E15 provides the confirmatory test.
+
+### E15: confirmatory study on 14 settings never used before
+
+**Data.** Mango record version 6, instrument × season settings with ≥ 12 consignments, excluding the units used in E8 and E10 (15006, 15016, 15014, 15029). That leaves 14 settings: 14002, 15015, 15023, 15038 and 30004 (2016); 14002, 15023, 16033, 16041, 17033, 17052 and 30004 (2017); 16048 and 17057 (2018).
+
+**Source model.** PLS on master unit 15006, trained on all its fruit except (a) fruit from the target setting's consignments and (b) fruit measured on the target unit.
+
+**Transfer.** Slope/bias correction.
+
+**Designs.** 2 × 10, 5 × 4 and 10 × 2 in every setting; 20 × 1 where at least 23 consignments exist (16041 and 17033 in 2017).
+
+**Methods.** TJ+N, Gauss-LOO, OLS-PI, ASTM-PI, TJ+B (TJ+H-N), Gauss-LGO and ANOVA-PI.
+
+**Levels and repetitions.** α ∈ {0.05, 0.10, 0.20}; 300 repetitions. The outcomes are those of E10.
+
+**Numerical predictions of the planning model with a fixed prior ρ = 0.5** (written before running; 40,000 simulations):
+
+| Design | Rule | α = 0.10 | α = 0.05 |
+|---|---|---|---|
+| 2 × 10 | Gauss-LOO | 0.793 | 0.866 |
+| 2 × 10 | TJ+ | 0.797 | 0.869 |
+| 2 × 10 | TJ+B | unbounded | unbounded |
+| 2 × 10 | Gauss-LGO | 1.000 | 1.000 |
+| 5 × 4 | Gauss-LOO | 0.864 | 0.923 |
+| 5 × 4 | TJ+ | 0.869 | 0.924 |
+| 5 × 4 | TJ+B | unbounded | unbounded |
+| 5 × 4 | Gauss-LGO | 0.942 | 0.981 |
+| 10 × 2 | Gauss-LOO | 0.888 | 0.941 |
+| 10 × 2 | TJ+ | 0.892 | 0.943 |
+| 10 × 2 | TJ+B | 0.947 | unbounded |
+| 10 × 2 | Gauss-LGO | 0.913 | 0.961 |
+| 20 × 1 | Gauss-LOO | 0.900 | 0.950 |
+| 20 × 1 | TJ+ | 0.904 | 0.952 |
+| 20 × 1 | TJ+B | 0.904 | 0.952 |
+| 20 × 1 | Gauss-LGO | 0.900 | 0.950 |
+
+**Confirmatory hypotheses** (α = 0.10 unless stated):
+
+- **P1.** With 2 × 10 standards, sample-level TJ+N and Gauss-LOO are flagged as too narrow in at least 8 of the 14 settings.
+- **P2.** TJ+B is not flagged in any cell where it is bounded (α = 0.10 and 0.20).
+- **P3.** With each cell's observed ICC, the planning model predicts the mean coverage of Gauss-LOO and TJ+N with a mean absolute error ≤ 0.04 over setting × design cells.
+- **P4.** With the fixed prior ρ = 0.5, the design-level mean coverage (mean over the 14 settings) of Gauss-LOO and TJ+N lies within ±0.05 of the predictions above.
+- **P5.** Gauss-LGO and ANOVA-PI are not flagged in at least 90% of the cells with K ≥ 5.
+
+**Interpretation if false.** If P3 or P4 fails, the planning model is presented as descriptive only. If P1 fails, the batch penalty is weaker on these units, and the effect is reported per setting.
+
+### E14b: guard-band trade-off in the harvest case study
+
+E14b uses the same seeds, designs and SBC settings as E14. It adds point rules with fixed guard bands (pass if ŷ ≥ 14 + k·RMSE_LOO, fail if ŷ < 14 − k·RMSE_LOO, refer otherwise; k = 0.25–3) and the TJ+N and Gauss-LOO intervals at α = 0.05, 0.20 and 0.30, for 200 repetitions. It traces the trade-off between the share of immature fruit passed and the share referred.
+
+**Expectation, stated in advance.** Interval rules lie on the same trade-off curve as guard bands, because a Gaussian interval is a guard band with k = t. Their value is that they fix the position on the curve through a stated coverage, not that they beat the curve. We will report this whatever the result.

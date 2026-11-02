@@ -33,3 +33,28 @@ def load_mango_inst_meta(raw_dir, instruments=(15006, 15016, 15014, 15029)):
         raise ValueError("fruit key mapped to several populations")
     return pd.DataFrame({"key": keys, "pop": g["pop"].astype(str).to_numpy(),
                          "date": pd.to_datetime(g["date"]).to_numpy()})
+
+@functools.lru_cache(maxsize=None)
+def load_mango_v6_settings(raw_dir, wl_min=684, wl_max=990):
+    """All fruit x instrument spectra of the providers' extended mango file (record version 6), outlier-flagged
+    spectra removed, replicate spectra averaged per fruit (season + reference number) and instrument.
+    Returns a long DataFrame of metadata and an aligned spectra array. Cached as npz + csv next to the raw file."""
+    import os
+    path = fetch("mango_v4", raw_dir)
+    cache_x = os.path.join(raw_dir, "mango_v6_all_instruments_X.npy")
+    cache_m = os.path.join(raw_dir, "mango_v6_all_instruments_meta.csv")
+    if os.path.exists(cache_x) and os.path.exists(cache_m):
+        return pd.read_csv(cache_m, dtype={"key": str, "pop": str}), np.load(cache_x)
+    head = pd.read_csv(path, nrows=0).columns
+    wl_cols = [c for c in head if c.replace(".", "", 1).isdigit() and wl_min <= float(c) <= wl_max]
+    d = pd.read_csv(path, usecols=["outlier_flag_1", "season", "reference_no", "dry_matter", "instrument",
+                                   "population", "date"] + wl_cols, dtype={"reference_no": str, "population": str,
+                                   "date": str}, low_memory=False)
+    d = d[d["outlier_flag_1"] == 0]
+    d["key"] = d["season"].astype(int).astype(str) + "_" + d["reference_no"].astype(str)
+    g = d.groupby(["key", "instrument"])
+    X = g[wl_cols].mean()
+    meta = g.agg(season=("season", "first"), pop=("population", "first"), date=("date", "min"),
+                 y=("dry_matter", "mean")).reindex(X.index).reset_index()
+    np.save(cache_x, X.to_numpy(float)); meta.to_csv(cache_m, index=False)
+    return meta, X.to_numpy(float)
